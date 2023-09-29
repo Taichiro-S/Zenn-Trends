@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "987919199528",
+    "project_id": "zenn-trends",
+    "storage_bucket": "zenn-trends.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987919199528:android:caee4a219cd41b2df0b41d",
+        "android_client_info": {
+          "package_name": "com.example.zenn_trends"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAppC3v3UMQghJfS_sx32zeqZ9CfahNek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
