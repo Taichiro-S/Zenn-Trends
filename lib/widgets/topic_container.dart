@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '/models/topic.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '/helper/favorite.dart';
 
 class TopicContainer extends StatelessWidget {
   final Topic topic;
   final int rank;
   final bool isSelected;
   final ValueChanged<bool?> onChanged;
+  final bool isFavorite;
+  final VoidCallback onFavoriteToggle;
 
   const TopicContainer({
     Key? key,
@@ -14,6 +17,8 @@ class TopicContainer extends StatelessWidget {
     required this.rank,
     required this.isSelected,
     required this.onChanged,
+    required this.isFavorite,
+    required this.onFavoriteToggle,
   }) : super(key: key);
 
   _launchURL() async {
@@ -23,6 +28,10 @@ class TopicContainer extends StatelessWidget {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  _toggleFavorite(Topic topic) {
+    toggleFavorite(topic);
   }
 
   @override
@@ -49,69 +58,78 @@ class TopicContainer extends StatelessWidget {
             ),
           ),
         ),
-        subtitle: Row(
-          children: [
-            Text(
-              '${topic.currentCount}',
-              style: const TextStyle(fontSize: 16),
-            ),
-            Icon(
-              topic.currentCount - topic.previousCount > 0
-                  ? Icons.arrow_upward
-                  : topic.currentCount - topic.previousCount < 0
-                      ? Icons.arrow_downward
-                      : Icons.arrow_right_alt,
-              color: topic.currentCount - topic.previousCount > 0
-                  ? Colors.green
-                  : topic.currentCount - topic.previousCount < 0
-                      ? Colors.red
-                      : Colors.grey,
-            ),
-            topic.currentCount - topic.previousCount != 0
-                ? Text(
-                    topic.currentCount - topic.previousCount > 0
-                        ? '+${topic.currentCount - topic.previousCount}'
-                        : '${topic.currentCount - topic.previousCount}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: topic.currentCount - topic.previousCount != 0
-                          ? topic.currentCount - topic.previousCount > 0
-                              ? Colors.green
-                              : Colors.red
-                          : Colors.grey,
-                    ),
-                  )
-                : const SizedBox(),
-          ],
+        subtitle: Column(children: [
+          Row(
+            children: [
+              Text(
+                'Rank: $rank',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                topic.currentRank < topic.previousRank
+                    ? Icons.arrow_upward
+                    : topic.currentRank > topic.previousRank
+                        ? Icons.arrow_downward
+                        : null,
+                color: topic.currentRank < topic.previousRank
+                    ? Colors.green
+                    : topic.currentRank > topic.previousRank
+                        ? Colors.red
+                        : Colors.grey,
+              ),
+              topic.currentRank != topic.previousRank
+                  ? Text(
+                      topic.currentRank < topic.previousRank
+                          ? '+${topic.previousRank - topic.currentRank}'
+                          : '${topic.previousRank - topic.currentRank}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: topic.currentRank != topic.previousRank
+                            ? topic.currentRank < topic.previousRank
+                                ? Colors.green
+                                : Colors.red
+                            : Colors.grey,
+                      ),
+                    )
+                  : const SizedBox(),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                '${topic.currentCount}',
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(width: 5),
+              topic.currentCount - topic.previousCount != 0
+                  ? Text(
+                      topic.currentCount - topic.previousCount > 0
+                          ? '+${topic.currentCount - topic.previousCount}'
+                          : '${topic.currentCount - topic.previousCount}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: topic.currentCount - topic.previousCount != 0
+                            ? topic.currentCount - topic.previousCount > 0
+                                ? Colors.green
+                                : Colors.red
+                            : Colors.grey,
+                      ),
+                    )
+                  : const SizedBox(),
+            ],
+          ),
+        ]),
+        trailing: IconButton(
+          icon: Icon(
+            isFavorite ? Icons.star : Icons.star_border,
+          ),
+          onPressed: onFavoriteToggle,
         ),
-        // subtitle: Row(
-        //   children: [
-        //     Text(
-        //       'Rank: $rank',
-        //       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        //     ),
-        //     Icon(
-        //       rank < topic.previousRank
-        //           ? Icons.arrow_upward
-        //           : rank > topic.previousRank
-        //               ? Icons.arrow_downward
-        //               : Icons.horizontal_rule,
-        //       color: rank < topic.previousRank
-        //           ? Colors.green
-        //           : rank > topic.previousRank
-        //               ? Colors.red
-        //               : Colors.grey,
-        //     ),
-        //     Text(
-        //       topic.previousRank != null ? '(${topic.previousRank})' : '(N/A)',
-        //       style: const TextStyle(fontSize: 16),
-        //     ),
-        //   ],
+        // trailing: Checkbox(
+        //   value: isSelected,
+        //   onChanged: onChanged,
         // ),
-        trailing: Checkbox(
-          value: isSelected,
-          onChanged: onChanged,
-        ),
       ),
     );
   }

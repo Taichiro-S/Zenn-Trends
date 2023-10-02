@@ -1,35 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/helper/favorite.dart';
-import '/widgets/bottom_navigating_bar.dart';
 import '/screens/trend.dart';
 import '/widgets/topic_container.dart';
 import '/models/topic.dart';
+import '/helper/favorite.dart';
 
-class Ranking extends StatefulWidget {
-  const Ranking({super.key, this.searchText = ''});
+class Favorite extends StatefulWidget {
+  const Favorite({super.key, this.searchText = ''});
   final String searchText;
   @override
-  State<Ranking> createState() => _RankingState();
+  State<Favorite> createState() => _FavoriteState();
 }
 
-class _RankingState extends State<Ranking> {
+class _FavoriteState extends State<Favorite> {
   List<String> selectedTopics = [];
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
-  int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Home Page'),
-    Text('Favorites Page'),
-    Text('Search Page'),
-  ];
-  List<String> _favoriteIds = [];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final List<String> favoriteIds = [];
 
   void _startSearching() {
     setState(() {
@@ -51,14 +38,8 @@ class _RankingState extends State<Ranking> {
   }
 
   _loadFavorites() async {
-    _favoriteIds = await getFavorites();
-    setState(() {});
-  }
-
-  _onToggleFavorite(Topic topic) async {
-    toggleFavorite(topic);
-    _favoriteIds = await getFavorites();
-    setState(() {});
+    final favoriteIds = await getFavorites();
+    print(favoriteIds);
   }
 
   @override
@@ -123,6 +104,7 @@ class _RankingState extends State<Ranking> {
             stream: FirebaseFirestore.instance
                 .collection('topics')
                 // .orderBy('taggings_count', descending: true)
+                .where('id', arrayContainsAny: favoriteIds)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const CircularProgressIndicator();
@@ -193,7 +175,6 @@ class _RankingState extends State<Ranking> {
                                 topic: topic,
                                 rank: topic.currentRank,
                                 isSelected: isSelected,
-                                isFavorite: _favoriteIds.contains(topic.id),
                                 onChanged: (bool? value) {
                                   if (value == true && !isSelected) {
                                     setState(() {
@@ -208,8 +189,6 @@ class _RankingState extends State<Ranking> {
                                     });
                                   }
                                 },
-                                onFavoriteToggle: () =>
-                                    _onToggleFavorite(topic),
                               );
                             },
                           ),
@@ -218,10 +197,6 @@ class _RankingState extends State<Ranking> {
                     );
                   });
             },
-          ),
-          bottomNavigationBar: BottomNavigatingBar(
-            selectedIndex: _selectedIndex,
-            onItemTapped: _onItemTapped,
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
