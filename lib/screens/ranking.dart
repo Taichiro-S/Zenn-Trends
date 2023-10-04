@@ -223,16 +223,16 @@ class _RankingState extends State<Ranking> {
             selectedIndex: _selectedIndex,
             onItemTapped: _onItemTapped,
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Trend(topicIds: selectedTopics)),
-              );
-            },
-            child: const Icon(Icons.trending_up),
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => Trend(topicIds: selectedTopics)),
+          //     );
+          //   },
+          //   child: const Icon(Icons.trending_up),
+          // ),
         ));
   }
 }
