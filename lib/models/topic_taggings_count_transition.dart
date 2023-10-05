@@ -1,8 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class TopicTaggingsCountTransition {
-  final String id;
-  final List<Map<DateTime, int>> taggingCountTransition;
+  final int id;
+  bool _hasCompleteData = false;
+  bool _isTagged = false;
+  final Map<DateTime, int> taggingCountTransition;
+  bool get isTagged => _isTagged;
+  set isTagged(bool v) {
+    _isTagged = v;
+  }
+
+  bool get hasCompleteData => _hasCompleteData;
+  set hasCompleteData(bool v) {
+    _hasCompleteData = v;
+  }
 
   TopicTaggingsCountTransition({
     required this.id,
@@ -10,9 +19,9 @@ class TopicTaggingsCountTransition {
   });
 
   factory TopicTaggingsCountTransition.fromDocument(
-      DocumentSnapshot doc, List<Map<DateTime, int>> taggingCountTransition) {
+      int id, Map<DateTime, int> taggingCountTransition) {
     return TopicTaggingsCountTransition(
-      id: doc.id,
+      id: id,
       taggingCountTransition: taggingCountTransition,
     );
   }

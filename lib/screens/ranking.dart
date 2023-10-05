@@ -18,11 +18,6 @@ class _RankingState extends State<Ranking> {
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Home Page'),
-    Text('Favorites Page'),
-    Text('Search Page'),
-  ];
   List<String> _favoriteIds = [];
 
   void _onItemTapped(int index) {
@@ -219,10 +214,10 @@ class _RankingState extends State<Ranking> {
                   });
             },
           ),
-          bottomNavigationBar: BottomNavigatingBar(
-            selectedIndex: _selectedIndex,
-            onItemTapped: _onItemTapped,
-          ),
+          // bottomNavigationBar: BottomNavigatingBar(
+          //   selectedIndex: _selectedIndex,
+          //   onItemTapped: _onItemTapped,
+          // ),
           // floatingActionButton: FloatingActionButton(
           //   onPressed: () {
           //     Navigator.push(
