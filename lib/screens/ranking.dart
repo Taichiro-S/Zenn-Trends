@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/helper/favorite.dart';
-import '/widgets/bottom_navigating_bar.dart';
-import '/screens/trend.dart';
 import '/widgets/topic_container.dart';
 import '/models/topic.dart';
 
@@ -17,14 +15,7 @@ class _RankingState extends State<Ranking> {
   List<String> selectedTopics = [];
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
-  int _selectedIndex = 0;
   List<String> _favoriteIds = [];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   void _startSearching() {
     setState(() {
@@ -115,16 +106,10 @@ class _RankingState extends State<Ranking> {
             ],
           ),
           body: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('topics')
-                // .orderBy('taggings_count', descending: true)
-                .snapshots(),
+            stream: FirebaseFirestore.instance.collection('topics').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const CircularProgressIndicator();
 
-              // List<Topic> topics = snapshot.data!.docs
-              //     .map((doc) => Topic.fromDocument(doc))
-              //     .toList();
               Future<List<Topic>> futureTopics =
                   Future.wait(snapshot.data!.docs.map((doc) async {
                 final historySnapshot = await doc.reference
@@ -157,7 +142,6 @@ class _RankingState extends State<Ranking> {
                       return const CircularProgressIndicator();
                     }
 
-                    // final topics = snapshot.data!;
                     var topics = snapshot.data!
                         .where((topic) =>
                             _searchController.text.isEmpty ||
@@ -214,10 +198,6 @@ class _RankingState extends State<Ranking> {
                   });
             },
           ),
-          // bottomNavigationBar: BottomNavigatingBar(
-          //   selectedIndex: _selectedIndex,
-          //   onItemTapped: _onItemTapped,
-          // ),
           // floatingActionButton: FloatingActionButton(
           //   onPressed: () {
           //     Navigator.push(

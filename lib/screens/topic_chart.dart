@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '/models/topic.dart';
 import '/models/topic_taggings_count_transition.dart';
 import '/helper/get_data_for_chart.dart';
 
@@ -43,7 +41,7 @@ class _TopicChartState extends State<TopicChart> {
                 i++) {
               List<int> taggingLog =
                   topic.taggingCountTransition.values.toList();
-              if (taggingLog[i] > taggingLog[i + 1]) {
+              if (taggingLog[i] < taggingLog[i + 1]) {
                 topic.isTagged = true;
                 break;
               }
@@ -54,29 +52,27 @@ class _TopicChartState extends State<TopicChart> {
               .where((topic) => topic.hasCompleteData && topic.isTagged)
               .toList();
 
-          print(topics.length);
-          print(completeTopics.length);
+          // print(topics.length);
+          // print(completeTopics.length);
           List<LineChartBarData> linesData = [];
 
-          completeTopics = completeTopics.toList();
-          completeTopics.sort((a, b) => a.taggingCountTransition.values
+          completeTopics.sort((a, b) => -a.taggingCountTransition.values
               .toList()
               .last
               .compareTo(b.taggingCountTransition.values.toList().last));
+
           final top10CompleteTopics = completeTopics.sublist(0, 10);
+
           for (var i = 0; i < top10CompleteTopics.length; i++) {
+            final daysCount = top10CompleteTopics[i]
+                .taggingCountTransition
+                .values
+                .toList()
+                .length;
             List<FlSpot> spots = [];
-            for (var j = top10CompleteTopics[i]
-                        .taggingCountTransition
-                        .values
-                        .length -
-                    1;
-                j >= 0;
-                j--) {
+            for (var j = 0; j < daysCount; j++) {
               spots.add(FlSpot(
-                  (top10CompleteTopics[i].taggingCountTransition.values.length -
-                          j)
-                      .toDouble(),
+                  j.toDouble(),
                   top10CompleteTopics[i]
                       .taggingCountTransition
                       .values
@@ -94,7 +90,7 @@ class _TopicChartState extends State<TopicChart> {
               isStrokeCapRound: true,
             ));
           }
-          print(top10CompleteTopics.length);
+          // print(top10CompleteTopics.length);
           return Column(
             children: [
               Padding(
@@ -115,12 +111,13 @@ class _TopicChartState extends State<TopicChart> {
                       ))),
               Expanded(
                 child: ListView.builder(
-                  itemCount: topics.length,
+                  itemCount: completeTopics.length,
                   itemBuilder: (context, index) {
-                    final topic = topics[index];
+                    final topic = completeTopics[index];
                     return ListTile(
                       title: Text(topic.id.toString()),
-                      subtitle: const Text('Weekly increase:'),
+                      subtitle: Text(
+                          'Weekly increase: ${topic.taggingCountTransition.values.toList().last}'),
                     );
                   },
                 ),

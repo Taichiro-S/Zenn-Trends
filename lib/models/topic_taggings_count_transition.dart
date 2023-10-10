@@ -1,5 +1,8 @@
+import '/models/topic.dart';
+
 class TopicTaggingsCountTransition {
   final int id;
+  // final Topic topic;
   bool _hasCompleteData = false;
   bool _isTagged = false;
   final Map<DateTime, int> taggingCountTransition;
@@ -15,6 +18,7 @@ class TopicTaggingsCountTransition {
 
   TopicTaggingsCountTransition({
     required this.id,
+    // required this.topic,
     required this.taggingCountTransition,
   });
 
@@ -22,6 +26,7 @@ class TopicTaggingsCountTransition {
       int id, Map<DateTime, int> taggingCountTransition) {
     return TopicTaggingsCountTransition(
       id: id,
+      // topic: topic,
       taggingCountTransition: taggingCountTransition,
     );
   }
