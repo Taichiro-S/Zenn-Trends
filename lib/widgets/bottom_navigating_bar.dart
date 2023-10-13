@@ -24,9 +24,13 @@ class _BottomNavigatingBarState extends State<BottomNavigatingBar> {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.star),
-          label: 'Favorites',
+          icon: Icon(Icons.query_stats),
+          label: 'Chart',
         ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.star),
+        //   label: 'Favorites',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.search),
           label: 'Search',
