@@ -8,7 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    const ProviderScope(child: MaterialApp(home: MyApp())),
+    const ProviderScope(child: MyApp()),
   );
 }
 
