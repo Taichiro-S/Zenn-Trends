@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/helper/favorite.dart';
-import '/widgets/topic_container.dart';
-import '/models/topic.dart';
+import '../widget/topic_container.dart';
+import '../../model/topic.dart';
 
 class Ranking extends StatefulWidget {
   const Ranking({super.key, this.searchText = ''});

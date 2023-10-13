@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '/screens/ranking.dart';
-import '/screens/topic_chart.dart';
+import 'view/screen/ranking.dart';
+import 'view/screen/topic_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {

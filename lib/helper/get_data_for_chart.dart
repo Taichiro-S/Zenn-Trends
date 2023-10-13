@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/models/topic_taggings_count_transition.dart';
+import '../model/topic_taggings_count_transition.dart';
 
 Future<Map<DateTime, int>> getDailyTags(int topicId) async {
   try {

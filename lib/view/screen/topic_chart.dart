@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '/models/topic_taggings_count_transition.dart';
+import '../../model/topic_taggings_count_transition.dart';
 import '/helper/get_data_for_chart.dart';
 
 class TopicChart extends StatefulWidget {

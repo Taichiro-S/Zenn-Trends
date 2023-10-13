@@ -1,5 +1,3 @@
-import '/models/topic.dart';
-
 class TopicTaggingsCountTransition {
   final int id;
   // final Topic topic;

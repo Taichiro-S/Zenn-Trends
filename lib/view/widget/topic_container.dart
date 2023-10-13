@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/models/topic.dart';
+import '../../model/topic.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '/helper/favorite.dart';
 

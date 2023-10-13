@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '/models/topic.dart';
+import '../model/topic.dart';
 
 Future<void> toggleFavorite(Topic topic) async {
   print(topic.id);

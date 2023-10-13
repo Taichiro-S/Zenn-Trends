@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/screens/ranking.dart';
+import '../screen/ranking.dart';
 
 class SearchTopic extends StatefulWidget {
   const SearchTopic({Key? key}) : super(key: key);
