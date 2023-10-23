@@ -4,6 +4,7 @@ import 'package:zenn_trends/provider/topics_provider.dart';
 import '/model/topic_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '/helper/favorite.dart';
+import '/provider/favorite_notifier_provider.dart';
 
 class TopicContainer extends ConsumerWidget {
   final TopicInfo topic;
@@ -11,6 +12,8 @@ class TopicContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final asyncFavoriteList = ref.watch(asyncFavoriteListProvider);
+    final notifier = ref.watch(asyncFavoriteListProvider.notifier);
     return Card(
         elevation: 3,
         margin: const EdgeInsets.all(8),
@@ -23,6 +26,14 @@ class TopicContainer extends ConsumerWidget {
                     as ImageProvider<Object>,
             radius: 25,
           ),
+          title: Text(
+            topic.displayName,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          trailing: const Icon(Icons.more_vert),
         ));
   }
 }
