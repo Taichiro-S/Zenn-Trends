@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '/model/topic_info.dart';
 
-part 'topic_repository.g.dart';
+part 'topics_repository.g.dart';
 
-class TopicRepository {
+class TopicsRepository {
   Future<List<TopicInfo>> getAllTopics() async {
     try {
       final snap = await FirebaseFirestore.instance.collection('topics').get();
@@ -16,6 +16,6 @@ class TopicRepository {
 }
 
 @riverpod
-TopicRepository topicRepository(TopicRepositoryRef ref) {
-  return TopicRepository();
+TopicsRepository topicsRepository(TopicsRepositoryRef ref) {
+  return TopicsRepository();
 }

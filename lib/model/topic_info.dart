@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
+part 'topic_info.freezed.dart';
 
-class TopicInfo {
-  final String id;
-  final String name;
-  final String displayName;
-  final String? imageUrl;
-
-  TopicInfo({
-    required this.id,
-    required this.name,
-    required this.displayName,
-    this.imageUrl,
-  });
+@freezed
+class TopicInfo with _$TopicInfo {
+  const factory TopicInfo({
+    required String id,
+    required String name,
+    required String displayName,
+    String? imageUrl,
+  }) = _TopicInfo;
 
   factory TopicInfo.fromDocument(DocumentSnapshot doc) {
     return TopicInfo(
