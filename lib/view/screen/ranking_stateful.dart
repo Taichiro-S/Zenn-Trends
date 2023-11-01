@@ -1,17 +1,18 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/helper/favorite.dart';
 import '../widget/topic_container.dart';
 import '../../model/topic.dart';
 
-class Ranking extends StatefulWidget {
-  const Ranking({super.key, this.searchText = ''});
+class RankingStateful extends StatefulWidget {
+  const RankingStateful({super.key, this.searchText = ''});
   final String searchText;
   @override
-  State<Ranking> createState() => _RankingState();
+  State<RankingStateful> createState() => _RankingStatefulState();
 }
 
-class _RankingState extends State<Ranking> {
+class _RankingStatefulState extends State<RankingStateful> {
   List<String> selectedTopics = [];
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();

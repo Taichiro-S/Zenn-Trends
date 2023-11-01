@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:zenn_trends/provider/topics_provider.dart';
+import 'package:zenn_trends/routes/router.dart';
+import 'package:zenn_trends/view/screen/ranking_stateful.dart';
+import 'package:zenn_trends/view/screen/settings_page.dart';
 import '/model/topic_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '/helper/favorite.dart';
 import '/provider/favorite_notifier_provider.dart';
+import '/view/screen/topic_tag_count_page.dart';
 
 class TopicContainer extends ConsumerWidget {
   final TopicInfo topic;
@@ -32,6 +37,31 @@ class TopicContainer extends ConsumerWidget {
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
+          ),
+          subtitle: Row(
+            children: [
+              Text(
+                topic.id,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    bottom: 8,
+                  ),
+                  child: ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                    child: const Text('タグ数の推移'),
+                    onPressed: () {
+                      AutoRouter.of(context)
+                          .push(TopicTagCountRoute(topic: topic));
+                    },
+                  )),
+            ],
           ),
           trailing: const Icon(Icons.more_vert),
         ));

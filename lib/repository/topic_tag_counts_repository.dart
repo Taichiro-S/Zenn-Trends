@@ -7,10 +7,11 @@ part 'topic_tag_counts_repository.g.dart';
 class TopicTagCountsRepository {
   Future<List<TopicTagCount>> getTopicTagCounts(
       String id, int daysCount) async {
+    final intId = int.tryParse(id);
     try {
       final doc = await FirebaseFirestore.instance
           .collection('topics')
-          .where('id', isEqualTo: id)
+          .where('id', isEqualTo: intId)
           .get();
       final history = doc.docs.first.reference
           .collection('history')

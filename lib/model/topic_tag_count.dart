@@ -13,10 +13,13 @@ class TopicTagCount with _$TopicTagCount {
   }) = _TopicTagCount;
 
   factory TopicTagCount.fromDocument(String id, DocumentSnapshot doc) {
+    final timestamp = doc['date'] as Timestamp;
+
+    final dateTime = timestamp.toDate();
     return TopicTagCount(
       id: id,
-      date: doc['date'],
-      rank: doc['rank'],
+      date: dateTime,
+      rank: doc['rank'].toString(),
       taggingsCount: doc['taggings_count'],
     );
   }

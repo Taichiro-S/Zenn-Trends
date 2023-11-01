@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '/model/topic_tag_count.dart';
-import '../repository/topic_tag_counts_repository.dart';
+import '/repository/topic_tag_counts_repository.dart';
 part 'topic_tag_counts_provider.g.dart';
 
 @riverpod
@@ -11,5 +10,7 @@ Future<List<TopicTagCount>> topicTagCounts(
   required int daysCount,
 }) async {
   final repository = ref.watch(topicTagCountsRepositoryProvider);
+  // print(
+  //     'topic_tag_counts_provider.dart: topicTagCounts: id: $id, daysCount: $daysCount');
   return repository.getTopicTagCounts(id, daysCount);
 }
