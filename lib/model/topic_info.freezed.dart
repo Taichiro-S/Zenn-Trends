@@ -19,6 +19,7 @@ mixin _$TopicInfo {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
+  String get taggingsCount => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,7 +32,12 @@ abstract class $TopicInfoCopyWith<$Res> {
   factory $TopicInfoCopyWith(TopicInfo value, $Res Function(TopicInfo) then) =
       _$TopicInfoCopyWithImpl<$Res, TopicInfo>;
   @useResult
-  $Res call({String id, String name, String displayName, String? imageUrl});
+  $Res call(
+      {String id,
+      String name,
+      String displayName,
+      String taggingsCount,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -50,6 +56,7 @@ class _$TopicInfoCopyWithImpl<$Res, $Val extends TopicInfo>
     Object? id = null,
     Object? name = null,
     Object? displayName = null,
+    Object? taggingsCount = null,
     Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -64,6 +71,10 @@ class _$TopicInfoCopyWithImpl<$Res, $Val extends TopicInfo>
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      taggingsCount: null == taggingsCount
+          ? _value.taggingsCount
+          : taggingsCount // ignore: cast_nullable_to_non_nullable
               as String,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
@@ -81,7 +92,12 @@ abstract class _$$TopicInfoImplCopyWith<$Res>
       __$$TopicInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String name, String displayName, String? imageUrl});
+  $Res call(
+      {String id,
+      String name,
+      String displayName,
+      String taggingsCount,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -98,6 +114,7 @@ class __$$TopicInfoImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? displayName = null,
+    Object? taggingsCount = null,
     Object? imageUrl = freezed,
   }) {
     return _then(_$TopicInfoImpl(
@@ -112,6 +129,10 @@ class __$$TopicInfoImplCopyWithImpl<$Res>
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      taggingsCount: null == taggingsCount
+          ? _value.taggingsCount
+          : taggingsCount // ignore: cast_nullable_to_non_nullable
               as String,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
@@ -128,6 +149,7 @@ class _$TopicInfoImpl with DiagnosticableTreeMixin implements _TopicInfo {
       {required this.id,
       required this.name,
       required this.displayName,
+      required this.taggingsCount,
       this.imageUrl});
 
   @override
@@ -137,11 +159,13 @@ class _$TopicInfoImpl with DiagnosticableTreeMixin implements _TopicInfo {
   @override
   final String displayName;
   @override
+  final String taggingsCount;
+  @override
   final String? imageUrl;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TopicInfo(id: $id, name: $name, displayName: $displayName, imageUrl: $imageUrl)';
+    return 'TopicInfo(id: $id, name: $name, displayName: $displayName, taggingsCount: $taggingsCount, imageUrl: $imageUrl)';
   }
 
   @override
@@ -152,6 +176,7 @@ class _$TopicInfoImpl with DiagnosticableTreeMixin implements _TopicInfo {
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('taggingsCount', taggingsCount))
       ..add(DiagnosticsProperty('imageUrl', imageUrl));
   }
 
@@ -164,12 +189,15 @@ class _$TopicInfoImpl with DiagnosticableTreeMixin implements _TopicInfo {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
+            (identical(other.taggingsCount, taggingsCount) ||
+                other.taggingsCount == taggingsCount) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, displayName, imageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, id, name, displayName, taggingsCount, imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -183,6 +211,7 @@ abstract class _TopicInfo implements TopicInfo {
       {required final String id,
       required final String name,
       required final String displayName,
+      required final String taggingsCount,
       final String? imageUrl}) = _$TopicInfoImpl;
 
   @override
@@ -191,6 +220,8 @@ abstract class _TopicInfo implements TopicInfo {
   String get name;
   @override
   String get displayName;
+  @override
+  String get taggingsCount;
   @override
   String? get imageUrl;
   @override

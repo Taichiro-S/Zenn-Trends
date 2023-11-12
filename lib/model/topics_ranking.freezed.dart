@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'topic_tag_count.dart';
+part of 'topics_ranking.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,30 +15,28 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$TopicTagCount {
+mixin _$TopicsRanking {
   String get id => throw _privateConstructorUsedError;
-  Timestamp get date => throw _privateConstructorUsedError;
-  String get rank => throw _privateConstructorUsedError;
   String get taggingsCount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $TopicTagCountCopyWith<TopicTagCount> get copyWith =>
+  $TopicsRankingCopyWith<TopicsRanking> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TopicTagCountCopyWith<$Res> {
-  factory $TopicTagCountCopyWith(
-          TopicTagCount value, $Res Function(TopicTagCount) then) =
-      _$TopicTagCountCopyWithImpl<$Res, TopicTagCount>;
+abstract class $TopicsRankingCopyWith<$Res> {
+  factory $TopicsRankingCopyWith(
+          TopicsRanking value, $Res Function(TopicsRanking) then) =
+      _$TopicsRankingCopyWithImpl<$Res, TopicsRanking>;
   @useResult
-  $Res call({String id, Timestamp date, String rank, String taggingsCount});
+  $Res call({String id, String taggingsCount});
 }
 
 /// @nodoc
-class _$TopicTagCountCopyWithImpl<$Res, $Val extends TopicTagCount>
-    implements $TopicTagCountCopyWith<$Res> {
-  _$TopicTagCountCopyWithImpl(this._value, this._then);
+class _$TopicsRankingCopyWithImpl<$Res, $Val extends TopicsRanking>
+    implements $TopicsRankingCopyWith<$Res> {
+  _$TopicsRankingCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -49,22 +47,12 @@ class _$TopicTagCountCopyWithImpl<$Res, $Val extends TopicTagCount>
   @override
   $Res call({
     Object? id = null,
-    Object? date = null,
-    Object? rank = null,
     Object? taggingsCount = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
-      rank: null == rank
-          ? _value.rank
-          : rank // ignore: cast_nullable_to_non_nullable
               as String,
       taggingsCount: null == taggingsCount
           ? _value.taggingsCount
@@ -75,44 +63,34 @@ class _$TopicTagCountCopyWithImpl<$Res, $Val extends TopicTagCount>
 }
 
 /// @nodoc
-abstract class _$$TopicTagCountImplCopyWith<$Res>
-    implements $TopicTagCountCopyWith<$Res> {
-  factory _$$TopicTagCountImplCopyWith(
-          _$TopicTagCountImpl value, $Res Function(_$TopicTagCountImpl) then) =
-      __$$TopicTagCountImplCopyWithImpl<$Res>;
+abstract class _$$TopicsRankingImplCopyWith<$Res>
+    implements $TopicsRankingCopyWith<$Res> {
+  factory _$$TopicsRankingImplCopyWith(
+          _$TopicsRankingImpl value, $Res Function(_$TopicsRankingImpl) then) =
+      __$$TopicsRankingImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, Timestamp date, String rank, String taggingsCount});
+  $Res call({String id, String taggingsCount});
 }
 
 /// @nodoc
-class __$$TopicTagCountImplCopyWithImpl<$Res>
-    extends _$TopicTagCountCopyWithImpl<$Res, _$TopicTagCountImpl>
-    implements _$$TopicTagCountImplCopyWith<$Res> {
-  __$$TopicTagCountImplCopyWithImpl(
-      _$TopicTagCountImpl _value, $Res Function(_$TopicTagCountImpl) _then)
+class __$$TopicsRankingImplCopyWithImpl<$Res>
+    extends _$TopicsRankingCopyWithImpl<$Res, _$TopicsRankingImpl>
+    implements _$$TopicsRankingImplCopyWith<$Res> {
+  __$$TopicsRankingImplCopyWithImpl(
+      _$TopicsRankingImpl _value, $Res Function(_$TopicsRankingImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
-    Object? date = null,
-    Object? rank = null,
     Object? taggingsCount = null,
   }) {
-    return _then(_$TopicTagCountImpl(
+    return _then(_$TopicsRankingImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
-      rank: null == rank
-          ? _value.rank
-          : rank // ignore: cast_nullable_to_non_nullable
               as String,
       taggingsCount: null == taggingsCount
           ? _value.taggingsCount
@@ -124,37 +102,27 @@ class __$$TopicTagCountImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TopicTagCountImpl
+class _$TopicsRankingImpl
     with DiagnosticableTreeMixin
-    implements _TopicTagCount {
-  const _$TopicTagCountImpl(
-      {required this.id,
-      required this.date,
-      required this.rank,
-      required this.taggingsCount});
+    implements _TopicsRanking {
+  const _$TopicsRankingImpl({required this.id, required this.taggingsCount});
 
   @override
   final String id;
-  @override
-  final Timestamp date;
-  @override
-  final String rank;
   @override
   final String taggingsCount;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TopicTagCount(id: $id, date: $date, rank: $rank, taggingsCount: $taggingsCount)';
+    return 'TopicsRanking(id: $id, taggingsCount: $taggingsCount)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'TopicTagCount'))
+      ..add(DiagnosticsProperty('type', 'TopicsRanking'))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('date', date))
-      ..add(DiagnosticsProperty('rank', rank))
       ..add(DiagnosticsProperty('taggingsCount', taggingsCount));
   }
 
@@ -162,41 +130,33 @@ class _$TopicTagCountImpl
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TopicTagCountImpl &&
+            other is _$TopicsRankingImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.date, date) || other.date == date) &&
-            (identical(other.rank, rank) || other.rank == rank) &&
             (identical(other.taggingsCount, taggingsCount) ||
                 other.taggingsCount == taggingsCount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, date, rank, taggingsCount);
+  int get hashCode => Object.hash(runtimeType, id, taggingsCount);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TopicTagCountImplCopyWith<_$TopicTagCountImpl> get copyWith =>
-      __$$TopicTagCountImplCopyWithImpl<_$TopicTagCountImpl>(this, _$identity);
+  _$$TopicsRankingImplCopyWith<_$TopicsRankingImpl> get copyWith =>
+      __$$TopicsRankingImplCopyWithImpl<_$TopicsRankingImpl>(this, _$identity);
 }
 
-abstract class _TopicTagCount implements TopicTagCount {
-  const factory _TopicTagCount(
+abstract class _TopicsRanking implements TopicsRanking {
+  const factory _TopicsRanking(
       {required final String id,
-      required final Timestamp date,
-      required final String rank,
-      required final String taggingsCount}) = _$TopicTagCountImpl;
+      required final String taggingsCount}) = _$TopicsRankingImpl;
 
   @override
   String get id;
   @override
-  Timestamp get date;
-  @override
-  String get rank;
-  @override
   String get taggingsCount;
   @override
   @JsonKey(ignore: true)
-  _$$TopicTagCountImplCopyWith<_$TopicTagCountImpl> get copyWith =>
+  _$$TopicsRankingImplCopyWith<_$TopicsRankingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

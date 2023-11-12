@@ -1,15 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:zenn_trends/provider/topics_provider.dart';
 import 'package:zenn_trends/routes/router.dart';
-import 'package:zenn_trends/view/screen/ranking_stateful.dart';
-import 'package:zenn_trends/view/screen/settings_page.dart';
 import '/model/topic_info.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '/helper/favorite.dart';
 import '/provider/favorite_notifier_provider.dart';
-import '/view/screen/topic_tag_count_page.dart';
 
 class TopicContainer extends ConsumerWidget {
   final TopicInfo topic;
@@ -25,7 +19,7 @@ class TopicContainer extends ConsumerWidget {
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: Colors.white70,
-            backgroundImage: topic.imageUrl != null
+            backgroundImage: topic.imageUrl != null && topic.imageUrl != 'null'
                 ? NetworkImage(topic.imageUrl!)
                 : const AssetImage('assets/images/no_image.png')
                     as ImageProvider<Object>,

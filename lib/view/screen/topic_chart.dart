@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../model/topic_taggings_count_transition.dart';
+import 'package:flutter/material.dart';
+
 import '/helper/get_data_for_chart.dart';
+import '../../model/topic_taggings_count_transition.dart';
 
 class TopicChart extends StatefulWidget {
   const TopicChart({Key? key}) : super(key: key);

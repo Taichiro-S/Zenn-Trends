@@ -1,10 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '/provider/topic_tag_counts_provider.dart';
-import '/view/widget/topic_container_p.dart';
-import '/view/widget/search_topic_p.dart';
-import 'package:auto_route/auto_route.dart';
+
 import '/model/topic_info.dart';
+import '/provider/topic_tag_counts_provider.dart';
 
 @RoutePage()
 class TopicTagCountPage extends ConsumerWidget {

@@ -6,10 +6,14 @@ const ZENN_API_TOPICS = 'https://zenn.dev/api/topics?page=';
 const ZENN_TOPICS = 'https://zenn.dev/topics/';
 
 admin.initializeApp();
-
+const db = admin.firestore();
 // 毎日6時にZennのタグ情報を取得してFirestoreに保存する
 
-exports.fetchZennTags = functions.runWith({ timeoutSeconds: 300 }).pubsub.schedule('0 6 * * *').timeZone('Asia/Tokyo').onRun(async (context) => {
+exports.fetchZennTags = functions
+  .runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule('0 6 * * *')
+  .timeZone('Asia/Tokyo')
+  .onRun(async (context) => {
     console.log('Fetching Zenn tags...')
     try {
         let allTopics = [];
@@ -19,8 +23,7 @@ exports.fetchZennTags = functions.runWith({ timeoutSeconds: 300 }).pubsub.schedu
         }
 
         const saveDate = new Date();
-        const db = admin.firestore();
-
+      
         for (let topic of allTopics) {
             const topicRef = db.collection('topics').doc(topic.id.toString());
             const topicDoc = await topicRef.get();
@@ -30,6 +33,9 @@ exports.fetchZennTags = functions.runWith({ timeoutSeconds: 300 }).pubsub.schedu
                 await topicRef.collection('history').doc(saveDate.toISOString()).set({
                     taggings_count: topic.taggings_count,
                     date: saveDate
+                });
+                await topicRef.update({
+                    taggings_count: topic.taggings_count
                 });
             } else {
                 // If topic doesn't exist, save all data.
@@ -61,14 +67,123 @@ exports.fetchZennTags = functions.runWith({ timeoutSeconds: 300 }).pubsub.schedu
     }
 });
 
+// 毎日7時に、Firestoreに保存されているタグ情報を元に、ランキングを作成する
+// const timeToCalculateRanking = '0 7 * * *'
+
+exports.calculateRanking = functions
+  .runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule('0 7 * * *')
+  .timeZone('Asia/Tokyo')
+  .onRun(async (context) => {
+    try {
+      const now = new Date()
+      // const startDay = new Date(now)
+      // startDay.setDate(startDay.getDate() - 1)
+
+      const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+      const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+        
+      const getDayRange = (date) => {
+        const startOfDay = new Date(date)
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = new Date(date)
+        endOfDay.setHours(23, 59, 59, 999)
+
+        return { startOfDay, endOfDay }
+      }
+
+      const { startOfDay: startOfToday, endOfDay: endOfToday } =
+        getDayRange(now)
+      const { startOfDay: startOfOneWeekAgo, endOfDay: endOfOneWeekAgo } =
+        getDayRange(oneWeekAgo)
+      const { startOfDay: startOfOneMonthAgo, endOfDay: endOfOneMonthAgo } = getDayRange(oneMonthAgo)
+      const tagsRef = db.collection('topics')
+      const tagsSnapshot = await tagsRef.get()
+
+      const weeklyRanking = []
+      const monthlyRanking = []
+
+
+      for (const tagDoc of tagsSnapshot.docs) {
+        const tagId = tagDoc.id
+        // 全タグについて1週間前と現在の記事数の差分を取得
+        let weeklyChange = 0
+        const itemsCountRef = tagsRef.doc(tagId).collection('history')
+        const currentItemsCountSnapshot = await itemsCountRef
+          .where('date', '>=', startOfToday)
+          .where('date', '<=', endOfToday)
+          .orderBy('date', 'desc')
+          .limit(1)
+          .get()
+        const oneWeekAgoItemsCountSnapshot = await itemsCountRef
+          .where('date', '>=', startOfOneWeekAgo)
+          .where('date', '<=', endOfOneWeekAgo)
+          .orderBy('date', 'desc')
+          .limit(1)
+          .get()
+        if (
+          !currentItemsCountSnapshot.empty &&
+          !oneWeekAgoItemsCountSnapshot.empty
+        ) {
+            weeklyChange =
+            currentItemsCountSnapshot.docs[0].data().taggings_count -
+            oneWeekAgoItemsCountSnapshot.docs[0].data().taggings_count
+        }
+        monthlyChange = 0
+        const oneMonthAgoItemsCountSnapshot = await itemsCountRef
+          .where('date', '>=', startOfOneMonthAgo)
+          .where('date', '<=', endOfOneMonthAgo)
+          .orderBy('date', 'desc')
+          .limit(1)
+          .get()
+        if (
+          !currentItemsCountSnapshot.empty &&
+          !oneMonthAgoItemsCountSnapshot.empty
+        ) {
+            monthlyChange =
+            currentItemsCountSnapshot.docs[0].data().taggings_count -
+            oneMonthAgoItemsCountSnapshot.docs[0].data().taggings_count
+        }
+        weeklyRanking.push({
+          tagId,
+          weeklyChange,
+        })
+        monthlyRanking.push({
+            tagId,
+            monthlyChange,
+          })
+      }
+
+      // ランキングを計算
+      weeklyRanking.sort((a, b) => b.weeklyChange - a.weeklyChange)
+      monthlyRanking.sort((a, b) => b.monthlyChange - a.monthlyChange)
+      // Firestoreにランキングを保存
+      const weeklyRankRef = db.collection('weeklyRank').doc(now.toISOString())
+      const monthlyRankRef = db.collection('monthlyRank').doc(now.toISOString())
+
+      await weeklyRankRef.set({
+        date: now,
+        ranking: weeklyRanking,
+      })
+        await monthlyRankRef.set({
+            date: now,
+            ranking: monthlyRanking,
+        })
+      return null
+    } catch (error) {
+      console.error('Error calculating weekly ranking:', error.message)
+      throw new functions.https.HttpsError(
+        'internal',
+        'Failed to calculate and store weekly ranking.',
+      )
+    }
+  })
 
 // 取得から5年以上経過したhistoryドキュメントを削除する
 
 exports.deleteOldHistories = functions.runWith({ timeoutSeconds: 300 }).pubsub.schedule('0 10 1 * *').timeZone('Asia/Tokyo').onRun(async (context) => {
     try {
-    
-        const db = admin.firestore();
-
         // 全てのトピックのドキュメントを取得
         const topicsSnapshot = await db.collection('topics').get();
         

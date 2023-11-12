@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '/provider/topics_provider.dart';
-import '/view/widget/topic_container_p.dart';
-import '/view/widget/search_topic_p.dart';
+
 import '/model/search.dart';
 import '/provider/search_provider.dart';
-import 'package:auto_route/auto_route.dart';
+import '/provider/topics_provider.dart';
+import '/view/widget/search_topic_p.dart';
+import '/view/widget/topic_container_p.dart';
 
 @RoutePage()
 class RankingPage extends ConsumerWidget {
@@ -24,7 +25,7 @@ class RankingPage extends ConsumerWidget {
         data: (topics) {
           final filteredTopics = search.filter(topics);
           final sortedTopics = filteredTopics
-            ..sort((a, b) => -a.id.compareTo(b.id));
+            ..sort((a, b) => a.taggingsCount.compareTo(b.taggingsCount));
           return ListView.builder(
             itemCount: sortedTopics.length,
             itemBuilder: (context, index) {

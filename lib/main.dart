@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '/view/screen/ranking_page.dart';
 import '/routes/router.dart';
 
 void main() async {
@@ -28,7 +27,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routerConfig: appRouter.config(),
-      // home: const RankingPage(),
     );
   }
 }
