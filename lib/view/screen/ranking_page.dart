@@ -8,7 +8,6 @@ import '/provider/topics_provider.dart';
 import '/view/widget/search_topic_p.dart';
 import '/view/widget/topic_container_p.dart';
 
-@RoutePage()
 class RankingPage extends ConsumerWidget {
   const RankingPage({super.key});
   @override
