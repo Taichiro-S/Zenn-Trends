@@ -4,7 +4,7 @@ const axios = require('axios')
 
 const ZENN_API_TOPICS = 'https://zenn.dev/api/topics?page='
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
-const TIME_TO_CALC_RANKING = '5 20 * * *'
+const TIME_TO_CALC_RANKING = '30 6 * * *'
 const WEEKLY_TAGGING_COUNT_CUTOFF = 7
 const MONTHLY_TAGGING_COUNT_CUTOFF = 30
 
@@ -161,6 +161,7 @@ exports.calculateMonthlyRanking = functions
           id: tagId,
           image_url: tagDoc.data().image_url,
           display_name: tagDoc.data().display_name,
+          name: tagDoc.data().name,
           taggings_count: currentSnapshot.docs[0].data().taggings_count,
           taggings_count_change: monthlyTaggingsCountChange,
           taggings_count_history: monthlyTaggingsCountHistoryJson,
@@ -269,6 +270,7 @@ exports.calculateWeeklyRanking = functions
           id: tagId,
           image_url: tagDoc.data().image_url,
           display_name: tagDoc.data().display_name,
+          name: tagDoc.data().name,
           taggings_count: currentSnapshot.docs[0].data().taggings_count,
           taggings_count_change: weeklyTaggingsCountChange,
           taggings_count_history: weeklyTaggingsCountHistoryJson,
