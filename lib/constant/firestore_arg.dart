@@ -7,7 +7,7 @@ enum Collection {
   String get name {
     switch (this) {
       case Collection.topics:
-        return 'tags';
+        return 'topics';
       case Collection.weeklyRanking:
         return 'weeklyRanking';
       case Collection.monthlyRanking:
@@ -18,16 +18,16 @@ enum Collection {
   }
 }
 
-enum RankedTagsSortOrder {
+enum RankedTopicsSortOrder {
   taggingsCount,
   taggingsCountChange,
   ;
 
   String get name {
     switch (this) {
-      case RankedTagsSortOrder.taggingsCount:
+      case RankedTopicsSortOrder.taggingsCount:
         return 'taggings_count';
-      case RankedTagsSortOrder.taggingsCountChange:
+      case RankedTopicsSortOrder.taggingsCountChange:
         return 'taggings_count_change';
       default:
         return '';

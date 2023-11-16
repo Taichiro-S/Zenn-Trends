@@ -2,42 +2,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/constant/default_value.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
-import 'package:zenn_trends/pages/ranking/model/ranked_tag.dart';
+import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 
-part 'ranked_tags_repository.g.dart';
+part 'ranked_topics_repository.g.dart';
 
-class RankedTagsRepository {
-  Future<List<RankedTag>> fetchRankedTags({
+class RankedTopicsRepository {
+  Future<List<RankedTopic>> fetchRankedTopics({
     required Collection timePeriod,
-    required RankedTagsSortOrder sortOrder,
-    int limit = DEFAULT_LOAD_TAGS,
+    required RankedTopicsSortOrder sortOrder,
+    int limit = DEFAULT_LOAD_TOPICS,
     DocumentSnapshot? startAfter,
     String? searchWord,
   }) async {
     try {
       String searchWordLower = '';
-
-      final QuerySnapshot rankedTagsSnapshot = await FirebaseFirestore.instance
+      final QuerySnapshot rankedTopicsSnapshot = await FirebaseFirestore
+          .instance
           .collection(timePeriod.name)
           .orderBy('date', descending: true)
           .limit(1)
           .get();
-      if (rankedTagsSnapshot.docs.isEmpty) {
+      if (rankedTopicsSnapshot.docs.isEmpty) {
         throw Exception('rankings is empty');
       }
-      final DocumentReference rankedTagsDocRef =
-          rankedTagsSnapshot.docs.first.reference;
+      final DocumentReference rankedTopicsDocRef =
+          rankedTopicsSnapshot.docs.first.reference;
       Query query;
       if (searchWord != null && searchWord.isNotEmpty) {
         searchWordLower = searchWord.toLowerCase();
-        query = rankedTagsDocRef
+        query = rankedTopicsDocRef
             .collection('topics')
             .where('name', isGreaterThanOrEqualTo: searchWordLower)
             .where('name', isLessThan: '$searchWordLower\uf8ff')
             .orderBy('name')
             .limit(limit);
       } else {
-        query = rankedTagsDocRef
+        query = rankedTopicsDocRef
             .collection('topics')
             .orderBy(sortOrder.name, descending: true)
             .limit(limit);
@@ -47,14 +47,15 @@ class RankedTagsRepository {
         query = query.startAfterDocument(startAfter);
       }
       final QuerySnapshot snap = await query.get();
-      return snap.docs.map((doc) => RankedTag.fromDocument(doc)).toList();
+      return snap.docs.map((doc) => RankedTopic.fromDocument(doc)).toList();
     } catch (e) {
+      print(e);
       throw Exception(e);
     }
   }
 }
 
 @riverpod
-RankedTagsRepository rankedTagsRepository(RankedTagsRepositoryRef ref) {
-  return RankedTagsRepository();
+RankedTopicsRepository rankedTopicsRepository(RankedTopicsRepositoryRef ref) {
+  return RankedTopicsRepository();
 }

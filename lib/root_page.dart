@@ -11,6 +11,7 @@ class RootPage extends StatelessWidget {
       routes: const [
         RankingRoute(),
         ProfileRoute(),
+        RecentArticleRoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
@@ -25,6 +26,10 @@ class RootPage extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.description),
+              label: 'Article',
             ),
           ],
         );

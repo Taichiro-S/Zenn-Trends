@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
-import 'package:zenn_trends/pages/ranking/provider/loaded_tags_provider.dart';
+import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 part 'scroll_controller_provider.g.dart';
 
@@ -19,7 +19,7 @@ class ScrollControllerNotifier extends _$ScrollControllerNotifier {
 
   void _fetchInitialDatas() {
     final displaySettings = ref.read(displaySettingsProvider);
-    ref.read(loadedTagsProvider.notifier).getRankedTags(
+    ref.read(loadedTopicsProvider.notifier).getRankedTopics(
         timePeriod: displaySettings.timePeriod,
         sortOrder: displaySettings.sortOrder);
   }
@@ -28,7 +28,7 @@ class ScrollControllerNotifier extends _$ScrollControllerNotifier {
     if (state.position.pixels == state.position.maxScrollExtent) {
       final displaySettings = ref.read(displaySettingsProvider);
 
-      ref.read(loadedTagsProvider.notifier).getMoreRankedTags(
+      ref.read(loadedTopicsProvider.notifier).getMoreRankedTopics(
           timePeriod: displaySettings.timePeriod,
           sortOrder: displaySettings.sortOrder);
     }

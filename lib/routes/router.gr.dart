@@ -21,16 +21,22 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const DisplaySettingsPage(),
       );
     },
-    QiitaProfileRoute.name: (routeData) {
+    ProfileRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const QiitaProfilePage(),
+        child: const ProfilePage(),
       );
     },
     RankingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const RankingPage(),
+      );
+    },
+    RecentArticleRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RecentArticlePage(),
       );
     },
     RootRoute.name: (routeData) {
@@ -57,15 +63,15 @@ class DisplaySettingsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [QiitaProfilePage]
-class QiitaProfileRoute extends PageRouteInfo<void> {
-  const QiitaProfileRoute({List<PageRouteInfo>? children})
+/// [ProfilePage]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
       : super(
-          QiitaProfileRoute.name,
+          ProfileRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'QiitaProfileRoute';
+  static const String name = 'ProfileRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -80,6 +86,20 @@ class RankingRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RankingRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RecentArticlePage]
+class RecentArticleRoute extends PageRouteInfo<void> {
+  const RecentArticleRoute({List<PageRouteInfo>? children})
+      : super(
+          RecentArticleRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RecentArticleRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

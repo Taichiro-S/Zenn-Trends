@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
 import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
-import 'package:zenn_trends/pages/ranking/provider/loaded_tags_provider.dart';
+import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 class BarIndicator extends ConsumerWidget {
   final double value;
@@ -17,36 +17,29 @@ class BarIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loadedTagsAsync = ref.watch(loadedTagsProvider);
-    final double maxWidth = MediaQuery.of(context).size.width - 200;
+    final loadedTopicsAsync = ref.watch(loadedTopicsProvider);
+    final double maxWidth = MediaQuery.of(context).size.width - 150;
     final displaySettings = ref.watch(displaySettingsProvider);
 
     return Container(
-        child: loadedTagsAsync.rankedTags.when(
-      data: (tags) {
+        child: loadedTopicsAsync.rankedTopics.when(
+      data: (topics) {
         int maxValue = 0;
-        if (displaySettings.sortOrder == RankedTagsSortOrder.taggingsCount) {
-          for (var i = 0; i < tags.length; i++) {
-            if (tags[i].taggingsCount > maxValue) {
-              maxValue = tags[i].taggingsCount;
+        if (displaySettings.sortOrder == RankedTopicsSortOrder.taggingsCount) {
+          for (var i = 0; i < topics.length; i++) {
+            if (topics[i].taggingsCount > maxValue) {
+              maxValue = topics[i].taggingsCount;
             }
           }
         } else {
-          for (var i = 0; i < tags.length; i++) {
-            if (tags[i].taggingsCountChange > maxValue) {
-              maxValue = tags[i].taggingsCountChange;
+          for (var i = 0; i < topics.length; i++) {
+            if (topics[i].taggingsCountChange > maxValue) {
+              maxValue = topics[i].taggingsCountChange;
             }
           }
         }
         final double ratio = value / (maxValue * 1.0);
         return Row(children: [
-          const Icon(
-            Icons.description,
-            size: 18,
-          ),
-          const SizedBox(
-            width: 5,
-          ),
           Container(
             width: maxWidth * ratio,
             height: 8,

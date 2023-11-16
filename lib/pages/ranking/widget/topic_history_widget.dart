@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
 import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
-import 'package:zenn_trends/pages/ranking/model/ranked_tag.dart';
-import 'package:zenn_trends/pages/ranking/model/tag_history_state.dart';
+import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
+import 'package:zenn_trends/pages/ranking/model/topic_history_state.dart';
 import 'package:zenn_trends/theme/app_colors.dart';
 
-class TagHistoryWidget extends ConsumerWidget {
-  final RankedTag rankedTag;
-  const TagHistoryWidget({super.key, required this.rankedTag});
+class TopicHistoryWidget extends ConsumerWidget {
+  final RankedTopic rankedTopic;
+  const TopicHistoryWidget({super.key, required this.rankedTopic});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,16 +18,16 @@ class TagHistoryWidget extends ConsumerWidget {
     String timePeriod = displaySettings.timePeriod == Collection.monthlyRanking
         ? 'monthly'
         : 'weekly';
-    List<TagHistoryState> dataset = rankedTag.taggingsCountHistory!;
-    if (displaySettings.sortOrder == RankedTagsSortOrder.taggingsCountChange) {
-      if (rankedTag.taggingsCountHistory == null) {
+    List<TopicHistoryState> dataset = rankedTopic.taggingsCountHistory!;
+    if (displaySettings.sortOrder ==
+        RankedTopicsSortOrder.taggingsCountChange) {
+      if (rankedTopic.taggingsCountHistory == null) {
         return Container();
       }
-      dataset = rankedTag.taggingsCountHistory!;
+      dataset = rankedTopic.taggingsCountHistory!;
     }
     return Stack(
       children: <Widget>[
-        const Text('グラフ'),
         AspectRatio(
           aspectRatio: 1.50,
           child: Padding(
@@ -44,7 +44,7 @@ class TagHistoryWidget extends ConsumerWidget {
     );
   }
 
-  LineChartData mainData(List<TagHistoryState> dataset, String timePeriod) {
+  LineChartData mainData(List<TopicHistoryState> dataset, String timePeriod) {
     List<Color> gradientColors = [
       AppColors.light().secondary,
       AppColors.light().primary,
@@ -65,9 +65,8 @@ class TagHistoryWidget extends ConsumerWidget {
       }
       spots.add(FlSpot(x, cumulativeY));
     }
-    List<DateTime> dates = dataset
-        .map((history) => history.date.toDate()) // TimestampからDateTimeに変換
-        .toList();
+    List<DateTime> dates =
+        dataset.map((history) => history.date.toDate()).toList();
     return LineChartData(
       gridData: const FlGridData(show: false),
       titlesData: FlTitlesData(
@@ -83,7 +82,6 @@ class TagHistoryWidget extends ConsumerWidget {
             showTitles: true,
             getTitlesWidget: (value, meta) {
               final index = value.toInt();
-              // リストの範囲外のインデックスを防ぐ
               if (index < 0 || index >= dates.length) {
                 return const Text('');
               }
@@ -104,8 +102,16 @@ class TagHistoryWidget extends ConsumerWidget {
         rightTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: 50,
-            reservedSize: 30,
+            interval: maxY > 200
+                ? 40
+                : maxY > 100
+                    ? 20
+                    : maxY > 50
+                        ? 20
+                        : maxY > 20
+                            ? 10
+                            : 5,
+            reservedSize: maxY > 100 ? 30 : 24,
             getTitlesWidget: (value, meta) {
               if (value == maxY || value == minY) {
                 return const Text('');
