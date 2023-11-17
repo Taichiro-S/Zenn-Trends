@@ -1,38 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
-import 'package:zenn_trends/pages/ranking/provider/loaded_tags_provider.dart';
+import 'package:zenn_trends/pages/profile/provider/favorite_topics_provider.dart';
+import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 class SearchTopic extends ConsumerWidget {
   const SearchTopic({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = TextEditingController();
-    final loadedTagsNotifier = ref.read(loadedTagsProvider.notifier);
-    final loadedTags = ref.watch(loadedTagsProvider);
-    final diaplaySettings = ref.watch(displaySettingsProvider);
+    final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
+    final loadedTopics = ref.watch(loadedTopicsProvider);
+    ref.watch(favoriteTopicsProvider);
+    final displaySettings = ref.watch(displaySettingsProvider);
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: loadedTags.isSearching
+          prefixIcon: loadedTopics.isSearching ||
+                  loadedTopics.showSearchResult ||
+                  loadedTopics.searchWord != null &&
+                      loadedTopics.searchWord!.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    if (loadedTopics.isSearching) {
+                      FocusScope.of(context).unfocus();
+                      searchController.clear();
+                      loadedTopicsNotifier.stopSearching();
+                    } else if (loadedTopics.showSearchResult) {
+                      FocusScope.of(context).unfocus();
+                      searchController.clear();
+                      loadedTopicsNotifier.stopSearching();
+                      loadedTopicsNotifier.getRankedTopics(
+                          timePeriod: displaySettings.timePeriod,
+                          sortOrder: displaySettings.sortOrder);
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back))
+              : const Icon(Icons.search),
+          suffixIcon: loadedTopics.isSearching
               ? IconButton(
                   onPressed: () {
                     searchController.clear();
-                    loadedTagsNotifier.clearSearchWord();
+                    loadedTopicsNotifier.clearSearchWord();
                   },
                   icon: const Icon(Icons.close))
               : null,
-          hintText: !loadedTags.isSearching &&
-                  loadedTags.searchWord != null &&
-                  loadedTags.searchWord!.isNotEmpty
-              ? loadedTags.searchWord
+          hintText: !loadedTopics.isSearching &&
+                  loadedTopics.searchWord != null &&
+                  loadedTopics.searchWord!.isNotEmpty
+              ? loadedTopics.searchWord
               : ''),
       onTap: () {
-        loadedTagsNotifier.startSearching();
+        loadedTopicsNotifier.startSearching();
       },
       onSubmitted: (value) {
-        loadedTagsNotifier.search(searchWord: value);
+        FocusScope.of(context).unfocus();
+        loadedTopicsNotifier.search(searchWord: value);
       },
     );
   }

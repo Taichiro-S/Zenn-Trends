@@ -51,6 +51,17 @@
 		<string>http</string>
 		<string>https</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+			<string>com.googleusercontent.apps.987919199528-h7n06f2s3iehp7b86b8k6esi01kgcalf</string>
+		</array>
+	</dict>
+	</array>
 	<!--  -->
 </dict>
 </plist>

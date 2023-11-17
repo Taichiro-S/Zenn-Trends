@@ -12,7 +12,20 @@
           "package_name": "com.example.zenn_trends"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "987919199528-6iash6aqqjbgc4tehuekfiur190vmiht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zenn_trends",
+            "certificate_hash": "c80d1db634a0667a9b001d7bdb76c48be8cc1120"
+          }
+        },
+        {
+          "client_id": "987919199528-23jpvqmptrndof5ljks9blvqq4i59gha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCAppC3v3UMQghJfS_sx32zeqZ9CfahNek"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987919199528-23jpvqmptrndof5ljks9blvqq4i59gha.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "987919199528-cob72eu2e6aadk9tc53n5rhffpmb7rav.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.zennTrends.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }

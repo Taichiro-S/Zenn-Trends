@@ -16,7 +16,7 @@ class DisplaySettings extends _$DisplaySettings {
     state = state.copyWith(timePeriod: timePeriod);
   }
 
-  void changeSortOrder(RankedTagsSortOrder sortOrder) {
+  void changeSortOrder(RankedTopicsSortOrder sortOrder) {
     state = state.copyWith(sortOrder: sortOrder);
   }
 
@@ -31,9 +31,9 @@ class DisplaySettings extends _$DisplaySettings {
   void toggleSortOrder(int index) {
     if (index == 0) {
       state =
-          state.copyWith(sortOrder: RankedTagsSortOrder.taggingsCountChange);
+          state.copyWith(sortOrder: RankedTopicsSortOrder.taggingsCountChange);
     } else {
-      state = state.copyWith(sortOrder: RankedTagsSortOrder.taggingsCount);
+      state = state.copyWith(sortOrder: RankedTopicsSortOrder.taggingsCount);
     }
   }
 }

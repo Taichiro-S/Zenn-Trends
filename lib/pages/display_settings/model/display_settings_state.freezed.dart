@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DisplaySettingsState {
   Collection get timePeriod => throw _privateConstructorUsedError;
-  RankedTagsSortOrder get sortOrder => throw _privateConstructorUsedError;
+  RankedTopicsSortOrder get sortOrder => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DisplaySettingsStateCopyWith<DisplaySettingsState> get copyWith =>
@@ -30,7 +30,7 @@ abstract class $DisplaySettingsStateCopyWith<$Res> {
           $Res Function(DisplaySettingsState) then) =
       _$DisplaySettingsStateCopyWithImpl<$Res, DisplaySettingsState>;
   @useResult
-  $Res call({Collection timePeriod, RankedTagsSortOrder sortOrder});
+  $Res call({Collection timePeriod, RankedTopicsSortOrder sortOrder});
 }
 
 /// @nodoc
@@ -58,7 +58,7 @@ class _$DisplaySettingsStateCopyWithImpl<$Res,
       sortOrder: null == sortOrder
           ? _value.sortOrder
           : sortOrder // ignore: cast_nullable_to_non_nullable
-              as RankedTagsSortOrder,
+              as RankedTopicsSortOrder,
     ) as $Val);
   }
 }
@@ -71,7 +71,7 @@ abstract class _$$DisplaySettingsStateImplCopyWith<$Res>
       __$$DisplaySettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Collection timePeriod, RankedTagsSortOrder sortOrder});
+  $Res call({Collection timePeriod, RankedTopicsSortOrder sortOrder});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$DisplaySettingsStateImplCopyWithImpl<$Res>
       sortOrder: null == sortOrder
           ? _value.sortOrder
           : sortOrder // ignore: cast_nullable_to_non_nullable
-              as RankedTagsSortOrder,
+              as RankedTopicsSortOrder,
     ));
   }
 }
@@ -110,7 +110,7 @@ class _$DisplaySettingsStateImpl implements _DisplaySettingsState {
   @override
   final Collection timePeriod;
   @override
-  final RankedTagsSortOrder sortOrder;
+  final RankedTopicsSortOrder sortOrder;
 
   @override
   String toString() {
@@ -143,13 +143,13 @@ class _$DisplaySettingsStateImpl implements _DisplaySettingsState {
 abstract class _DisplaySettingsState implements DisplaySettingsState {
   const factory _DisplaySettingsState(
           {required final Collection timePeriod,
-          required final RankedTagsSortOrder sortOrder}) =
+          required final RankedTopicsSortOrder sortOrder}) =
       _$DisplaySettingsStateImpl;
 
   @override
   Collection get timePeriod;
   @override
-  RankedTagsSortOrder get sortOrder;
+  RankedTopicsSortOrder get sortOrder;
   @override
   @JsonKey(ignore: true)
   _$$DisplaySettingsStateImplCopyWith<_$DisplaySettingsStateImpl>

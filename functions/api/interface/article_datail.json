@@ -1,0 +1,168 @@
+{
+  "article": {
+    "id": 217653,
+    "post_type": "Article",
+    "title": "Slack Bot を Kotlin +  Serverless Framework + AWS Lambda で作る",
+    "slug": "b50a6da59f5071",
+    "comments_count": 0,
+    "liked_count": 0,
+    "body_letters_count": 4272,
+    "article_type": "tech",
+    "emoji": "⛳",
+    "is_suspending_private": false,
+    "published_at": "2023-11-16T23:22:51.896+09:00",
+    "body_updated_at": "2023-11-16T23:22:51.896+09:00",
+    "source_repo_updated_at": null,
+    "pinned": false,
+    "path": "/mobdev/articles/b50a6da59f5071",
+    "body_html": "\u003cp\u003eSlack Bot を Kotlin + Serverless Framework + Lambda で作っていこうと思います。\u003c/p\u003e\n\u003ch3 id=\"%E4%BD%BF%E7%94%A8%E6%8A%80%E8%A1%93\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#%E4%BD%BF%E7%94%A8%E6%8A%80%E8%A1%93\" aria-hidden=\"true\"\u003e\u003c/a\u003e 使用技術\u003c/h3\u003e\n\u003cp\u003e今回の使用技術は以下のようになっています。ツール系のインストールなどは完了しているとします。\u003c/p\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003e技術\u003c/th\u003e\n\u003cth\u003e説明\u003c/th\u003e\n\u003cth\u003eURL\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eSlack Bolt for Java\u003c/td\u003e\n\u003ctd\u003eSlack の Java用の SDK\u003c/td\u003e\n\u003ctd\u003e\u003ca href=\"https://slack.dev/java-slack-sdk/guides/ja/getting-started-with-bolt\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"\u003eリンク\u003c/a\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eAmazon API Gateway + AWS Lambda\u003c/td\u003e\n\u003ctd\u003eAPIのエンドポイントおよびAPIの実装をここで\u003c/td\u003e\n\u003ctd\u003e-\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eServerless Framework\u003c/td\u003e\n\u003ctd\u003eサーバーレスアプリケーションの開発、デプロイ、管理ツール\u003c/td\u003e\n\u003ctd\u003e\u003ca href=\"https://www.serverless.com/\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"\u003eリンク\u003c/a\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eKotlin\u003c/td\u003e\n\u003ctd\u003eプログラミング言語\u003c/td\u003e\n\u003ctd\u003e\u003ca href=\"https://kotlinlang.org/\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"\u003eリンク\u003c/a\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003ch2 id=\"%E3%81%BE%E3%81%9A%E3%81%AF%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E3%81%84%E3%81%8F\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#%E3%81%BE%E3%81%9A%E3%81%AF%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E3%81%84%E3%81%8F\" aria-hidden=\"true\"\u003e\u003c/a\u003e まずは実装していく\u003c/h2\u003e\n\u003ch3 id=\"kotlin-%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E7%AB%8B%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#kotlin-%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E7%AB%8B%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e Kotlin のプロジェクトを立ち上げる\u003c/h3\u003e\n\u003cp\u003eGradle プロジェクトを作成して、 Bolt 関連と lambda 関連の依存ライブラリを \u003ccode\u003ebuild.gradle\u003c/code\u003e や \u003ccode\u003ebuild.gradle.kts\u003c/code\u003e に追加します.\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre class=\"language-groovy\"\u003e\u003ccode class=\"language-groovy\"\u003edependencies \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token function\"\u003eplatform\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"org.jetbrains.kotlin:kotlin-bom\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"org.jetbrains.kotlin:kotlin-stdlib-jdk8\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"com.slack.api:bolt-jetty:1.34.0\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"com.slack.api:bolt-aws-lambda:1.34.0\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"org.slf4j:slf4j-simple:1.7.36\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"com.amazonaws:aws-lambda-java-core:1.2.1\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n  \u003cspan class=\"token function\"\u003eimplementation\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token interpolation-string\"\u003e\u003cspan class=\"token string\"\u003e\"com.amazonaws:aws-java-sdk-lambda:1.11.907\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003ch3 id=\"%E3%83%A1%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AB%E5%8F%8D%E5%BF%9C%E3%81%97%E3%81%A6%E8%BF%94%E4%BF%A1%E3%81%99%E3%82%8B%E5%AE%9F%E8%A3%85%E3%82%92%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#%E3%83%A1%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AB%E5%8F%8D%E5%BF%9C%E3%81%97%E3%81%A6%E8%BF%94%E4%BF%A1%E3%81%99%E3%82%8B%E5%AE%9F%E8%A3%85%E3%82%92%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e メンションに反応して返信する実装をする\u003c/h3\u003e\n\u003cp\u003e今回は簡単にメンションがあれば \u003ccode\u003eHello\u003c/code\u003e と返す Bot とします.\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003ecom.slack.api.bolt.App\u003c/code\u003e のインスタンスを作成して、\u003ccode\u003eapp.event(AppMentionEvent::class.java)\u003c/code\u003e でメンションに反応するようになります。そして、\u003ccode\u003echatPostMessage\u003c/code\u003e で返信が送信されます。\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre class=\"language-kotlin\"\u003e\u003ccode class=\"language-kotlin\"\u003e\u003cspan class=\"token keyword\"\u003eobject\u003c/span\u003e SlackApp \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n  \u003cspan class=\"token keyword\"\u003efun\u003c/span\u003e \u003cspan class=\"token keyword\"\u003eget\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003econfig\u003cspan class=\"token operator\"\u003e:\u003c/span\u003e AppConfig\u003cspan class=\"token operator\"\u003e?\u003c/span\u003e \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token keyword\"\u003enull\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token operator\"\u003e:\u003c/span\u003e App \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003eval\u003c/span\u003e app \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e \u003cspan class=\"token function\"\u003eApp\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003econfig\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n    app\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eevent\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003eAppMentionEvent\u003cspan class=\"token operator\"\u003e::\u003c/span\u003e\u003cspan class=\"token keyword\"\u003eclass\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003ejava\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e payload\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e ctx \u003cspan class=\"token operator\"\u003e-\u0026gt;\u003c/span\u003e\n      \u003cspan class=\"token keyword\"\u003eval\u003c/span\u003e event \u003cspan class=\"token operator\"\u003e=\u003c/span\u003e payload\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003eevent\n      ctx\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eclient\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003echatPostMessage\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n        it\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003echannel\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003eevent\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003echannel\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n        it\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003ethreadTs\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003eevent\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003ets\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n        it\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003etext\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token string-literal singleline\"\u003e\u003cspan class=\"token string\"\u003e\"Hello\"\u003c/span\u003e\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n      \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n      ctx\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eack\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\n    \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003ereturn\u003c/span\u003e app\n  \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003ch3 id=\"requesthandler-%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#requesthandler-%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e RequestHandler を実装する\u003c/h3\u003e\n\u003cp\u003eLambda では \u003ccode\u003eRequestHandler\u003c/code\u003e を実装する必要があります。\u003cbr\u003e\n\u003ccode\u003ebolt-aws-lambda\u003c/code\u003e には \u003ccode\u003eRequestHandler\u003c/code\u003e を継承した \u003ccode\u003eSlackApiLambdaHandler\u003c/code\u003e が用意されているので、これを使います。\u003c/p\u003e\n\u003cp\u003e下記のように \u003ccode\u003eSlackApiLambdaHandler\u003c/code\u003e のコンストラクタで \u003ccode\u003ecom.slack.api.bolt.App\u003c/code\u003e のインスタンスを渡しつつ、 \u003ccode\u003eisWarmupRequest\u003c/code\u003e を実装すればOKです。\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre class=\"language-kotlin\"\u003e\u003ccode class=\"language-kotlin\"\u003e\u003cspan class=\"token keyword\"\u003eclass\u003c/span\u003e \u003cspan class=\"token function\"\u003eSlackEventHandler\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token operator\"\u003e:\u003c/span\u003e \u003cspan class=\"token function\"\u003eSlackApiLambdaHandler\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003eSlackApp\u003cspan class=\"token punctuation\"\u003e.\u003c/span\u003e\u003cspan class=\"token function\"\u003eget\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n  \u003cspan class=\"token keyword\"\u003eoverride\u003c/span\u003e \u003cspan class=\"token keyword\"\u003efun\u003c/span\u003e \u003cspan class=\"token function\"\u003eisWarmupRequest\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e(\u003c/span\u003eawsReq\u003cspan class=\"token operator\"\u003e:\u003c/span\u003e ApiGatewayRequest\u003cspan class=\"token operator\"\u003e?\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e)\u003c/span\u003e\u003cspan class=\"token operator\"\u003e:\u003c/span\u003e Boolean \u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"token keyword\"\u003ereturn\u003c/span\u003e \u003cspan class=\"token boolean\"\u003efalse\u003c/span\u003e\n  \u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003e実装はこれで完了です。　Graldeプロジェクトをビルドして fat jar ファイルを生成しておきます。\u003c/p\u003e\n\u003ch2 id=\"slack-bot%E3%81%AE%E6%BA%96%E5%82%99%E3%82%92%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#slack-bot%E3%81%AE%E6%BA%96%E5%82%99%E3%82%92%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e Slack Botの準備をする\u003c/h2\u003e\n\u003cp\u003e\u003ccode\u003eBot Token\u003c/code\u003e と \u003ccode\u003eSigning Secret\u003c/code\u003e を取得します。\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\n\u003ca href=\"https://api.slack.com/apps\" target=\"_blank\" rel=\"nofollow noopener noreferrer\"\u003ehttps://api.slack.com/apps\u003c/a\u003e で アプリを作成する\u003c/li\u003e\n\u003cli\u003e\n\u003ccode\u003eBasic information\u003c/code\u003e の \u003ccode\u003eApp Credentials\u003c/code\u003e に \u003ccode\u003eSigning Secret\u003c/code\u003e があるので手元にメモしておく\u003c/li\u003e\n\u003cli\u003e\n\u003ccode\u003eOAuth \u0026amp; Permissions\u003c/code\u003e で \u003ccode\u003eScope\u003c/code\u003e に \u003ccode\u003eapp_mentions:read\u003c/code\u003e と \u003ccode\u003echat:write\u003c/code\u003e を追加する\u003c/li\u003e\n\u003cli\u003e\n\u003ccode\u003eOAuth \u0026amp; Permissions\u003c/code\u003e で \u003ccode\u003eInstall to Workspace\u003c/code\u003e を選択して、Slack にインストールする\u003c/li\u003e\n\u003cli\u003eインストールが完了すると \u003ccode\u003eBot User OAuth Access Token\u003c/code\u003e(Bot Token) が表示されるのでこれもメモします（ \u003ccode\u003exoxb-\u003c/code\u003e から始まります ）\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2 id=\"serverless-framework%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6-deploy-%E3%81%BE%E3%81%A7%E3%82%84%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#serverless-framework%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6-deploy-%E3%81%BE%E3%81%A7%E3%82%84%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e Serverless Frameworkを使って deploy までやる\u003c/h2\u003e\n\u003ch3 id=\".env%E3%82%92%E7%94%A8%E6%84%8F%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#.env%E3%82%92%E7%94%A8%E6%84%8F%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e .envを用意する\u003c/h3\u003e\n\u003cp\u003e先ほどの\u003ccode\u003eBot Token\u003c/code\u003e と \u003ccode\u003eSigning Secret\u003c/code\u003eをもとに \u003ccode\u003e.env\u003c/code\u003e ファイルを作ります。\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre\u003e\u003ccode\u003eSLACK_BOT_TOKEN=xoxb-xxxxxxxxx \u0026lt;-- 先ほどのBot Tokenを設定\nSLACK_SIGNING_SECRET=xxxxxxxxx \u0026lt;-- 先ほどのSigning Secretを設定\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003ch3 id=\"serverless.yml-%E3%82%92%E8%A8%98%E8%BF%B0%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#serverless.yml-%E3%82%92%E8%A8%98%E8%BF%B0%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e serverless.yml を記述する\u003c/h3\u003e\n\u003cp\u003e\u003ccode\u003e.env\u003c/code\u003e ファイルと同じ場所に 次の \u003ccode\u003eserverless.yml\u003c/code\u003e を作ります。\u003cbr\u003e\n内容は下記で、適宜書き換えてください。\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre class=\"language-yaml\"\u003e\u003ccode class=\"language-yaml\"\u003e\u003cspan class=\"token key atrule\"\u003eservice\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e example\u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003eslack\u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003ebot \u0026lt;\u003cspan class=\"token punctuation\"\u003e---\u003c/span\u003e lambda の名前を定義\n\u003cspan class=\"token key atrule\"\u003euseDotenv\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"token boolean important\"\u003etrue\u003c/span\u003e\n\n\u003cspan class=\"token key atrule\"\u003eprovider\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n  \u003cspan class=\"token key atrule\"\u003ename\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e aws\n  \u003cspan class=\"token key atrule\"\u003eruntime\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e java11\n  \u003cspan class=\"token key atrule\"\u003estage\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e $\u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003eopt\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003estage\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e \u003cspan class=\"token string\"\u003e'dev'\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n  \u003cspan class=\"token key atrule\"\u003eregion\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e ap\u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003enortheast\u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003e\u003cspan class=\"token number\"\u003e1\u003c/span\u003e\n  \u003cspan class=\"token key atrule\"\u003eapiGateway\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n    \u003cspan class=\"token key atrule\"\u003eshouldStartNameWithService\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"token boolean important\"\u003etrue\u003c/span\u003e\n  \u003cspan class=\"token key atrule\"\u003eiamRoleStatements\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n    \u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003e \u003cspan class=\"token key atrule\"\u003eEffect\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e Allow\n      \u003cspan class=\"token key atrule\"\u003eAction\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n        \u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003e lambda\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003eInvokeFunction\n        \u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003e lambda\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003eInvokeAsync\n      \u003cspan class=\"token key atrule\"\u003eResource\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"token string\"\u003e\"*\"\u003c/span\u003e\n\n  \u003cspan class=\"token key atrule\"\u003eenvironment\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n    \u003cspan class=\"token key atrule\"\u003eSERVERLESS_STAGE\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e $\u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003eopt\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003estage\u003cspan class=\"token punctuation\"\u003e,\u003c/span\u003e \u003cspan class=\"token string\"\u003e'dev'\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n    \u003cspan class=\"token key atrule\"\u003eSLACK_SIGNING_SECRET\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e $\u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003eenv\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003eSLACK_SIGNING_SECRET\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n    \u003cspan class=\"token key atrule\"\u003eSLACK_BOT_TOKEN\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e $\u003cspan class=\"token punctuation\"\u003e{\u003c/span\u003eenv\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003eSLACK_BOT_TOKEN\u003cspan class=\"token punctuation\"\u003e}\u003c/span\u003e\n\n\u003cspan class=\"token key atrule\"\u003epackage\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n  \u003cspan class=\"token key atrule\"\u003eartifact\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e ./path/sample\u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003eslack\u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003ebolt.jar \u0026lt;\u003cspan class=\"token punctuation\"\u003e---\u003c/span\u003e jarのパスを設定\n\n\u003cspan class=\"token key atrule\"\u003efunctions\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n  \u003cspan class=\"token key atrule\"\u003eapi\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n    \u003cspan class=\"token key atrule\"\u003ehandler\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e com.xxx.slack.SlackEventHandler \u0026lt;\u003cspan class=\"token punctuation\"\u003e---\u003c/span\u003e 先ほど実装したクラスを設定\n    \u003cspan class=\"token key atrule\"\u003etimeout\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"token number\"\u003e30\u003c/span\u003e\n    \u003cspan class=\"token key atrule\"\u003eevents\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n      \u003cspan class=\"token punctuation\"\u003e-\u003c/span\u003e \u003cspan class=\"token key atrule\"\u003ehttp\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e\n          \u003cspan class=\"token key atrule\"\u003epath\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e slack/events\n          \u003cspan class=\"token key atrule\"\u003emethod\u003c/span\u003e\u003cspan class=\"token punctuation\"\u003e:\u003c/span\u003e post\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003ch3 id=\"deploy%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#deploy%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e deployする\u003c/h3\u003e\n\u003cp\u003eserverless.yml があるところで下記を実行します.\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre\u003e\u003ccode\u003eserverless deploy\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eデプロイが完了すると endpoint が表示されているはずなので、これをメモします。\u003cbr\u003e\n流れちゃった人は、下記で再度 endpoint などを見ることができます。\u003c/p\u003e\n\u003cdiv class=\"code-block-container\"\u003e\u003cpre\u003e\u003ccode\u003eserverless info\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003ch2 id=\"slack-%E3%81%AB-event-subscription-request-url-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#slack-%E3%81%AB-event-subscription-request-url-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B\" aria-hidden=\"true\"\u003e\u003c/a\u003e Slack に Event Subscription Request URL を設定する\u003c/h2\u003e\n\u003cp\u003eSlackアプリの設定画面に戻ります。 \u003ccode\u003eEvent Subscriptions\u003c/code\u003e に移動して、 \u003ccode\u003eEnable Events\u003c/code\u003e をオンにします。 \u003ccode\u003eEvent Subscriptions Request URL\u003c/code\u003e に 先ほどメモした endpoint を入力。\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eVerified\u003c/code\u003e と表示されたら、\u003ccode\u003eSubscribe to bot events\u003c/code\u003eで \u003ccode\u003eapp_mention\u003c/code\u003e を追加して \u003ccode\u003eSave Change\u003c/code\u003e を押してください。\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"https://storage.googleapis.com/zenn-user-upload/e601ed9b0a0b-20231116.png\" loading=\"lazy\" class=\"md-img\"\u003e\u003c/p\u003e\n\u003ch2 id=\"%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D\"\u003e\n\u003ca class=\"header-anchor-link\" href=\"#%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D\" aria-hidden=\"true\"\u003e\u003c/a\u003e 動作確認\u003c/h2\u003e\n\u003cp\u003eあとは Slack で メンションを投げてみて \u003ccode\u003eHello\u003c/code\u003e と返信がくることが確認できれば完了です。\u003c/p\u003e\n",
+    "og_image_url": "https://res.cloudinary.com/zenn/image/upload/s--2J2cFILc--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:Slack%2520Bot%2520%25E3%2582%2592%2520Kotlin%2520%252B%2520%2520Serverless%2520Framework%2520%252B%2520AWS%2520Lambda%2520%25E3%2581%25A7%25E4%25BD%259C%25E3%2582%258B%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:mob%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTG52TGlHR19CazdidjBEc25rVUszMXFBYzlrQ0g0cnJYaW5KVzI5emJYMFE9czk2LWM=%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png",
+    "toc": [
+      {
+        "id": "%E4%BD%BF%E7%94%A8%E6%8A%80%E8%A1%93",
+        "text": "使用技術",
+        "level": 3,
+        "children": []
+      },
+      {
+        "id": "%E3%81%BE%E3%81%9A%E3%81%AF%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E3%81%84%E3%81%8F",
+        "text": "まずは実装していく",
+        "level": 2,
+        "children": [
+          {
+            "id": "kotlin-%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E7%AB%8B%E3%81%A1%E4%B8%8A%E3%81%92%E3%82%8B",
+            "text": "Kotlin のプロジェクトを立ち上げる",
+            "level": 3,
+            "children": []
+          },
+          {
+            "id": "%E3%83%A1%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AB%E5%8F%8D%E5%BF%9C%E3%81%97%E3%81%A6%E8%BF%94%E4%BF%A1%E3%81%99%E3%82%8B%E5%AE%9F%E8%A3%85%E3%82%92%E3%81%99%E3%82%8B",
+            "text": "メンションに反応して返信する実装をする",
+            "level": 3,
+            "children": []
+          },
+          {
+            "id": "requesthandler-%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B",
+            "text": "RequestHandler を実装する",
+            "level": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "slack-bot%E3%81%AE%E6%BA%96%E5%82%99%E3%82%92%E3%81%99%E3%82%8B",
+        "text": "Slack Botの準備をする",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "serverless-framework%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6-deploy-%E3%81%BE%E3%81%A7%E3%82%84%E3%82%8B",
+        "text": "Serverless Frameworkを使って deploy までやる",
+        "level": 2,
+        "children": [
+          {
+            "id": ".env%E3%82%92%E7%94%A8%E6%84%8F%E3%81%99%E3%82%8B",
+            "text": ".envを用意する",
+            "level": 3,
+            "children": []
+          },
+          {
+            "id": "serverless.yml-%E3%82%92%E8%A8%98%E8%BF%B0%E3%81%99%E3%82%8B",
+            "text": "serverless.yml を記述する",
+            "level": 3,
+            "children": []
+          },
+          {
+            "id": "deploy%E3%81%99%E3%82%8B",
+            "text": "deployする",
+            "level": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "slack-%E3%81%AB-event-subscription-request-url-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B",
+        "text": "Slack に Event Subscription Request URL を設定する",
+        "level": 2,
+        "children": []
+      },
+      {
+        "id": "%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D",
+        "text": "動作確認",
+        "level": 2,
+        "children": []
+      }
+    ],
+    "toc_enabled": true,
+    "should_noindex": false,
+    "scheduled_publish_at": null,
+    "can_send_badge": true,
+    "status": "published",
+    "badges": [],
+    "is_mine": false,
+    "is_preview": false,
+    "current_user_liked": false,
+    "github_repository": null,
+    "user": {
+      "id": 142552,
+      "username": "mobdev",
+      "name": "mob",
+      "avatar_small_url": "https://lh3.googleusercontent.com/a/ACg8ocLnvLiGG_Bk7bv0DsnkUK31qAc9kCH4rrXinJW29zbX0Q=s96-c",
+      "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocLnvLiGG_Bk7bv0DsnkUK31qAc9kCH4rrXinJW29zbX0Q=s96-c",
+      "bio": "個人開発垢 / Kotlin縛り / AI",
+      "autolinked_bio": "個人開発垢 / Kotlin縛り / AI",
+      "github_username": "",
+      "twitter_username": "mob_aidev",
+      "is_support_open": true,
+      "tokusyo_contact": null,
+      "tokusyo_name": null,
+      "website_url": "",
+      "website_domain": null,
+      "total_liked_count": 0,
+      "ga_tracking_id": null,
+      "hatena_id": null,
+      "is_invoice_issuer": false
+    },
+    "publication": null,
+    "topics": [
+      {
+        "id": 72,
+        "name": "kotlin",
+        "display_name": "Kotlin",
+        "taggings_count": 1113,
+        "image_url": "https://storage.googleapis.com/zenn-user-upload/topics/0913f0325d.png"
+      },
+      {
+        "id": 165,
+        "name": "lambda",
+        "display_name": "Lambda",
+        "taggings_count": 890,
+        "image_url": "https://storage.googleapis.com/zenn-user-upload/topics/cbe2e4bdd4.png"
+      },
+      {
+        "id": 398,
+        "name": "bolt",
+        "display_name": "bolt",
+        "taggings_count": 26,
+        "image_url": null
+      },
+      {
+        "id": 721,
+        "name": "slackbot",
+        "display_name": "Slackbot",
+        "taggings_count": 29,
+        "image_url": "https://storage.googleapis.com/zenn-user-upload/topics/2526c268d9.png"
+      },
+      {
+        "id": 3811,
+        "name": "serverlessframewor",
+        "display_name": "Serverless Framework",
+        "taggings_count": 71,
+        "image_url": "https://storage.googleapis.com/zenn-user-upload/topics/e6164d3330.png"
+      }
+    ],
+    "comments": [],
+    "positive_comments_count": 0,
+    "commented_users": []
+  }
+}

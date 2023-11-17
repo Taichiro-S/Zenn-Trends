@@ -6,7 +6,7 @@ part of 'display_settings_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$displaySettingsHash() => r'e7a292455b291a1d66443638911ffe4e0b34133d';
+String _$displaySettingsHash() => r'bae87570718f2ac951d0bc8d865aafbd853fdd4d';
 
 /// See also [DisplaySettings].
 @ProviderFor(DisplaySettings)

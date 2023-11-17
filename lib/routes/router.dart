@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:zenn_trends/pages/display_settings/display_settings_page.dart';
+import 'package:zenn_trends/pages/profile/profile_page.dart';
 import 'package:zenn_trends/pages/ranking/ranking_page.dart';
+import 'package:zenn_trends/pages/recent_article/recent_article_page.dart';
+import 'package:zenn_trends/root_page.dart';
 
 part 'router.gr.dart';
 
@@ -9,7 +11,15 @@ part 'router.gr.dart';
 class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: RankingRoute.page, initial: true),
-        AutoRoute(page: DisplaySettingsRoute.page),
+        AutoRoute(path: '/', page: RootRoute.page, children: [
+          AutoRoute(path: '', page: RankingRoute.page),
+          AutoRoute(path: 'recent_article', page: RecentArticleRoute.page),
+          AutoRoute(path: 'profile', page: ProfileRoute.page),
+        ]),
+        AutoRoute(path: '/display_settings', page: DisplaySettingsRoute.page),
+        // AutoRoute(
+        //     path: '/daily_articles', page: DailyArticlesOfTopicRoute.page),
+
+        // AutoRoute(path: '/article_body', page: ArticleBodyRoute.page)
       ];
 }
