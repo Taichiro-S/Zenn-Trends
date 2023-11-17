@@ -2,12 +2,12 @@
 // ref : https://pub.dev/packages/freezed#disabling-invalid_annotation_target-warning-and-warning-in-generates-files
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'zenn_article.freezed.dart';
-part 'zenn_article.g.dart';
+part 'zenn_article_body.freezed.dart';
+part 'zenn_article_body.g.dart';
 
 @freezed
-class ZennArticle with _$ZennArticle {
-  const factory ZennArticle({
+class ZennArticleBody with _$ZennArticleBody {
+  const factory ZennArticleBody({
     required int id,
     @JsonKey(name: 'post_type') required String? postType,
     required String title,
@@ -18,14 +18,16 @@ class ZennArticle with _$ZennArticle {
     @JsonKey(name: 'article_type') required String? articleType,
     required String? emoji,
     @JsonKey(name: 'is_suspending_private') required bool isSuspendingPrivate,
-    @JsonKey(name: 'published_at') required String publishedAt,
-    @JsonKey(name: 'body_updated_at') required String bodyUpdatedAt,
+    @JsonKey(name: 'published_at') required String? publishedAt,
+    @JsonKey(name: 'body_updated_at') required String? bodyUpdatedAt,
     @JsonKey(name: 'source_repo_updated_at')
     required String? sourceRepoUpdatedAt,
     required bool pinned,
-    required String path,
+    required String? path,
+    @JsonKey(name: 'body_html') required String bodyHtml,
     required Map<String, dynamic> user,
-  }) = _ZennArticle;
-  factory ZennArticle.fromJson(Map<String, dynamic> json) =>
-      _$ZennArticleFromJson(json);
+    required List<Map<String, dynamic>>? topics,
+  }) = _ZennArticleBody;
+  factory ZennArticleBody.fromJson(Map<String, dynamic> json) =>
+      _$ZennArticleBodyFromJson(json);
 }

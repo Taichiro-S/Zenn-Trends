@@ -1,9 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/pages/recent_article/api/zenn_recent_articles.dart';
-import 'package:zenn_trends/pages/recent_article/model/article_detail.dart';
+import 'package:zenn_trends/pages/recent_article/article_body_page.dart';
 import 'package:zenn_trends/pages/recent_article/model/zenn_article.dart';
 
 @RoutePage()
@@ -17,7 +16,7 @@ class RecentArticlePage extends ConsumerWidget {
         title: const Text('Recent Article'),
       ),
       body: FutureBuilder<List<ZennArticle>>(
-        future: recentArticle.getRecentArticles(),
+        future: recentArticle.getRecentArticles(duration: 7),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -29,11 +28,22 @@ class RecentArticlePage extends ConsumerWidget {
               itemCount: articles.length,
               itemBuilder: (context, index) {
                 final article = articles[index];
+                final publishedAt = DateTime.parse(article.publishedAt);
                 return ListTile(
                   title: Text(article.title),
-                  subtitle: Text('Likes: ${article.likedCount}'),
+                  subtitle: Column(children: [
+                    Text('いいね数: ${article.likedCount}'),
+                    Text('$publishedAt'),
+                    Text('文字数: ${article.bodyLettersCount}')
+                  ]),
                   onTap: () {
                     // ここに記事をタップしたときの処理を追加する
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => ArticleBodyPage(
+                                  articleSlug: article.slug,
+                                )));
                   },
                 );
               },

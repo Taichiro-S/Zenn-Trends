@@ -25,6 +25,16 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
 
   @override
   void initState() {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final favoriteTopics = ref.watch(favoriteTopicsProvider);
+    //   print(favoriteTopics.topicIds.value);
+    //   final newIsFavorite =
+    //       favoriteTopics.topicIds.value?.contains(widget.rankedTopic.id) ??
+    //           false;
+    //   setState(() {
+    //     isFavorite = newIsFavorite;
+    //   });
+    // });
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -58,10 +68,20 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
     final router = AutoRouter.of(context);
     final newIsFavorite =
         favoriteTopics.topicIds.value?.contains(widget.rankedTopic.id) ?? false;
-    print('user: ${googleAuth.user.value?.uid}');
-    print('favoriteTopics: ${favoriteTopics.topicIds.value ?? []}');
+    // ref.listen<AsyncValue<List<String>>>(
+    //     favoriteTopicsProvider.select((state) => state.topicIds), (prev, next) {
+    //   if (prev != next && next is AsyncData<List<String>>) {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       setState(() {
+    //         isFavorite = next.value.contains(widget.rankedTopic.id);
+    //       });
+    //     });
+    //   } else {
+    //     ref.read(favoriteTopicsProvider.notifier).initialize();
+    //   }
+    // });
+
     if (newIsFavorite != isFavorite) {
-      print('id = ${widget.rankedTopic.id}');
       setState(() {
         isFavorite = newIsFavorite;
       });
@@ -72,54 +92,64 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
       return AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {
-          return user == null
-              ? IconButton(
-                  onPressed: () {
-                    /* 
-                  todo: モーダルを出してログイン画面に遷移できるようにする
-                  router.push(const ProfileRoute());
+          if (user == null) {
+            return IconButton(
+                onPressed: () {
+                  /* 
+                  TODO
+                  モーダルを出してログイン画面に遷移できるようにする
                   */
-                    return;
-                  },
-                  icon: const Icon(Icons.favorite, color: Colors.grey))
-              : IconButton(
-                  icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite ? Colors.red : Colors.grey,
-                    size: _animation.value,
-                  ),
-                  onPressed: () async {
-                    if (isLoading) return;
-                    setState(() {
-                      isLoading = true;
-                    });
-                    try {
-                      if (isFavorite) {
-                        await favoriteTopicsNotifier.removeFavoriteTopic(
-                            user: user, topicId: widget.rankedTopic.id);
-                      } else {
-                        await favoriteTopicsNotifier.addFavoriteTopic(
-                            user: user, topic: widget.rankedTopic);
+                  return;
+                },
+                icon: const Icon(Icons.favorite_border, color: Colors.grey));
+          } else {
+            return favoriteTopics.topicIds.when(
+                data: (topicIds) {
+                  return IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.grey,
+                      size: _animation.value,
+                    ),
+                    onPressed: () async {
+                      if (isLoading) return;
+                      setState(() {
+                        isLoading = true;
+                      });
+                      try {
+                        if (isFavorite) {
+                          await favoriteTopicsNotifier.removeFavoriteTopic(
+                              user: user, topicId: widget.rankedTopic.id);
+                        } else {
+                          await favoriteTopicsNotifier.addFavoriteTopic(
+                              user: user, topic: widget.rankedTopic);
+                        }
+                      } catch (e) {
+                        /* TODO 
+                        error modal 
+                        */
                       }
-                    } catch (e) {
-                      print(e.toString());
-                    }
-                    await _toggleFavorite(user, isFavorite);
-                    await Future<void>.delayed(
-                        const Duration(milliseconds: 300));
-                    setState(() {
-                      isLoading = false;
-                    });
-                  },
-                );
+                      await _toggleFavorite(user, isFavorite);
+                      await Future<void>.delayed(
+                          const Duration(milliseconds: 300));
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                  );
+                },
+                loading: () => const CircularProgressIndicator(
+                      color: Colors.amber,
+                    ),
+                error: (error, stackTrace) {
+                  return Text(error.toString());
+                });
+          }
         },
       );
     }, loading: () {
-      print('loading user');
       return const CircularProgressIndicator();
     }, error: (error, stackTrace) {
-      print(error.toString());
-      // return Container();
       return Text(error.toString());
     }));
   }

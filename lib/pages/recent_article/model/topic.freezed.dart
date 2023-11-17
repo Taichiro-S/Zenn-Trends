@@ -22,8 +22,11 @@ Topic _$TopicFromJson(Map<String, dynamic> json) {
 mixin _$Topic {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'display_name')
   String get displayName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'taggings_count')
   int get taggingsCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_url')
   String? get imageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,9 +42,9 @@ abstract class $TopicCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String displayName,
-      int taggingsCount,
-      String? imageUrl});
+      @JsonKey(name: 'display_name') String displayName,
+      @JsonKey(name: 'taggings_count') int taggingsCount,
+      @JsonKey(name: 'image_url') String? imageUrl});
 }
 
 /// @nodoc
@@ -98,9 +101,9 @@ abstract class _$$TopicImplCopyWith<$Res> implements $TopicCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String displayName,
-      int taggingsCount,
-      String? imageUrl});
+      @JsonKey(name: 'display_name') String displayName,
+      @JsonKey(name: 'taggings_count') int taggingsCount,
+      @JsonKey(name: 'image_url') String? imageUrl});
 }
 
 /// @nodoc
@@ -151,9 +154,9 @@ class _$TopicImpl implements _Topic {
   const _$TopicImpl(
       {required this.id,
       required this.name,
-      required this.displayName,
-      required this.taggingsCount,
-      required this.imageUrl});
+      @JsonKey(name: 'display_name') required this.displayName,
+      @JsonKey(name: 'taggings_count') required this.taggingsCount,
+      @JsonKey(name: 'image_url') required this.imageUrl});
 
   factory _$TopicImpl.fromJson(Map<String, dynamic> json) =>
       _$$TopicImplFromJson(json);
@@ -163,10 +166,13 @@ class _$TopicImpl implements _Topic {
   @override
   final String name;
   @override
+  @JsonKey(name: 'display_name')
   final String displayName;
   @override
+  @JsonKey(name: 'taggings_count')
   final int taggingsCount;
   @override
+  @JsonKey(name: 'image_url')
   final String? imageUrl;
 
   @override
@@ -210,11 +216,12 @@ class _$TopicImpl implements _Topic {
 
 abstract class _Topic implements Topic {
   const factory _Topic(
-      {required final int id,
-      required final String name,
-      required final String displayName,
-      required final int taggingsCount,
-      required final String? imageUrl}) = _$TopicImpl;
+          {required final int id,
+          required final String name,
+          @JsonKey(name: 'display_name') required final String displayName,
+          @JsonKey(name: 'taggings_count') required final int taggingsCount,
+          @JsonKey(name: 'image_url') required final String? imageUrl}) =
+      _$TopicImpl;
 
   factory _Topic.fromJson(Map<String, dynamic> json) = _$TopicImpl.fromJson;
 
@@ -223,10 +230,13 @@ abstract class _Topic implements Topic {
   @override
   String get name;
   @override
+  @JsonKey(name: 'display_name')
   String get displayName;
   @override
+  @JsonKey(name: 'taggings_count')
   int get taggingsCount;
   @override
+  @JsonKey(name: 'image_url')
   String? get imageUrl;
   @override
   @JsonKey(ignore: true)

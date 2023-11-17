@@ -12,10 +12,14 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(path: '/', page: RootRoute.page, children: [
-          AutoRoute(path: '', page: RecentArticleRoute.page),
-          AutoRoute(path: 'ranking', page: RankingRoute.page),
+          AutoRoute(path: '', page: RankingRoute.page),
+          AutoRoute(path: 'recent_article', page: RecentArticleRoute.page),
           AutoRoute(path: 'profile', page: ProfileRoute.page),
         ]),
         AutoRoute(path: '/display_settings', page: DisplaySettingsRoute.page),
+        // AutoRoute(
+        //     path: '/daily_articles', page: DailyArticlesOfTopicRoute.page),
+
+        // AutoRoute(path: '/article_body', page: ArticleBodyRoute.page)
       ];
 }

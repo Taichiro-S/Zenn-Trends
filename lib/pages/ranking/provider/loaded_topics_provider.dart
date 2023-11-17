@@ -15,6 +15,7 @@ class LoadedTopics extends _$LoadedTopics {
       lastDoc: null,
       isLoadingMore: false,
       isSearching: false,
+      showSearchResult: false,
     );
   }
 
@@ -92,21 +93,25 @@ class LoadedTopics extends _$LoadedTopics {
   void setSearchWord(String searchWord) {
     state = state.copyWith(isSearching: true);
     state = state.copyWith(searchWord: searchWord);
+    state = state.copyWith(showSearchResult: false);
   }
 
   void clearSearchWord() {
     state = state.copyWith(isSearching: true);
     state = state.copyWith(searchWord: '');
+    state = state.copyWith(showSearchResult: false);
   }
 
   void startSearching() {
     state = state.copyWith(isSearching: true);
+    state = state.copyWith(showSearchResult: false);
   }
 
   void search({required String searchWord}) {
     final displaySettings = ref.watch(displaySettingsProvider);
     state = state.copyWith(isSearching: false);
     state = state.copyWith(searchWord: searchWord);
+    state = state.copyWith(showSearchResult: true);
 
     searchRankedTopics(
         timePeriod: displaySettings.timePeriod,
@@ -115,7 +120,9 @@ class LoadedTopics extends _$LoadedTopics {
   }
 
   void stopSearching() {
+    state = state.copyWith(searchWord: '');
     state = state.copyWith(isSearching: false);
+    state = state.copyWith(showSearchResult: false);
   }
 
   /*

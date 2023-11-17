@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:zenn_trends/constant/default_value.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
 import 'package:zenn_trends/pages/display_settings/model/display_settings_state.dart';
@@ -29,6 +28,7 @@ class RankingPage extends ConsumerWidget {
     final displaySettings = ref.watch(displaySettingsProvider);
     final googleAuth = ref.watch(googleAuthProvider);
     final router = AutoRouter.of(context);
+    ref.watch(favoriteTopicsProvider);
     ref.listen<DisplaySettingsState>(displaySettingsProvider,
         (previousState, state) {
       if (state != previousState) {
@@ -43,7 +43,20 @@ class RankingPage extends ConsumerWidget {
           ref
               .read(favoriteTopicsProvider.notifier)
               .getFavoriteTopics(user: user.value!);
+          ref.watch(favoriteTopicsProvider);
         });
+      } else {
+        ref.read(favoriteTopicsProvider.notifier).initialize();
+      }
+    });
+    ref.listen<bool>(loadedTopicsProvider.select((state) => state.isSearching),
+        (_, user) {
+      final user = ref.watch(googleAuthProvider.select((state) => state.user));
+      if (user.value != null) {
+        ref
+            .read(favoriteTopicsProvider.notifier)
+            .getFavoriteTopics(user: user.value!);
+        ref.watch(favoriteTopicsProvider);
       } else {
         ref.read(favoriteTopicsProvider.notifier).initialize();
       }
@@ -71,7 +84,6 @@ class RankingPage extends ConsumerWidget {
               if (loadedTopics.isSearching) {
                 return GestureDetector(
                   onTap: () {
-                    print('onTap');
                     FocusScope.of(context).unfocus();
                     loadedTopicsNotifier.stopSearching();
                   },
@@ -86,15 +98,21 @@ class RankingPage extends ConsumerWidget {
                 return RefreshIndicator(
                   child: ListView.builder(
                     controller: scrollController,
-                    itemCount: rankedTopics.length +
-                        (loadedTopics.isLoadingMore ? 1 : 0),
+                    itemCount: rankedTopics.length + 1,
+                    // (loadedTopics.isLoadingMore ? 1 : 0),
                     itemBuilder: (context, index) {
-                      if (loadedTopics.isLoadingMore &&
-                          index == rankedTopics.length) {
-                        return const Center(
-                            child: CircularProgressIndicator(
-                          color: Colors.blue,
-                        ));
+                      if (index == rankedTopics.length) {
+                        // ここで、最後のアイテムがロード中かどうかをチェック
+                        if (loadedTopics.lastDoc != null) {
+                          return const Center(
+                              child: CircularProgressIndicator(
+                                  color: Colors.blue, value: 20));
+                        } else {
+                          return const Center(
+                              child: Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Text('トピックがありません')));
+                        }
                       }
                       final rankedTopic = rankedTopics[index];
                       if (displaySettings.sortOrder ==
@@ -108,11 +126,7 @@ class RankingPage extends ConsumerWidget {
                           margin: const EdgeInsets.all(8),
                           child: Column(
                             children: [
-                              TopicContainerWidget(
-                                rankedTopic: rankedTopic,
-                                // topicIds: topicIds,
-                                // user: user
-                              ),
+                              TopicContainerWidget(rankedTopic: rankedTopic),
                               Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: TopicHistoryWidget(

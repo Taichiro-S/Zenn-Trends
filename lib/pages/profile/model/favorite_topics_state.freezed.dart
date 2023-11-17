@@ -17,8 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FavoriteTopicsState {
   AsyncValue<List<String>> get topicIds => throw _privateConstructorUsedError;
-  Map<String, AsyncValue<void>> get individualLoadingStates =>
-      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FavoriteTopicsStateCopyWith<FavoriteTopicsState> get copyWith =>
@@ -31,9 +29,7 @@ abstract class $FavoriteTopicsStateCopyWith<$Res> {
           FavoriteTopicsState value, $Res Function(FavoriteTopicsState) then) =
       _$FavoriteTopicsStateCopyWithImpl<$Res, FavoriteTopicsState>;
   @useResult
-  $Res call(
-      {AsyncValue<List<String>> topicIds,
-      Map<String, AsyncValue<void>> individualLoadingStates});
+  $Res call({AsyncValue<List<String>> topicIds});
 }
 
 /// @nodoc
@@ -50,17 +46,12 @@ class _$FavoriteTopicsStateCopyWithImpl<$Res, $Val extends FavoriteTopicsState>
   @override
   $Res call({
     Object? topicIds = null,
-    Object? individualLoadingStates = null,
   }) {
     return _then(_value.copyWith(
       topicIds: null == topicIds
           ? _value.topicIds
           : topicIds // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<String>>,
-      individualLoadingStates: null == individualLoadingStates
-          ? _value.individualLoadingStates
-          : individualLoadingStates // ignore: cast_nullable_to_non_nullable
-              as Map<String, AsyncValue<void>>,
     ) as $Val);
   }
 }
@@ -73,9 +64,7 @@ abstract class _$$FavoriteTopicsStateImplCopyWith<$Res>
       __$$FavoriteTopicsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {AsyncValue<List<String>> topicIds,
-      Map<String, AsyncValue<void>> individualLoadingStates});
+  $Res call({AsyncValue<List<String>> topicIds});
 }
 
 /// @nodoc
@@ -90,17 +79,12 @@ class __$$FavoriteTopicsStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? topicIds = null,
-    Object? individualLoadingStates = null,
   }) {
     return _then(_$FavoriteTopicsStateImpl(
       topicIds: null == topicIds
           ? _value.topicIds
           : topicIds // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<String>>,
-      individualLoadingStates: null == individualLoadingStates
-          ? _value._individualLoadingStates
-          : individualLoadingStates // ignore: cast_nullable_to_non_nullable
-              as Map<String, AsyncValue<void>>,
     ));
   }
 }
@@ -108,25 +92,14 @@ class __$$FavoriteTopicsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$FavoriteTopicsStateImpl implements _FavoriteTopicsState {
-  const _$FavoriteTopicsStateImpl(
-      {required this.topicIds,
-      required final Map<String, AsyncValue<void>> individualLoadingStates})
-      : _individualLoadingStates = individualLoadingStates;
+  const _$FavoriteTopicsStateImpl({required this.topicIds});
 
   @override
   final AsyncValue<List<String>> topicIds;
-  final Map<String, AsyncValue<void>> _individualLoadingStates;
-  @override
-  Map<String, AsyncValue<void>> get individualLoadingStates {
-    if (_individualLoadingStates is EqualUnmodifiableMapView)
-      return _individualLoadingStates;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_individualLoadingStates);
-  }
 
   @override
   String toString() {
-    return 'FavoriteTopicsState(topicIds: $topicIds, individualLoadingStates: $individualLoadingStates)';
+    return 'FavoriteTopicsState(topicIds: $topicIds)';
   }
 
   @override
@@ -135,14 +108,11 @@ class _$FavoriteTopicsStateImpl implements _FavoriteTopicsState {
         (other.runtimeType == runtimeType &&
             other is _$FavoriteTopicsStateImpl &&
             (identical(other.topicIds, topicIds) ||
-                other.topicIds == topicIds) &&
-            const DeepCollectionEquality().equals(
-                other._individualLoadingStates, _individualLoadingStates));
+                other.topicIds == topicIds));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, topicIds,
-      const DeepCollectionEquality().hash(_individualLoadingStates));
+  int get hashCode => Object.hash(runtimeType, topicIds);
 
   @JsonKey(ignore: true)
   @override
@@ -154,14 +124,11 @@ class _$FavoriteTopicsStateImpl implements _FavoriteTopicsState {
 
 abstract class _FavoriteTopicsState implements FavoriteTopicsState {
   const factory _FavoriteTopicsState(
-      {required final AsyncValue<List<String>> topicIds,
-      required final Map<String, AsyncValue<void>>
-          individualLoadingStates}) = _$FavoriteTopicsStateImpl;
+          {required final AsyncValue<List<String>> topicIds}) =
+      _$FavoriteTopicsStateImpl;
 
   @override
   AsyncValue<List<String>> get topicIds;
-  @override
-  Map<String, AsyncValue<void>> get individualLoadingStates;
   @override
   @JsonKey(ignore: true)
   _$$FavoriteTopicsStateImplCopyWith<_$FavoriteTopicsStateImpl> get copyWith =>

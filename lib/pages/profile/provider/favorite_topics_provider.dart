@@ -14,7 +14,9 @@ class FavoriteTopics extends _$FavoriteTopics {
     //   getFavoriteTopics(user: user);
     // });
     return const FavoriteTopicsState(
-        topicIds: AsyncValue.loading(), individualLoadingStates: {});
+      topicIds: AsyncValue.data([]),
+      // individualLoadingStates: {}
+    );
   }
 
   void initialize() {
@@ -38,24 +40,25 @@ class FavoriteTopics extends _$FavoriteTopics {
       {required User user, required RankedTopic topic}) async {
     final favoriteTopicsRepository =
         ref.watch(favoriteTopicsRepositoryProvider);
-    final topicId = topic.id;
-    state = state.copyWith(
-      individualLoadingStates: Map.from(state.individualLoadingStates)
-        ..update(topicId, (_) => const AsyncValue.loading(),
-            ifAbsent: () => const AsyncValue.loading()),
-    );
+    // final topicId = topic.id;
+    // state = state.copyWith(
+    //   individualLoadingStates: Map.from(state.individualLoadingStates)
+    //     ..update(topicId, (_) => const AsyncValue.loading(),
+    //         ifAbsent: () => const AsyncValue.loading()),
+    // );
     try {
       final updatedTopicIds = await favoriteTopicsRepository.addFavoriteTopic(
           user: user, topic: topic);
       state = state.copyWith(
-          topicIds: AsyncValue.data(updatedTopicIds),
-          individualLoadingStates: Map.from(state.individualLoadingStates)
-            ..remove(topicId));
+        topicIds: AsyncValue.data(updatedTopicIds),
+        // individualLoadingStates: Map.from(state.individualLoadingStates)
+        //   ..remove(topicId)
+      );
     } catch (e, s) {
       state = state.copyWith(
         topicIds: AsyncValue.error(e, s),
-        individualLoadingStates: Map.from(state.individualLoadingStates)
-          ..remove(topicId),
+        // individualLoadingStates: Map.from(state.individualLoadingStates)
+        //   ..remove(topicId),
       );
     }
   }
@@ -64,23 +67,24 @@ class FavoriteTopics extends _$FavoriteTopics {
       {required User user, required String topicId}) async {
     final favoriteTopicsRepository =
         ref.watch(favoriteTopicsRepositoryProvider);
-    state = state.copyWith(
-      individualLoadingStates: Map.from(state.individualLoadingStates)
-        ..update(topicId, (_) => const AsyncValue.loading(),
-            ifAbsent: () => const AsyncValue.loading()),
-    );
+    // state = state.copyWith(
+    //   individualLoadingStates: Map.from(state.individualLoadingStates)
+    //     ..update(topicId, (_) => const AsyncValue.loading(),
+    //         ifAbsent: () => const AsyncValue.loading()),
+    // );
     try {
       final updatedTopicIds = await favoriteTopicsRepository
           .removeFavoriteTopic(user: user, topicId: topicId);
       state = state.copyWith(
-          topicIds: AsyncValue.data(updatedTopicIds),
-          individualLoadingStates: Map.from(state.individualLoadingStates)
-            ..remove(topicId));
+        topicIds: AsyncValue.data(updatedTopicIds),
+        // individualLoadingStates: Map.from(state.individualLoadingStates)
+        //   ..remove(topicId)
+      );
     } catch (e, s) {
       state = state.copyWith(
         topicIds: AsyncValue.error(e, s),
-        individualLoadingStates: Map.from(state.individualLoadingStates)
-          ..remove(topicId),
+        // individualLoadingStates: Map.from(state.individualLoadingStates)
+        //   ..remove(topicId),
       );
     }
   }

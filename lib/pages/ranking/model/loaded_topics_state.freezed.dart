@@ -21,6 +21,7 @@ mixin _$LoadedTopicsState {
   DocumentSnapshot<Object?>? get lastDoc => throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
   bool get isSearching => throw _privateConstructorUsedError;
+  bool get showSearchResult => throw _privateConstructorUsedError;
   String? get searchWord => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -39,6 +40,7 @@ abstract class $LoadedTopicsStateCopyWith<$Res> {
       DocumentSnapshot<Object?>? lastDoc,
       bool isLoadingMore,
       bool isSearching,
+      bool showSearchResult,
       String? searchWord});
 }
 
@@ -59,6 +61,7 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
     Object? lastDoc = freezed,
     Object? isLoadingMore = null,
     Object? isSearching = null,
+    Object? showSearchResult = null,
     Object? searchWord = freezed,
   }) {
     return _then(_value.copyWith(
@@ -77,6 +80,10 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
       isSearching: null == isSearching
           ? _value.isSearching
           : isSearching // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSearchResult: null == showSearchResult
+          ? _value.showSearchResult
+          : showSearchResult // ignore: cast_nullable_to_non_nullable
               as bool,
       searchWord: freezed == searchWord
           ? _value.searchWord
@@ -99,6 +106,7 @@ abstract class _$$LoadedTopicsStateeImplCopyWith<$Res>
       DocumentSnapshot<Object?>? lastDoc,
       bool isLoadingMore,
       bool isSearching,
+      bool showSearchResult,
       String? searchWord});
 }
 
@@ -117,6 +125,7 @@ class __$$LoadedTopicsStateeImplCopyWithImpl<$Res>
     Object? lastDoc = freezed,
     Object? isLoadingMore = null,
     Object? isSearching = null,
+    Object? showSearchResult = null,
     Object? searchWord = freezed,
   }) {
     return _then(_$LoadedTopicsStateeImpl(
@@ -136,6 +145,10 @@ class __$$LoadedTopicsStateeImplCopyWithImpl<$Res>
           ? _value.isSearching
           : isSearching // ignore: cast_nullable_to_non_nullable
               as bool,
+      showSearchResult: null == showSearchResult
+          ? _value.showSearchResult
+          : showSearchResult // ignore: cast_nullable_to_non_nullable
+              as bool,
       searchWord: freezed == searchWord
           ? _value.searchWord
           : searchWord // ignore: cast_nullable_to_non_nullable
@@ -152,6 +165,7 @@ class _$LoadedTopicsStateeImpl implements _LoadedTopicsStatee {
       required this.lastDoc,
       required this.isLoadingMore,
       required this.isSearching,
+      required this.showSearchResult,
       this.searchWord});
 
   @override
@@ -163,11 +177,13 @@ class _$LoadedTopicsStateeImpl implements _LoadedTopicsStatee {
   @override
   final bool isSearching;
   @override
+  final bool showSearchResult;
+  @override
   final String? searchWord;
 
   @override
   String toString() {
-    return 'LoadedTopicsState(rankedTopics: $rankedTopics, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, searchWord: $searchWord)';
+    return 'LoadedTopicsState(rankedTopics: $rankedTopics, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, showSearchResult: $showSearchResult, searchWord: $searchWord)';
   }
 
   @override
@@ -182,13 +198,15 @@ class _$LoadedTopicsStateeImpl implements _LoadedTopicsStatee {
                 other.isLoadingMore == isLoadingMore) &&
             (identical(other.isSearching, isSearching) ||
                 other.isSearching == isSearching) &&
+            (identical(other.showSearchResult, showSearchResult) ||
+                other.showSearchResult == showSearchResult) &&
             (identical(other.searchWord, searchWord) ||
                 other.searchWord == searchWord));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, rankedTopics, lastDoc,
-      isLoadingMore, isSearching, searchWord);
+      isLoadingMore, isSearching, showSearchResult, searchWord);
 
   @JsonKey(ignore: true)
   @override
@@ -204,6 +222,7 @@ abstract class _LoadedTopicsStatee implements LoadedTopicsState {
       required final DocumentSnapshot<Object?>? lastDoc,
       required final bool isLoadingMore,
       required final bool isSearching,
+      required final bool showSearchResult,
       final String? searchWord}) = _$LoadedTopicsStateeImpl;
 
   @override
@@ -214,6 +233,8 @@ abstract class _LoadedTopicsStatee implements LoadedTopicsState {
   bool get isLoadingMore;
   @override
   bool get isSearching;
+  @override
+  bool get showSearchResult;
   @override
   String? get searchWord;
   @override

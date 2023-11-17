@@ -3,8 +3,11 @@ const functions = require('firebase-functions')
 const axios = require('axios')
 
 const ZENN_API_TOPICS = 'https://zenn.dev/api/topics?page='
+const ZENN_API_ARTICLES = 'https://zenn.dev/api/articles'
+const MAX_PAGE = 10
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
-const TIME_TO_CALC_RANKING = '30 6 * * *'
+const TIME_TO_CALC_RANKING = '10 6 * * *'
+const TIME_TO_FETCH_ARTICLES_SLUG = '40 23 * * *'
 const WEEKLY_TAGGING_COUNT_CUTOFF = 7
 const MONTHLY_TAGGING_COUNT_CUTOFF = 30
 
@@ -18,6 +21,7 @@ exports.fetchZennTags = functions
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
+      4
       let allTopics = []
       for (let page = 1; page <= 10; page++) {
         const response = await axios.get(ZENN_API_TOPICS + page)
@@ -276,6 +280,120 @@ exports.calculateWeeklyRanking = functions
           taggings_count_history: weeklyTaggingsCountHistoryJson,
           date: now,
         })
+      }
+      return null
+    } catch (error) {
+      console.error('Error calculating ranking:', error.message)
+      throw new functions.https.HttpsError(
+        'internal',
+        'Failed to calculate and store ranking.',
+      )
+    }
+  })
+
+exports.getDailyArticlesSlug = functions
+  .runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule(TIME_TO_FETCH_ARTICLES_SLUG)
+  .timeZone('Asia/Tokyo')
+  .onRun(async (context) => {
+    try {
+      const weeklyRankingSnapshot = await db
+        .collection('weeklyRanking')
+        .orderBy('date', 'desc')
+        .limit(1)
+        .get()
+      if (!weeklyRankingSnapshot.empty) {
+        const latestDoc = weeklyRankingSnapshot.docs[0]
+        const latestDate = latestDoc.data().date
+        console.log(latestDate)
+
+        // 'topics' サブコレクションからIDを取得して配列に保存
+        const topicsSnapshot = await db
+          .collection('weeklyRanking')
+          .doc(latestDoc.id)
+          .collection('topics')
+          .get()
+
+        const ids = []
+        topicsSnapshot.forEach((doc) => {
+          ids.push(doc.id)
+        })
+        console.log(ids)
+        const now = new Date()
+        const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+        const recentArticles = []
+        apiCall: for (let i = 1; i <= MAX_PAGE; i++) {
+          const response = await axios.get(
+            ZENN_API_ARTICLES + '?order=latest&page=' + i,
+          )
+          if (response.status === 200) {
+            const articles = response.data.articles
+            for (const article of articles) {
+              const publishedAt = new Date(article.published_at)
+              if (publishedAt > cutoff) {
+                recentArticles.push({
+                  slug: article.slug,
+                  topics: article.topics,
+                })
+              } else {
+                break apiCall
+              }
+            }
+          }
+        }
+
+        const articlesSlugDocRef = db
+          .collection('articlesSlug')
+          .doc(now.toISOString())
+        await articlesSlugDocRef.set({ date: now })
+
+        for (const id of ids) {
+          await articlesSlugDocRef.collection('slugs').doc(id).set({ id: id })
+        }
+
+        // recentArticlesから各記事を処理
+        for (const article of recentArticles) {
+          const response = await axios.get(
+            ZENN_API_ARTICLES + '/' + article.slug,
+          )
+          if (response.status === 200) {
+            const topics = response.data.article.topics
+            console.log(topics)
+            for (const topic of topics) {
+              const topicId = topic.id.toString()
+              const slugDocRef = articlesSlugDocRef
+                .collection('slugs')
+                .doc(topicId)
+              const slugDoc = await slugDocRef.get()
+              if (slugDoc.exists) {
+                const slugs = slugDoc.data().slugs || {}
+                const user = response.data.article.user
+                const articleDetail = response.data.article
+                slugs[article.slug] = {
+                  slug: article.slug,
+                  article: {
+                    title: articleDetail.title,
+                    emoji: articleDetail.emoji,
+                    published_at: articleDetail.published_at,
+                    path: articleDetail.path,
+                  },
+                  topics: topics || [],
+                  user: user
+                    ? {
+                        id: user.id,
+                        name: user.name || '',
+                        username: user.username,
+                        avatar_url: user.avatar_url,
+                        total_liked_count: user.total_liked_count || 0,
+                      }
+                    : {},
+                }
+
+                await slugDocRef.set({ slugs }, { merge: true })
+              }
+            }
+          }
+        }
       }
       return null
     } catch (error) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
+import 'package:zenn_trends/pages/profile/provider/favorite_topics_provider.dart';
 import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 class SearchTopic extends ConsumerWidget {
@@ -9,15 +11,29 @@ class SearchTopic extends ConsumerWidget {
     final searchController = TextEditingController();
     final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
     final loadedTopics = ref.watch(loadedTopicsProvider);
+    ref.watch(favoriteTopicsProvider);
+    final displaySettings = ref.watch(displaySettingsProvider);
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
-          prefixIcon: loadedTopics.isSearching
+          prefixIcon: loadedTopics.isSearching ||
+                  loadedTopics.showSearchResult ||
+                  loadedTopics.searchWord != null &&
+                      loadedTopics.searchWord!.isNotEmpty
               ? IconButton(
                   onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    searchController.clear();
-                    loadedTopicsNotifier.stopSearching();
+                    if (loadedTopics.isSearching) {
+                      FocusScope.of(context).unfocus();
+                      searchController.clear();
+                      loadedTopicsNotifier.stopSearching();
+                    } else if (loadedTopics.showSearchResult) {
+                      FocusScope.of(context).unfocus();
+                      searchController.clear();
+                      loadedTopicsNotifier.stopSearching();
+                      loadedTopicsNotifier.getRankedTopics(
+                          timePeriod: displaySettings.timePeriod,
+                          sortOrder: displaySettings.sortOrder);
+                    }
                   },
                   icon: const Icon(Icons.arrow_back))
               : const Icon(Icons.search),

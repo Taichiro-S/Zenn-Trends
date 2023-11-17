@@ -49,7 +49,6 @@ class RankedTopicsRepository {
       final QuerySnapshot snap = await query.get();
       return snap.docs.map((doc) => RankedTopic.fromDocument(doc)).toList();
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

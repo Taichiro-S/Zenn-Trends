@@ -22,7 +22,6 @@ class FavoriteTopicsRepository {
       });
       return await getFavoriteTopics(user: user);
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -40,7 +39,6 @@ class FavoriteTopicsRepository {
         topicIds.add(doc.id);
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
     return topicIds;
@@ -59,7 +57,6 @@ class FavoriteTopicsRepository {
       await favoriteTopicDocRef.delete();
       return await getFavoriteTopics(user: user);
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

@@ -9,16 +9,16 @@ part of 'topic.dart';
 _$TopicImpl _$$TopicImplFromJson(Map<String, dynamic> json) => _$TopicImpl(
       id: json['id'] as int,
       name: json['name'] as String,
-      displayName: json['displayName'] as String,
-      taggingsCount: json['taggingsCount'] as int,
-      imageUrl: json['imageUrl'] as String?,
+      displayName: json['display_name'] as String,
+      taggingsCount: json['taggings_count'] as int,
+      imageUrl: json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$$TopicImplToJson(_$TopicImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'displayName': instance.displayName,
-      'taggingsCount': instance.taggingsCount,
-      'imageUrl': instance.imageUrl,
+      'display_name': instance.displayName,
+      'taggings_count': instance.taggingsCount,
+      'image_url': instance.imageUrl,
     };

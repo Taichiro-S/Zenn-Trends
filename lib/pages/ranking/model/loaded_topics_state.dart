@@ -11,6 +11,7 @@ class LoadedTopicsState with _$LoadedTopicsState {
     required DocumentSnapshot? lastDoc,
     required bool isLoadingMore,
     required bool isSearching,
+    required bool showSearchResult,
     String? searchWord,
   }) = _LoadedTopicsStatee;
 }
