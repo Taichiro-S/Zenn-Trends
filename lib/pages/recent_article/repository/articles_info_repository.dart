@@ -31,6 +31,9 @@ class ArticlesInfoRepository {
 
       final Map<String, dynamic> slugsData =
           slugDoc.data() as Map<String, dynamic>;
+      if (slugsData['slugs'] == null) {
+        return [];
+      }
       final Map<String, dynamic> slugs =
           slugsData['slugs'] as Map<String, dynamic>;
       List<ArticlesInfo> articlesInfoList = [];

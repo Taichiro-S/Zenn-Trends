@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
 import 'package:zenn_trends/constant/url.dart';
 import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
@@ -9,7 +8,6 @@ import 'package:zenn_trends/pages/ranking/service/display_num.dart';
 import 'package:zenn_trends/pages/ranking/widget/bar_indicator_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/favorite_icon_widget.dart';
 import 'package:zenn_trends/pages/recent_article/articles_info_page.dart';
-import 'package:zenn_trends/pages/recent_article/model/articles_info.dart';
 
 class TopicContainerWidget extends ConsumerWidget {
   const TopicContainerWidget({

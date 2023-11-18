@@ -8,10 +8,8 @@ import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 
 class FavoriteIconWidget extends ConsumerStatefulWidget {
   final RankedTopic rankedTopic;
-
   const FavoriteIconWidget({Key? key, required this.rankedTopic})
       : super(key: key);
-
   @override
   ConsumerState<FavoriteIconWidget> createState() => _FavoriteIconWidgetState();
 }
@@ -22,19 +20,8 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
   bool isLoading = false;
   late AnimationController _animationController;
   late Animation<double> _animation;
-
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   final favoriteTopics = ref.watch(favoriteTopicsProvider);
-    //   print(favoriteTopics.topicIds.value);
-    //   final newIsFavorite =
-    //       favoriteTopics.topicIds.value?.contains(widget.rankedTopic.id) ??
-    //           false;
-    //   setState(() {
-    //     isFavorite = newIsFavorite;
-    //   });
-    // });
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -68,25 +55,11 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
     final router = AutoRouter.of(context);
     final newIsFavorite =
         favoriteTopics.topicIds.value?.contains(widget.rankedTopic.id) ?? false;
-    // ref.listen<AsyncValue<List<String>>>(
-    //     favoriteTopicsProvider.select((state) => state.topicIds), (prev, next) {
-    //   if (prev != next && next is AsyncData<List<String>>) {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       setState(() {
-    //         isFavorite = next.value.contains(widget.rankedTopic.id);
-    //       });
-    //     });
-    //   } else {
-    //     ref.read(favoriteTopicsProvider.notifier).initialize();
-    //   }
-    // });
-
     if (newIsFavorite != isFavorite) {
       setState(() {
         isFavorite = newIsFavorite;
       });
     }
-
     return Container(
         child: googleAuth.user.when(data: (user) {
       return AnimatedBuilder(
@@ -138,9 +111,13 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
                     },
                   );
                 },
-                loading: () => const CircularProgressIndicator(
-                      color: Colors.amber,
+                loading: () => IconButton(
+                    icon: Icon(
+                      Icons.favorite_border,
+                      color: Colors.grey,
+                      size: _animation.value,
                     ),
+                    onPressed: () {}),
                 error: (error, stackTrace) {
                   return Text(error.toString());
                 });

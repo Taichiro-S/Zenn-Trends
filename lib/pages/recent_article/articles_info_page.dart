@@ -20,6 +20,9 @@ class ArticlesInfoPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('エラー: $error')),
         data: (articlesInfo) {
+          if (articlesInfo.isEmpty) {
+            return const Center(child: Text('記事がありません'));
+          }
           return ListView.builder(
             itemCount: articlesInfo.length,
             itemBuilder: (context, index) {

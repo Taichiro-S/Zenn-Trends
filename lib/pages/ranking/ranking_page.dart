@@ -99,14 +99,17 @@ class RankingPage extends ConsumerWidget {
                   child: ListView.builder(
                     controller: scrollController,
                     itemCount: rankedTopics.length + 1,
-                    // (loadedTopics.isLoadingMore ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == rankedTopics.length) {
-                        // ここで、最後のアイテムがロード中かどうかをチェック
                         if (loadedTopics.lastDoc != null) {
                           return const Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.blue, value: 20));
+                              child: Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                          color: Colors.blue))));
                         } else {
                           return const Center(
                               child: Padding(
@@ -115,10 +118,18 @@ class RankingPage extends ConsumerWidget {
                         }
                       }
                       final rankedTopic = rankedTopics[index];
-                      if (displaySettings.sortOrder ==
-                              RankedTopicsSortOrder.taggingsCountChange &&
-                          rankedTopic.taggingsCountChange <
-                              DEFAULT_ITEMS_CHANGE_CUTOFF) {
+                      if ((displaySettings.sortOrder ==
+                                  RankedTopicsSortOrder.taggingsCountChange &&
+                              displaySettings.timePeriod ==
+                                  Collection.weeklyRanking &&
+                              rankedTopic.taggingsCountChange <
+                                  DEFAULT_WEEKLY_ITEMS_CHANGE_CUTOFF) ||
+                          (displaySettings.sortOrder ==
+                                  RankedTopicsSortOrder.taggingsCountChange &&
+                              displaySettings.timePeriod ==
+                                  Collection.monthlyRanking &&
+                              rankedTopic.taggingsCountChange <
+                                  DEFAULT_MONTHLY_ITEMS_CHANGE_CUTOFF)) {
                         return Container();
                       }
                       return Card(

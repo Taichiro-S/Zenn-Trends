@@ -7,7 +7,7 @@ const ZENN_API_ARTICLES = 'https://zenn.dev/api/articles'
 const MAX_PAGE = 10
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
 const TIME_TO_CALC_RANKING = '10 6 * * *'
-const TIME_TO_FETCH_ARTICLES_SLUG = '40 23 * * *'
+// const TIME_TO_FETCH_ARTICLES_SLUG = '20 0,6,12,18 * * *'
 const WEEKLY_TAGGING_COUNT_CUTOFF = 7
 const MONTHLY_TAGGING_COUNT_CUTOFF = 30
 
@@ -21,7 +21,6 @@ exports.fetchZennTags = functions
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
-      4
       let allTopics = []
       for (let page = 1; page <= 10; page++) {
         const response = await axios.get(ZENN_API_TOPICS + page)
@@ -293,7 +292,7 @@ exports.calculateWeeklyRanking = functions
 
 exports.getDailyArticlesSlug = functions
   .runWith({ timeoutSeconds: 540 })
-  .pubsub.schedule(TIME_TO_FETCH_ARTICLES_SLUG)
+  .pubsub.schedule('40 16 * * *')
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
@@ -302,26 +301,40 @@ exports.getDailyArticlesSlug = functions
         .orderBy('date', 'desc')
         .limit(1)
         .get()
-      if (!weeklyRankingSnapshot.empty) {
-        const latestDoc = weeklyRankingSnapshot.docs[0]
-        const latestDate = latestDoc.data().date
-        console.log(latestDate)
+      const monthlyRankingSnapshot = await db
+        .collection('monthlyRanking')
+        .orderBy('date', 'desc')
+        .limit(1)
+        .get()
+      if (!weeklyRankingSnapshot.empty && !monthlyRankingSnapshot.empty) {
+        const weeklyLatestDoc = weeklyRankingSnapshot.docs[0]
+        const monthlyLatestDoc = monthlyRankingSnapshot.docs[0]
 
         // 'topics' サブコレクションからIDを取得して配列に保存
-        const topicsSnapshot = await db
+        const weeklyTopicsSnapshot = await db
           .collection('weeklyRanking')
-          .doc(latestDoc.id)
+          .doc(weeklyLatestDoc.id)
           .collection('topics')
           .get()
 
-        const ids = []
-        topicsSnapshot.forEach((doc) => {
-          ids.push(doc.id)
+        const monthlyTopicsSnapshot = await db
+          .collection('monthlyRanking')
+          .doc(monthlyLatestDoc.id)
+          .collection('topics')
+          .get()
+        // 重複を除いてトピックのIDを配列に保存
+        const savedTopicIds = []
+        weeklyTopicsSnapshot.forEach((doc) => {
+          savedTopicIds.push(doc.id)
         })
-        console.log(ids)
+        monthlyTopicsSnapshot.forEach((doc) => {
+          if (!savedTopicIds.includes(doc.id)) {
+            savedTopicIds.push(doc.id)
+          }
+        })
         const now = new Date()
-        const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-        const recentArticles = []
+        const cutoff = new Date(now.getTime() - 6 * 60 * 60 * 1000)
+        const recentArticlesSlug = []
         apiCall: for (let i = 1; i <= MAX_PAGE; i++) {
           const response = await axios.get(
             ZENN_API_ARTICLES + '?order=latest&page=' + i,
@@ -331,10 +344,7 @@ exports.getDailyArticlesSlug = functions
             for (const article of articles) {
               const publishedAt = new Date(article.published_at)
               if (publishedAt > cutoff) {
-                recentArticles.push({
-                  slug: article.slug,
-                  topics: article.topics,
-                })
+                recentArticlesSlug.push(article.slug)
               } else {
                 break apiCall
               }
@@ -342,42 +352,46 @@ exports.getDailyArticlesSlug = functions
           }
         }
 
-        const articlesSlugDocRef = db
-          .collection('articlesSlug')
-          .doc(now.toISOString())
-        await articlesSlugDocRef.set({ date: now })
+        // const articlesSlugDocRef = db
+        //   .collection('articlesSlug')
+        //   .doc(now.toISOString())
+        // await articlesSlugDocRef.set({ date: now })
 
-        for (const id of ids) {
-          await articlesSlugDocRef.collection('slugs').doc(id).set({ id: id })
-        }
+        // for (const id of ids) {
+        //   const articlesSlugDocRef = db.collection('slugs').doc(id)
+        //   await articlesSlugDocRef.set({ id: id })
+        // }
+        const articlesRef = db.collection('articles')
+        await articlesRef.doc('updated_at').set({ date: now })
 
-        // recentArticlesから各記事を処理
-        for (const article of recentArticles) {
-          const response = await axios.get(
-            ZENN_API_ARTICLES + '/' + article.slug,
-          )
+        // recentArticlesSlugから各記事を処理
+        for (const slug of recentArticlesSlug) {
+          const response = await axios.get(ZENN_API_ARTICLES + '/' + slug)
           if (response.status === 200) {
-            const topics = response.data.article.topics
-            console.log(topics)
-            for (const topic of topics) {
-              const topicId = topic.id.toString()
-              const slugDocRef = articlesSlugDocRef
-                .collection('slugs')
-                .doc(topicId)
-              const slugDoc = await slugDocRef.get()
-              if (slugDoc.exists) {
+            const articleTopics = response.data.article.topics
+            const articleTopicsIds = articleTopics.map((topic) =>
+              topic.id.toString(),
+            )
+            console.log(articleTopics)
+            for (const savedId of savedTopicIds) {
+              // const articlesDocRef = db.collection('articles').doc(topicId)
+              const articlesDocRef = articlesRef.doc(savedId.toString())
+              await articlesDocRef.set({ id: savedId.toString() })
+              const slugDoc = await articlesDocRef.get()
+              if (slugDoc.exists && savedId.toString() in articleTopicsIds) {
                 const slugs = slugDoc.data().slugs || {}
                 const user = response.data.article.user
                 const articleDetail = response.data.article
-                slugs[article.slug] = {
-                  slug: article.slug,
+                slugs[slug] = {
+                  slug: slug,
                   article: {
                     title: articleDetail.title,
                     emoji: articleDetail.emoji,
                     published_at: articleDetail.published_at,
                     path: articleDetail.path,
+                    liked_count: articleDetail.liked_count,
                   },
-                  topics: topics || [],
+                  topics: articleTopics || [],
                   user: user
                     ? {
                         id: user.id,
@@ -388,8 +402,7 @@ exports.getDailyArticlesSlug = functions
                       }
                     : {},
                 }
-
-                await slugDocRef.set({ slugs }, { merge: true })
+                await articlesDocRef.set({ slugs }, { merge: true })
               }
             }
           }
@@ -397,10 +410,10 @@ exports.getDailyArticlesSlug = functions
       }
       return null
     } catch (error) {
-      console.error('Error calculating ranking:', error.message)
+      console.error('Error fetching daily articles:', error.message)
       throw new functions.https.HttpsError(
         'internal',
-        'Failed to calculate and store ranking.',
+        'Failed to fetch daily articles.',
       )
     }
   })
