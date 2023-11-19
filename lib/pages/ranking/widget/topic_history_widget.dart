@@ -27,7 +27,20 @@ class TopicHistoryWidget extends ConsumerWidget {
       dataset = rankedTopic.taggingsCountHistory!;
     }
     return Stack(
+      alignment: const Alignment(0, 0),
       children: <Widget>[
+        AspectRatio(
+          aspectRatio: 1.50,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              right: 20,
+              left: 10,
+              top: 10,
+              bottom: 40,
+            ),
+            child: BarChart(mainBarData(dataset, timePeriod)),
+          ),
+        ),
         AspectRatio(
           aspectRatio: 1.50,
           child: Padding(
@@ -41,6 +54,72 @@ class TopicHistoryWidget extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  BarChartData mainBarData(List<TopicHistoryState> dataset, String timePeriod) {
+    List<BarChartGroupData> barGroups = [];
+    double maxY = 0.0;
+    for (var i = 0; i < dataset.length; i++) {
+      final history = dataset[i];
+      if (history.change.toDouble() > maxY) {
+        maxY = history.change.toDouble();
+      }
+      barGroups.add(BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: history.change.toDouble(),
+            color: Colors.blue,
+          ),
+        ],
+      ));
+    }
+    return BarChartData(
+      barGroups: barGroups,
+      alignment: BarChartAlignment.spaceAround,
+      gridData: const FlGridData(show: false),
+      titlesData: FlTitlesData(
+        show: false,
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            interval: maxY > 200
+                ? 40
+                : maxY > 100
+                    ? 20
+                    : maxY > 50
+                        ? 20
+                        : maxY > 20
+                            ? 10
+                            : 5,
+            reservedSize: maxY > 100 ? 30 : 24,
+            getTitlesWidget: (value, meta) {
+              if (value == maxY || value == 0) {
+                return const Text('');
+              }
+              return Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Text(
+                    value.toInt().toString(),
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ));
+            },
+          ),
+        ),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      ),
+      maxY: maxY,
     );
   }
 
@@ -127,10 +206,6 @@ class TopicHistoryWidget extends ConsumerWidget {
             },
           ),
         ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: const Border(),
       ),
       minX: 0,
       maxX: timePeriod == 'monthly' ? 29 : 6,

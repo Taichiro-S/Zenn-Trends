@@ -1,10 +1,12 @@
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 const axios = require('axios')
+// const fetch = require('node-fetch')
+// const parseString = require('xml2js').parseString
 
 const ZENN_API_TOPICS = 'https://zenn.dev/api/topics?page='
-const ZENN_API_ARTICLES = 'https://zenn.dev/api/articles'
-const MAX_PAGE = 10
+// const ZENN_API_ARTICLES = 'https://zenn.dev/api/articles'
+// const MAX_PAGE = 10
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
 const TIME_TO_CALC_RANKING = '10 6 * * *'
 // const TIME_TO_FETCH_ARTICLES_SLUG = '20 0,6,12,18 * * *'
@@ -292,7 +294,7 @@ exports.calculateWeeklyRanking = functions
 
 exports.getDailyArticlesSlug = functions
   .runWith({ timeoutSeconds: 540 })
-  .pubsub.schedule('40 16 * * *')
+  .pubsub.schedule('5 13 * * *')
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
@@ -323,90 +325,120 @@ exports.getDailyArticlesSlug = functions
           .collection('topics')
           .get()
         // 重複を除いてトピックのIDを配列に保存
-        const savedTopicIds = []
+        const savedTopics = []
         weeklyTopicsSnapshot.forEach((doc) => {
-          savedTopicIds.push(doc.id)
+          const topicName = doc.data().name // ここを修正
+          savedTopics.push(topicName)
         })
         monthlyTopicsSnapshot.forEach((doc) => {
-          if (!savedTopicIds.includes(doc.id)) {
-            savedTopicIds.push(doc.id)
+          const topicName = doc.data().name
+          if (topicName && !savedTopics.includes(topicName)) {
+            savedTopics.push(topicName)
           }
         })
-        const now = new Date()
-        const cutoff = new Date(now.getTime() - 6 * 60 * 60 * 1000)
-        const recentArticlesSlug = []
-        apiCall: for (let i = 1; i <= MAX_PAGE; i++) {
-          const response = await axios.get(
-            ZENN_API_ARTICLES + '?order=latest&page=' + i,
-          )
-          if (response.status === 200) {
-            const articles = response.data.articles
-            for (const article of articles) {
-              const publishedAt = new Date(article.published_at)
-              if (publishedAt > cutoff) {
-                recentArticlesSlug.push(article.slug)
-              } else {
-                break apiCall
-              }
-            }
-          }
-        }
+        console.log(savedTopics)
+        console.log(savedTopics.length)
+        // for (const topicName of savedTopics) {
+        //   const url = `https://zenn.dev/topics/${topicName}/feed`
+        //   const response = await fetch(url)
+        //   const xml = await response.text()
 
-        // const articlesSlugDocRef = db
-        //   .collection('articlesSlug')
-        //   .doc(now.toISOString())
-        // await articlesSlugDocRef.set({ date: now })
+        //   parseString(xml, async (err, result) => {
+        //     if (err) {
+        //       throw err
+        //     }
 
-        // for (const id of ids) {
-        //   const articlesSlugDocRef = db.collection('slugs').doc(id)
-        //   await articlesSlugDocRef.set({ id: id })
+        //     const articles = result.rss.channel[0].item
+        //     const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000)
+
+        //     for (const article of articles) {
+        //       const pubDate = new Date(article.pubDate[0])
+        //       if (pubDate > threeHoursAgo) {
+        //         const slugId = article.guid[0]._.split('/').pop()
+        //         // トピック名に基づいたドキュメントとサブコレクションを作成
+        //         const topicDocRef = db.collection('articles').doc(topicName)
+        //         const articleDocRef = topicDocRef
+        //           .collection('articles_of_topic')
+        //           .doc(slugId)
+
+        //         await articleDocRef.set({
+        //           title: article.title[0],
+        //           link: article.link[0],
+        //           publishedDate: article.pubDate[0],
+        //         })
+        //       }
+        //     }
+        //   })
         // }
-        const articlesRef = db.collection('articles')
-        await articlesRef.doc('updated_at').set({ date: now })
 
-        // recentArticlesSlugから各記事を処理
-        for (const slug of recentArticlesSlug) {
-          const response = await axios.get(ZENN_API_ARTICLES + '/' + slug)
-          if (response.status === 200) {
-            const articleTopics = response.data.article.topics
-            const articleTopicsIds = articleTopics.map((topic) =>
-              topic.id.toString(),
-            )
-            console.log(articleTopics)
-            for (const savedId of savedTopicIds) {
-              // const articlesDocRef = db.collection('articles').doc(topicId)
-              const articlesDocRef = articlesRef.doc(savedId.toString())
-              await articlesDocRef.set({ id: savedId.toString() })
-              const slugDoc = await articlesDocRef.get()
-              if (slugDoc.exists && savedId.toString() in articleTopicsIds) {
-                const slugs = slugDoc.data().slugs || {}
-                const user = response.data.article.user
-                const articleDetail = response.data.article
-                slugs[slug] = {
-                  slug: slug,
-                  article: {
-                    title: articleDetail.title,
-                    emoji: articleDetail.emoji,
-                    published_at: articleDetail.published_at,
-                    path: articleDetail.path,
-                    liked_count: articleDetail.liked_count,
-                  },
-                  topics: articleTopics || [],
-                  user: user
-                    ? {
-                        id: user.id,
-                        name: user.name || '',
-                        username: user.username,
-                        avatar_url: user.avatar_url,
-                        total_liked_count: user.total_liked_count || 0,
-                      }
-                    : {},
-                }
-                await articlesDocRef.set({ slugs }, { merge: true })
-              }
-            }
-          }
-        }
+        // const now = new Date()
+        // const cutoff = new Date(now.getTime() - 3 * 60 * 60 * 1000)
+        // const recentArticlesSlug = []
+        // apiCall: for (let i = 1; i <= MAX_PAGE; i++) {
+        //   const response = await axios.get(
+        //     ZENN_API_ARTICLES + '?order=latest&page=' + i,
+        //   )
+        //   if (response.status === 200) {
+        //     const articles = response.data.articles
+        //     for (const article of articles) {
+        //       const publishedAt = new Date(article.published_at)
+        //       if (publishedAt > cutoff) {
+        //         recentArticlesSlug.push(article.slug)
+        //       } else {
+        //         break apiCall
+        //       }
+        //     }
+        //   }
+        // }
+        // const articlesRef = db.collection('articles')
+        // await articlesRef.doc('updated_at').set({ date: now })
+
+        // // recentArticlesSlugから各記事を処理
+        // for (const slug of recentArticlesSlug) {
+        //   const response = await axios.get(ZENN_API_ARTICLES + '/' + slug)
+        //   if (response.status === 200) {
+        //     const articleTopics = response.data.article.topics
+        //     const articleTopicsIds = articleTopics.map((topic) =>
+        //       topic.id.toString(),
+        //     )
+        //     console.log('articleTopicsIds' + articleTopicsIds)
+        //     for (const id of savedTopicIds) {
+        //       // const articlesDocRef = db.collection('articles').doc(topicId)
+        //       const articlesDocRef = articlesRef.doc(id.toString())
+        //       await articlesDocRef.set({ id: id.toString() })
+        //       const slugDoc = await articlesDocRef.get()
+        //       if (slugDoc.exists && articleTopicsIds.includes(id.toString())) {
+        //         const slugs = slugDoc.data().slugs || {}
+        //         const user = response.data.article.user
+        //         const articleDetail = response.data.article
+        //         // const slugUpdate = {}
+        //         // const slugs = []
+        //         slugs[slug] = {
+        //           slug: slug,
+        //           article: {
+        //             title: articleDetail.title,
+        //             emoji: articleDetail.emoji,
+        //             published_at: articleDetail.published_at,
+        //             path: articleDetail.path,
+        //             liked_count: articleDetail.liked_count,
+        //           },
+        //           topics: articleTopics || [],
+        //           user: user
+        //             ? {
+        //                 id: user.id,
+        //                 name: user.name || '',
+        //                 username: user.username,
+        //                 avatar_url: user.avatar_url,
+        //                 total_liked_count: user.total_liked_count || 0,
+        //               }
+        //             : {},
+        //         }
+        //         // await articlesDocRef.update(slugUpdate)
+        //         await articlesDocRef.set({ slugs }, { merge: true })
+        //       }
+        //     }
+        //   }
+        // }
       }
       return null
     } catch (error) {
