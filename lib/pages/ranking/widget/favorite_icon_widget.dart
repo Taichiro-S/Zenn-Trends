@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zenn_trends/pages/profile/provider/favorite_topics_provider.dart';
-import 'package:zenn_trends/pages/profile/provider/google_auth_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
+import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
+import 'package:zenn_trends/routes/router.dart';
+import 'package:zenn_trends/theme/app_theme.dart';
 
 class FavoriteIconWidget extends ConsumerStatefulWidget {
   final RankedTopic rankedTopic;
@@ -24,7 +27,7 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 100),
       vsync: this,
     );
     _animation =
@@ -37,7 +40,7 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
     super.dispose();
   }
 
-  Future<void> _toggleFavorite(User user, bool isFavorite) async {
+  Future<void> _toggleFavorite() async {
     if (isFavorite) {
       _animationController.reverse();
     } else {
@@ -50,6 +53,7 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
   @override
   Widget build(BuildContext context) {
     final googleAuth = ref.watch(googleAuthProvider);
+    final googleAuthNotifier = ref.read(googleAuthProvider.notifier);
     final favoriteTopics = ref.watch(favoriteTopicsProvider);
     final favoriteTopicsNotifier = ref.read(favoriteTopicsProvider.notifier);
     final router = AutoRouter.of(context);
@@ -68,11 +72,76 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
           if (user == null) {
             return IconButton(
                 onPressed: () {
-                  /* 
-                  TODO
-                  モーダルを出してログイン画面に遷移できるようにする
-                  */
-                  return;
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showDialog<Widget>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Googleアカウントでログインしてください"),
+                            content: const Text("ログインページに移動しますか？"),
+                            actions: [
+                              GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: const Text('キャンセル'),
+                              ),
+                              GestureDetector(
+                                  child: const Text('ログイン'),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    final user =
+                                        await googleAuthNotifier.singIn();
+                                    if (user != null) {
+                                      Fluttertoast.showToast(
+                                          backgroundColor: AppTheme.light()
+                                              .appColors
+                                              .primary,
+                                          msg: "ログインしました");
+
+                                      router.pushAndPopUntil(
+                                        const RankingRoute(),
+                                        predicate: (route) => false,
+                                      );
+                                    }
+                                  })
+                            ],
+                          );
+                        });
+                  } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+                    showDialog<Widget>(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: const Text("Googleアカウントでログインしてください"),
+                            content: const Text("ログインページに移動しますか？"),
+                            actions: [
+                              CupertinoDialogAction(
+                                isDestructiveAction: true,
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('キャンセル'),
+                              ),
+                              CupertinoDialogAction(
+                                  child: const Text('ログイン'),
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    final user =
+                                        await googleAuthNotifier.singIn();
+                                    if (user != null) {
+                                      Fluttertoast.showToast(
+                                          backgroundColor: AppTheme.light()
+                                              .appColors
+                                              .primary,
+                                          msg: "ログインしました");
+
+                                      router.pushAndPopUntil(
+                                        const RankingRoute(),
+                                        predicate: (route) => false,
+                                      );
+                                    }
+                                  })
+                            ],
+                          );
+                        });
+                  }
                 },
                 icon: const Icon(Icons.favorite_border, color: Colors.grey));
           } else {
@@ -89,22 +158,43 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
                       setState(() {
                         isLoading = true;
                       });
-                      try {
-                        if (isFavorite) {
+
+                      if (isFavorite) {
+                        try {
                           await favoriteTopicsNotifier.removeFavoriteTopic(
                               user: user, topicId: widget.rankedTopic.id);
-                        } else {
+                        } catch (e) {
+                          Fluttertoast.showToast(
+                              backgroundColor: AppTheme.light().appColors.error,
+                              msg: "お気に入りの削除に失敗しました");
+                        }
+                        Fluttertoast.showToast(
+                            backgroundColor: AppTheme.light().appColors.primary,
+                            msg:
+                                "${widget.rankedTopic.displayName} をお気に入りから削除しました");
+
+                        await _toggleFavorite();
+                        await Future<void>.delayed(
+                            const Duration(milliseconds: 300));
+                      } else {
+                        try {
                           await favoriteTopicsNotifier.addFavoriteTopic(
                               user: user, topic: widget.rankedTopic);
+                        } catch (e) {
+                          Fluttertoast.showToast(
+                              backgroundColor: AppTheme.light().appColors.error,
+                              msg: "お気に入りの追加に失敗しました");
                         }
-                      } catch (e) {
-                        /* TODO 
-                        error modal 
-                        */
+                        Fluttertoast.showToast(
+                            backgroundColor: AppTheme.light().appColors.primary,
+                            msg:
+                                "${widget.rankedTopic.displayName} をお気に入りに追加しました");
+
+                        await _toggleFavorite();
+                        await Future<void>.delayed(
+                            const Duration(milliseconds: 300));
                       }
-                      await _toggleFavorite(user, isFavorite);
-                      await Future<void>.delayed(
-                          const Duration(milliseconds: 300));
+
                       setState(() {
                         isLoading = false;
                       });

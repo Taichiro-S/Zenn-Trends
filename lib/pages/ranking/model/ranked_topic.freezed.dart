@@ -26,7 +26,7 @@ mixin _$RankedTopic {
       throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   bool? get isFavorite => throw _privateConstructorUsedError;
-  List<TopicHistoryState>? get taggingsCountHistory =>
+  List<TaggingsCountChangeHistory>? get taggingsCountHistory =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -50,7 +50,7 @@ abstract class $RankedTopicCopyWith<$Res> {
       DocumentSnapshot<Object?> documentSnapshot,
       String? imageUrl,
       bool? isFavorite,
-      List<TopicHistoryState>? taggingsCountHistory});
+      List<TaggingsCountChangeHistory>? taggingsCountHistory});
 }
 
 /// @nodoc
@@ -117,7 +117,7 @@ class _$RankedTopicCopyWithImpl<$Res, $Val extends RankedTopic>
       taggingsCountHistory: freezed == taggingsCountHistory
           ? _value.taggingsCountHistory
           : taggingsCountHistory // ignore: cast_nullable_to_non_nullable
-              as List<TopicHistoryState>?,
+              as List<TaggingsCountChangeHistory>?,
     ) as $Val);
   }
 }
@@ -140,7 +140,7 @@ abstract class _$$RankedTopicImplCopyWith<$Res>
       DocumentSnapshot<Object?> documentSnapshot,
       String? imageUrl,
       bool? isFavorite,
-      List<TopicHistoryState>? taggingsCountHistory});
+      List<TaggingsCountChangeHistory>? taggingsCountHistory});
 }
 
 /// @nodoc
@@ -205,7 +205,7 @@ class __$$RankedTopicImplCopyWithImpl<$Res>
       taggingsCountHistory: freezed == taggingsCountHistory
           ? _value._taggingsCountHistory
           : taggingsCountHistory // ignore: cast_nullable_to_non_nullable
-              as List<TopicHistoryState>?,
+              as List<TaggingsCountChangeHistory>?,
     ));
   }
 }
@@ -223,7 +223,7 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
       required this.documentSnapshot,
       this.imageUrl,
       this.isFavorite,
-      final List<TopicHistoryState>? taggingsCountHistory})
+      final List<TaggingsCountChangeHistory>? taggingsCountHistory})
       : _taggingsCountHistory = taggingsCountHistory;
 
   @override
@@ -244,9 +244,9 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
   final String? imageUrl;
   @override
   final bool? isFavorite;
-  final List<TopicHistoryState>? _taggingsCountHistory;
+  final List<TaggingsCountChangeHistory>? _taggingsCountHistory;
   @override
-  List<TopicHistoryState>? get taggingsCountHistory {
+  List<TaggingsCountChangeHistory>? get taggingsCountHistory {
     final value = _taggingsCountHistory;
     if (value == null) return null;
     if (_taggingsCountHistory is EqualUnmodifiableListView)
@@ -324,16 +324,17 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
 
 abstract class _RankedTopic implements RankedTopic {
   const factory _RankedTopic(
-      {required final String id,
-      required final Timestamp date,
-      required final String displayName,
-      required final String name,
-      required final int taggingsCount,
-      required final int taggingsCountChange,
-      required final DocumentSnapshot<Object?> documentSnapshot,
-      final String? imageUrl,
-      final bool? isFavorite,
-      final List<TopicHistoryState>? taggingsCountHistory}) = _$RankedTopicImpl;
+          {required final String id,
+          required final Timestamp date,
+          required final String displayName,
+          required final String name,
+          required final int taggingsCount,
+          required final int taggingsCountChange,
+          required final DocumentSnapshot<Object?> documentSnapshot,
+          final String? imageUrl,
+          final bool? isFavorite,
+          final List<TaggingsCountChangeHistory>? taggingsCountHistory}) =
+      _$RankedTopicImpl;
 
   @override
   String get id;
@@ -354,7 +355,7 @@ abstract class _RankedTopic implements RankedTopic {
   @override
   bool? get isFavorite;
   @override
-  List<TopicHistoryState>? get taggingsCountHistory;
+  List<TaggingsCountChangeHistory>? get taggingsCountHistory;
   @override
   @JsonKey(ignore: true)
   _$$RankedTopicImplCopyWith<_$RankedTopicImpl> get copyWith =>

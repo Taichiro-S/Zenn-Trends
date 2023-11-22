@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/constant/default_value.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
-import 'package:zenn_trends/pages/display_settings/model/display_settings_state.dart';
-import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
-import 'package:zenn_trends/pages/profile/provider/favorite_topics_provider.dart';
-import 'package:zenn_trends/pages/profile/provider/google_auth_provider.dart';
+import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
+import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
+import 'package:zenn_trends/pages/ranking/model/display_settings_state.dart';
+import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 import 'package:zenn_trends/pages/ranking/provider/scroll_controller_provider.dart';
+import 'package:zenn_trends/pages/ranking/widget/display_settings_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/search_topic_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/topic_container_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/topic_history_widget.dart';
-import 'package:zenn_trends/routes/router.dart';
 import 'package:zenn_trends/widget/circle_loading_widget.dart';
 
 @RoutePage()
@@ -21,14 +21,29 @@ class RankingPage extends ConsumerWidget {
   const RankingPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loadedTopics = ref.watch(loadedTopicsProvider);
-    final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
-    final favoriteTopicsNotifier = ref.read(favoriteTopicsProvider.notifier);
-    final scrollController = ref.watch(scrollControllerNotifierProvider);
     final displaySettings = ref.watch(displaySettingsProvider);
+    final loadedTopicsAsync = ref.watch(
+        displaySettings.timePeriod == Collection.monthlyRanking
+            ? loadedTopicsProvider.select((state) => state.monthlyRankedTopics)
+            : loadedTopicsProvider.select((state) => state.weeklyRankedTopics));
+    final isSearching = ref.watch(
+        displaySettings.timePeriod == Collection.monthlyRanking
+            ? loadedTopicsProvider.select((state) => state.isSearching)
+            : loadedTopicsProvider.select((state) => state.isSearching));
+    final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
+    final lastDoc = ref.watch(
+        displaySettings.timePeriod == Collection.monthlyRanking
+            ? loadedTopicsProvider.select((state) => state.monthlyLastDoc)
+            : loadedTopicsProvider.select((state) => state.weeklyLastDoc));
+    final scrollController = ref.watch(scrollControllerNotifierProvider);
     final googleAuth = ref.watch(googleAuthProvider);
-    final router = AutoRouter.of(context);
+    final showChart = ref.watch(displaySettingsProvider.select((state) {
+      return state.showChart;
+    }));
+    final searchWord =
+        ref.watch(loadedTopicsProvider.select((state) => state.searchWord));
     ref.watch(favoriteTopicsProvider);
+
     ref.listen<DisplaySettingsState>(displaySettingsProvider,
         (previousState, state) {
       if (state != previousState) {
@@ -45,9 +60,10 @@ class RankingPage extends ConsumerWidget {
               .getFavoriteTopics(user: user.value!);
           ref.watch(favoriteTopicsProvider);
         });
-      } else {
-        ref.read(favoriteTopicsProvider.notifier).initialize();
       }
+      // else {
+      //   ref.read(favoriteTopicsProvider.notifier).initialize();
+      // }
     });
     ref.listen<bool>(loadedTopicsProvider.select((state) => state.isSearching),
         (_, user) {
@@ -57,31 +73,38 @@ class RankingPage extends ConsumerWidget {
             .read(favoriteTopicsProvider.notifier)
             .getFavoriteTopics(user: user.value!);
         ref.watch(favoriteTopicsProvider);
-      } else {
-        ref.read(favoriteTopicsProvider.notifier).initialize();
       }
+      // else {
+      //   ref.read(favoriteTopicsProvider.notifier).initialize();
+      // }
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: const SearchTopic(),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              router.push(const DisplaySettingsRoute());
-            },
-          ),
+        leading: !isSearching
+            ? IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  loadedTopicsNotifier.startSearching();
+                })
+            : null,
+        title: isSearching
+            ? const SearchTopic()
+            : (searchWord != null && searchWord.isNotEmpty)
+                ? Text('$searchWord を検索中', style: const TextStyle(fontSize: 18))
+                : const Text('Zenn Trends'),
+        actions: const <Widget>[
+          DisplaySettingsWidget(),
         ],
       ),
       body: googleAuth.user.when(
         data: (user) {
-          return loadedTopics.rankedTopics.when(
+          return loadedTopicsAsync.when(
             loading: () => const Center(
                 child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
             error: (error, stack) => Center(child: Text('エラー: $error')),
-            data: (rankedTopics) {
-              if (loadedTopics.isSearching) {
+            data: (loadedTopics) {
+              if (isSearching) {
                 return GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
@@ -89,59 +112,67 @@ class RankingPage extends ConsumerWidget {
                   },
                   child: Container(),
                 );
-              } else if (rankedTopics.isEmpty) {
+              } else if (loadedTopics.isEmpty) {
                 return const Center(
-                    child: Text('一致するタグが見つかりませんでした😢',
+                    child: Text('トピックが見つかりませんでした😢',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)));
               } else {
                 return RefreshIndicator(
                   child: ListView.builder(
                     controller: scrollController,
-                    itemCount: rankedTopics.length + 1,
+                    itemCount: loadedTopics.length + 1,
                     itemBuilder: (context, index) {
-                      if (index == rankedTopics.length) {
-                        if (loadedTopics.lastDoc != null) {
+                      if (isSearching) {
+                        return GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            loadedTopicsNotifier.stopSearching();
+                          },
+                          child: Container(),
+                        );
+                      } else if (loadedTopics.isEmpty) {
+                        return const Center(
+                            heightFactor: 20,
+                            child: Text('トピックが見つかりませんでした😢',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)));
+                      }
+                      if (index == loadedTopics.length) {
+                        if (lastDoc != null &&
+                            loadedTopics.length >= DEFAULT_LOAD_TOPICS) {
                           return const Center(
                               child: Padding(
                                   padding: EdgeInsets.only(top: 5),
                                   child: SizedBox(
-                                      height: 20,
-                                      width: 20,
+                                      height: 24,
+                                      width: 24,
                                       child: CircularProgressIndicator(
                                           color: Colors.blue))));
-                        } else {
+                        } else if (loadedTopics.length > 1) {
                           return const Center(
                               child: Padding(
                                   padding: EdgeInsets.only(top: 5),
                                   child: Text('トピックがありません')));
+                        } else {
+                          return Container();
                         }
                       }
-                      final rankedTopic = rankedTopics[index];
-                      if ((displaySettings.sortOrder ==
-                                  RankedTopicsSortOrder.taggingsCountChange &&
-                              displaySettings.timePeriod ==
-                                  Collection.weeklyRanking &&
-                              rankedTopic.taggingsCountChange <
-                                  DEFAULT_WEEKLY_ITEMS_CHANGE_CUTOFF) ||
-                          (displaySettings.sortOrder ==
-                                  RankedTopicsSortOrder.taggingsCountChange &&
-                              displaySettings.timePeriod ==
-                                  Collection.monthlyRanking &&
-                              rankedTopic.taggingsCountChange <
-                                  DEFAULT_MONTHLY_ITEMS_CHANGE_CUTOFF)) {
-                        return Container();
-                      }
+                      final rankedTopic = loadedTopics[index];
                       return Card(
                           elevation: 3,
                           margin: const EdgeInsets.all(8),
                           child: Column(
                             children: [
-                              TopicContainerWidget(rankedTopic: rankedTopic),
-                              Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: TopicHistoryWidget(
-                                      rankedTopic: rankedTopic)),
+                              TopicContainerWidget(
+                                  rankedTopic: rankedTopic, index: index),
+                              showChart
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: TopicHistoryWidget(
+                                          rankedTopic: rankedTopic))
+                                  : Container(),
                             ],
                           ));
                     },
@@ -150,11 +181,6 @@ class RankingPage extends ConsumerWidget {
                     loadedTopicsNotifier.getRankedTopics(
                         timePeriod: displaySettings.timePeriod,
                         sortOrder: displaySettings.sortOrder);
-                    if (user != null) {
-                      favoriteTopicsNotifier.getFavoriteTopics(user: user);
-                    } else {
-                      favoriteTopicsNotifier.initialize();
-                    }
                   },
                 );
               }

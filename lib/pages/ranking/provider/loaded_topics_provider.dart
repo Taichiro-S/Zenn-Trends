@@ -1,42 +1,119 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
-import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/model/loaded_topics_state.dart';
+import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/repository/ranked_topics_repository.dart';
 
 part 'loaded_topics_provider.g.dart';
 
+/*TODO
+検索したときの結果を保存する変数を追加し、
+weeklyとmonthlyの一覧が検索のたびに更新されないようにする
+weeklyRankedSearchedTopics, monthlyRankedSearchedTopics
+weeklySearchedLastDoc, monthlySearchedLastDoc の追加
+searchメソッド内でのstateの更新を修正
+*/
 @riverpod
 class LoadedTopics extends _$LoadedTopics {
   @override
   LoadedTopicsState build() {
-    return const LoadedTopicsState(
-      rankedTopics: AsyncValue.loading(),
-      lastDoc: null,
+    return LoadedTopicsState(
+      weeklyRankedTopics: const AsyncValue.data([]),
+      monthlyRankedTopics: const AsyncValue.data([]),
+      weeklyLastDoc: null,
+      monthlyLastDoc: null,
       isLoadingMore: false,
       isSearching: false,
       showSearchResult: false,
+      lastUpdatedAt: Timestamp(0, 0),
     );
   }
 
   /*
   topicの取得
   */
-
   Future<void> getRankedTopics(
       {required Collection timePeriod,
       required RankedTopicsSortOrder sortOrder}) async {
+    // 現在の日時と最終更新日時を取得（UTCに変換して日本時間に合わせる）
+    final now = DateTime.now().toUtc().add(const Duration(hours: 9));
+    final lastUpdate =
+        state.lastUpdatedAt.toDate().toUtc().add(const Duration(hours: 9));
+
+    // 最終更新日の翌日の朝6時を計算
+    final nextDay6Am =
+        DateTime(lastUpdate.year, lastUpdate.month, lastUpdate.day + 1, 6)
+            .toUtc()
+            .add(const Duration(hours: 9));
+
     final rankedTopicsrepository = ref.watch(rankedTopicsRepositoryProvider);
-    state = state.copyWith(rankedTopics: const AsyncValue.loading());
-    try {
-      final newTopics = await rankedTopicsrepository.fetchRankedTopics(
-          timePeriod: timePeriod, sortOrder: sortOrder);
-      state = state.copyWith(
-        rankedTopics: AsyncValue.data(newTopics),
-        lastDoc: newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
-      );
-    } catch (e, s) {
-      state = state.copyWith(rankedTopics: AsyncValue.error(e, s));
+
+    // データ更新のタイミングが朝6時であるため、
+    // 現在の時刻が最終更新日の翌日の朝6時を過ぎている場合はデータを取得して更新
+    if (now.isAfter(nextDay6Am)) {
+      state = timePeriod == Collection.weeklyRanking
+          ? state.copyWith(weeklyRankedTopics: const AsyncValue.loading())
+          : state.copyWith(monthlyRankedTopics: const AsyncValue.loading());
+      try {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+            timePeriod: timePeriod, sortOrder: sortOrder);
+
+        if (timePeriod == Collection.weeklyRanking) {
+          state = state.copyWith(
+            weeklyRankedTopics: AsyncValue.data(newTopics),
+            weeklyLastDoc:
+                newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+            lastUpdatedAt: Timestamp.now(),
+          );
+        } else {
+          state = state.copyWith(
+            monthlyRankedTopics: AsyncValue.data(newTopics),
+            monthlyLastDoc:
+                newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+            lastUpdatedAt: Timestamp.now(),
+          );
+        }
+      } catch (e, s) {
+        state = timePeriod == Collection.weeklyRanking
+            ? state.copyWith(weeklyRankedTopics: AsyncValue.error(e, s))
+            : state.copyWith(monthlyRankedTopics: AsyncValue.error(e, s));
+      }
+      // キャッシュデータがない場合のみデータを取得
+    } else if (timePeriod == Collection.weeklyRanking &&
+        state.weeklyRankedTopics is AsyncData &&
+        (state.weeklyRankedTopics.value != null &&
+            state.weeklyRankedTopics.value!.isEmpty)) {
+      state = state.copyWith(weeklyRankedTopics: const AsyncValue.loading());
+      try {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+            timePeriod: timePeriod, sortOrder: sortOrder);
+        state = state.copyWith(
+          weeklyRankedTopics: AsyncValue.data(newTopics),
+          weeklyLastDoc:
+              newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+          lastUpdatedAt: Timestamp.now(),
+        );
+      } catch (e, s) {
+        state = state.copyWith(weeklyRankedTopics: AsyncValue.error(e, s));
+      }
+    } else if (timePeriod == Collection.monthlyRanking &&
+        state.monthlyRankedTopics is AsyncData &&
+        (state.monthlyRankedTopics.value != null &&
+            state.monthlyRankedTopics.value!.isEmpty)) {
+      state = state.copyWith(monthlyRankedTopics: const AsyncValue.loading());
+      try {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+            timePeriod: timePeriod, sortOrder: sortOrder);
+        state = state.copyWith(
+          monthlyRankedTopics: AsyncValue.data(newTopics),
+          monthlyLastDoc:
+              newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+          lastUpdatedAt: Timestamp.now(),
+        );
+      } catch (e, s) {
+        state = state.copyWith(monthlyRankedTopics: AsyncValue.error(e, s));
+      }
     }
   }
 
@@ -44,25 +121,54 @@ class LoadedTopics extends _$LoadedTopics {
       {required Collection timePeriod,
       required RankedTopicsSortOrder sortOrder}) async {
     final rankedTopicsrepository = ref.watch(rankedTopicsRepositoryProvider);
-    if (state.lastDoc == null ||
-        state.rankedTopics is! AsyncData ||
+
+    if ((timePeriod == Collection.weeklyRanking &&
+            (state.weeklyLastDoc == null ||
+                state.weeklyRankedTopics is! AsyncData)) ||
+        (timePeriod == Collection.monthlyRanking &&
+            (state.monthlyLastDoc == null ||
+                state.monthlyRankedTopics is! AsyncData)) ||
         state.isLoadingMore) {
       return;
     }
+
     state = state.copyWith(isLoadingMore: true);
+
     try {
-      final newTopics = await rankedTopicsrepository.fetchRankedTopics(
-          timePeriod: timePeriod,
-          sortOrder: sortOrder,
-          startAfter: state.lastDoc);
-      state = state.copyWith(
-        rankedTopics: AsyncValue.data(
-            [...(state.rankedTopics.value ?? []), ...newTopics]),
-        lastDoc: newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
-        isLoadingMore: false,
-      );
+      if (timePeriod == Collection.weeklyRanking) {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+            timePeriod: timePeriod,
+            sortOrder: sortOrder,
+            startAfter: state.weeklyLastDoc);
+        state = state.copyWith(
+          weeklyRankedTopics: AsyncValue.data(
+              [...(state.weeklyRankedTopics.value ?? []), ...newTopics]),
+          weeklyLastDoc:
+              newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+          isLoadingMore: false,
+        );
+      } else if (timePeriod == Collection.monthlyRanking) {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+            timePeriod: timePeriod,
+            sortOrder: sortOrder,
+            startAfter: state.monthlyLastDoc);
+        state = state.copyWith(
+          monthlyRankedTopics: AsyncValue.data(
+              [...(state.monthlyRankedTopics.value ?? []), ...newTopics]),
+          monthlyLastDoc:
+              newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+          isLoadingMore: false,
+        );
+      }
     } catch (e, s) {
-      state = state.copyWith(rankedTopics: AsyncValue.error(e, s));
+      state = state.copyWith(
+        weeklyRankedTopics: timePeriod == Collection.weeklyRanking
+            ? AsyncValue.error(e, s)
+            : state.weeklyRankedTopics,
+        monthlyRankedTopics: timePeriod == Collection.monthlyRanking
+            ? AsyncValue.error(e, s)
+            : state.monthlyRankedTopics,
+      );
     } finally {
       state = state.copyWith(isLoadingMore: false);
     }
@@ -72,21 +178,97 @@ class LoadedTopics extends _$LoadedTopics {
   検索機能
   */
 
-  Future<void> searchRankedTopics(
+  Future<void> getSearchedTopics(
       {required Collection timePeriod,
       required RankedTopicsSortOrder sortOrder,
       required String searchWord}) async {
     final rankedTopicsrepository = ref.watch(rankedTopicsRepositoryProvider);
-    state = state.copyWith(rankedTopics: const AsyncValue.loading());
+
+    state = timePeriod == Collection.weeklyRanking
+        ? state.copyWith(weeklyRankedTopics: const AsyncValue.loading())
+        : state.copyWith(monthlyRankedTopics: const AsyncValue.loading());
+
     try {
       final newTopics = await rankedTopicsrepository.fetchRankedTopics(
           timePeriod: timePeriod, sortOrder: sortOrder, searchWord: searchWord);
-      state = state.copyWith(
-        rankedTopics: AsyncValue.data(newTopics),
-        lastDoc: newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
-      );
+
+      if (timePeriod == Collection.weeklyRanking) {
+        state = state.copyWith(
+            weeklyRankedTopics: AsyncValue.data(newTopics),
+            weeklyLastDoc:
+                newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null);
+      } else {
+        state = state.copyWith(
+            monthlyRankedTopics: AsyncValue.data(newTopics),
+            monthlyLastDoc:
+                newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null);
+      }
     } catch (e, s) {
-      state = state.copyWith(rankedTopics: AsyncValue.error(e, s));
+      state = timePeriod == Collection.weeklyRanking
+          ? state.copyWith(weeklyRankedTopics: AsyncValue.error(e, s))
+          : state.copyWith(monthlyRankedTopics: AsyncValue.error(e, s));
+    }
+  }
+
+  Future<void> getMoreSearchedTopics(
+      {required Collection timePeriod,
+      required RankedTopicsSortOrder sortOrder,
+      required String searchWord}) async {
+    final rankedTopicsrepository = ref.watch(rankedTopicsRepositoryProvider);
+
+    if ((timePeriod == Collection.weeklyRanking &&
+            (state.weeklyLastDoc == null ||
+                state.weeklyRankedTopics is! AsyncData)) ||
+        (timePeriod == Collection.monthlyRanking &&
+            (state.monthlyLastDoc == null ||
+                state.monthlyRankedTopics is! AsyncData)) ||
+        state.isLoadingMore) {
+      return;
+    }
+
+    state = state.copyWith(isLoadingMore: true);
+
+    try {
+      if (timePeriod == Collection.weeklyRanking) {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+          timePeriod: timePeriod,
+          sortOrder: sortOrder,
+          startAfter: state.weeklyLastDoc,
+          searchWord: searchWord,
+        );
+        state = state.copyWith(
+          weeklyRankedTopics: AsyncValue.data(
+              [...(state.weeklyRankedTopics.value ?? []), ...newTopics]),
+          weeklyLastDoc:
+              newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+          isLoadingMore: false,
+        );
+      } else if (timePeriod == Collection.monthlyRanking) {
+        final newTopics = await rankedTopicsrepository.fetchRankedTopics(
+          timePeriod: timePeriod,
+          sortOrder: sortOrder,
+          startAfter: state.monthlyLastDoc,
+          searchWord: searchWord,
+        );
+        state = state.copyWith(
+          monthlyRankedTopics: AsyncValue.data(
+              [...(state.monthlyRankedTopics.value ?? []), ...newTopics]),
+          monthlyLastDoc:
+              newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
+          isLoadingMore: false,
+        );
+      }
+    } catch (e, s) {
+      state = state.copyWith(
+        weeklyRankedTopics: timePeriod == Collection.weeklyRanking
+            ? AsyncValue.error(e, s)
+            : state.weeklyRankedTopics,
+        monthlyRankedTopics: timePeriod == Collection.monthlyRanking
+            ? AsyncValue.error(e, s)
+            : state.monthlyRankedTopics,
+      );
+    } finally {
+      state = state.copyWith(isLoadingMore: false);
     }
   }
 
@@ -113,7 +295,7 @@ class LoadedTopics extends _$LoadedTopics {
     state = state.copyWith(searchWord: searchWord);
     state = state.copyWith(showSearchResult: true);
 
-    searchRankedTopics(
+    getSearchedTopics(
         timePeriod: displaySettings.timePeriod,
         sortOrder: displaySettings.sortOrder,
         searchWord: searchWord);

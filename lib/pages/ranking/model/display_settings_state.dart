@@ -4,7 +4,9 @@ part 'display_settings_state.freezed.dart';
 
 @freezed
 class DisplaySettingsState with _$DisplaySettingsState {
-  const factory DisplaySettingsState(
-      {required Collection timePeriod,
-      required RankedTopicsSortOrder sortOrder}) = _DisplaySettingsState;
+  const factory DisplaySettingsState({
+    required Collection timePeriod,
+    required RankedTopicsSortOrder sortOrder,
+    required bool showChart,
+  }) = _DisplaySettingsState;
 }

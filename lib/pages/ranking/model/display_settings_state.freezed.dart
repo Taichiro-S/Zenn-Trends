@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DisplaySettingsState {
   Collection get timePeriod => throw _privateConstructorUsedError;
   RankedTopicsSortOrder get sortOrder => throw _privateConstructorUsedError;
+  bool get showChart => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DisplaySettingsStateCopyWith<DisplaySettingsState> get copyWith =>
@@ -30,7 +31,8 @@ abstract class $DisplaySettingsStateCopyWith<$Res> {
           $Res Function(DisplaySettingsState) then) =
       _$DisplaySettingsStateCopyWithImpl<$Res, DisplaySettingsState>;
   @useResult
-  $Res call({Collection timePeriod, RankedTopicsSortOrder sortOrder});
+  $Res call(
+      {Collection timePeriod, RankedTopicsSortOrder sortOrder, bool showChart});
 }
 
 /// @nodoc
@@ -49,6 +51,7 @@ class _$DisplaySettingsStateCopyWithImpl<$Res,
   $Res call({
     Object? timePeriod = null,
     Object? sortOrder = null,
+    Object? showChart = null,
   }) {
     return _then(_value.copyWith(
       timePeriod: null == timePeriod
@@ -59,6 +62,10 @@ class _$DisplaySettingsStateCopyWithImpl<$Res,
           ? _value.sortOrder
           : sortOrder // ignore: cast_nullable_to_non_nullable
               as RankedTopicsSortOrder,
+      showChart: null == showChart
+          ? _value.showChart
+          : showChart // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -71,7 +78,8 @@ abstract class _$$DisplaySettingsStateImplCopyWith<$Res>
       __$$DisplaySettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Collection timePeriod, RankedTopicsSortOrder sortOrder});
+  $Res call(
+      {Collection timePeriod, RankedTopicsSortOrder sortOrder, bool showChart});
 }
 
 /// @nodoc
@@ -87,6 +95,7 @@ class __$$DisplaySettingsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? timePeriod = null,
     Object? sortOrder = null,
+    Object? showChart = null,
   }) {
     return _then(_$DisplaySettingsStateImpl(
       timePeriod: null == timePeriod
@@ -97,6 +106,10 @@ class __$$DisplaySettingsStateImplCopyWithImpl<$Res>
           ? _value.sortOrder
           : sortOrder // ignore: cast_nullable_to_non_nullable
               as RankedTopicsSortOrder,
+      showChart: null == showChart
+          ? _value.showChart
+          : showChart // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -105,16 +118,20 @@ class __$$DisplaySettingsStateImplCopyWithImpl<$Res>
 
 class _$DisplaySettingsStateImpl implements _DisplaySettingsState {
   const _$DisplaySettingsStateImpl(
-      {required this.timePeriod, required this.sortOrder});
+      {required this.timePeriod,
+      required this.sortOrder,
+      required this.showChart});
 
   @override
   final Collection timePeriod;
   @override
   final RankedTopicsSortOrder sortOrder;
+  @override
+  final bool showChart;
 
   @override
   String toString() {
-    return 'DisplaySettingsState(timePeriod: $timePeriod, sortOrder: $sortOrder)';
+    return 'DisplaySettingsState(timePeriod: $timePeriod, sortOrder: $sortOrder, showChart: $showChart)';
   }
 
   @override
@@ -125,11 +142,14 @@ class _$DisplaySettingsStateImpl implements _DisplaySettingsState {
             (identical(other.timePeriod, timePeriod) ||
                 other.timePeriod == timePeriod) &&
             (identical(other.sortOrder, sortOrder) ||
-                other.sortOrder == sortOrder));
+                other.sortOrder == sortOrder) &&
+            (identical(other.showChart, showChart) ||
+                other.showChart == showChart));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, timePeriod, sortOrder);
+  int get hashCode =>
+      Object.hash(runtimeType, timePeriod, sortOrder, showChart);
 
   @JsonKey(ignore: true)
   @override
@@ -142,14 +162,16 @@ class _$DisplaySettingsStateImpl implements _DisplaySettingsState {
 
 abstract class _DisplaySettingsState implements DisplaySettingsState {
   const factory _DisplaySettingsState(
-          {required final Collection timePeriod,
-          required final RankedTopicsSortOrder sortOrder}) =
-      _$DisplaySettingsStateImpl;
+      {required final Collection timePeriod,
+      required final RankedTopicsSortOrder sortOrder,
+      required final bool showChart}) = _$DisplaySettingsStateImpl;
 
   @override
   Collection get timePeriod;
   @override
   RankedTopicsSortOrder get sortOrder;
+  @override
+  bool get showChart;
   @override
   @JsonKey(ignore: true)
   _$$DisplaySettingsStateImplCopyWith<_$DisplaySettingsStateImpl>

@@ -39,14 +39,24 @@ class RankedTopicsRepository {
       } else {
         query = rankedTopicsDocRef
             .collection('topics')
+            .where(sortOrder.name,
+                isGreaterThanOrEqualTo: timePeriod.name ==
+                            Collection.weeklyRanking.name &&
+                        sortOrder == RankedTopicsSortOrder.taggingsCountChange
+                    ? DEFAULT_WEEKLY_TAGGINGS_CHANGE_CUTOFF
+                    : timePeriod.name == Collection.monthlyRanking.name &&
+                            sortOrder ==
+                                RankedTopicsSortOrder.taggingsCountChange
+                        ? DEFAULT_MONTHLY_TAGGINGS_CHANGE_CUTOFF
+                        : 0)
             .orderBy(sortOrder.name, descending: true)
             .limit(limit);
       }
-
       if (startAfter != null) {
         query = query.startAfterDocument(startAfter);
       }
       final QuerySnapshot snap = await query.get();
+
       return snap.docs.map((doc) => RankedTopic.fromDocument(doc)).toList();
     } catch (e) {
       throw Exception(e);

@@ -9,9 +9,9 @@ enum Collection {
       case Collection.topics:
         return 'topics';
       case Collection.weeklyRanking:
-        return 'weeklyRanking';
+        return 'weekly_ranking';
       case Collection.monthlyRanking:
-        return 'monthlyRanking';
+        return 'monthly_ranking';
       default:
         return '';
     }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zenn_trends/pages/ranking/model/topic_history_state.dart';
+import 'package:zenn_trends/pages/ranking/model/taggings_count_change_history.dart';
 
 part 'ranked_topic.freezed.dart';
 
@@ -17,18 +17,18 @@ class RankedTopic with _$RankedTopic {
     required DocumentSnapshot documentSnapshot,
     String? imageUrl,
     bool? isFavorite,
-    List<TopicHistoryState>? taggingsCountHistory,
+    List<TaggingsCountChangeHistory>? taggingsCountHistory,
   }) = _RankedTopic;
 
   factory RankedTopic.fromDocument(DocumentSnapshot doc) {
-    List<TopicHistoryState> taggingsCountHistory = [];
+    List<TaggingsCountChangeHistory> taggingsCountHistory = [];
     (doc['taggings_count_history'] as Map<String, dynamic>)
         .forEach((key, value) {
       DateTime dateTime = DateTime.parse(key);
       Timestamp timestamp = Timestamp.fromDate(dateTime);
       int change = value as int;
       taggingsCountHistory
-          .add(TopicHistoryState(date: timestamp, change: change));
+          .add(TaggingsCountChangeHistory(date: timestamp, change: change));
     });
     taggingsCountHistory.sort((a, b) => a.date.compareTo(b.date));
     return RankedTopic(
