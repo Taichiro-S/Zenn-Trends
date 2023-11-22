@@ -39,7 +39,6 @@ class ZennRecentArticlesApi {
               ZennArticle.fromJson(articleJson as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

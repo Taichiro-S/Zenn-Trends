@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:zenn_trends/pages/privacy_policy/privacy_policy_page.dart';
 import 'package:zenn_trends/pages/account/account_page.dart';
+import 'package:zenn_trends/pages/privacy_policy/privacy_policy_page.dart';
 import 'package:zenn_trends/pages/ranking/ranking_page.dart';
 import 'package:zenn_trends/pages/recent_article/recent_article_page.dart';
 import 'package:zenn_trends/pages/user_settings/user_settings_page.dart';

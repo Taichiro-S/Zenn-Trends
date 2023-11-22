@@ -22,19 +22,29 @@ class RankingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final displaySettings = ref.watch(displaySettingsProvider);
-    final loadedTopicsAsync = ref.watch(
-        displaySettings.timePeriod == Collection.monthlyRanking
-            ? loadedTopicsProvider.select((state) => state.monthlyRankedTopics)
-            : loadedTopicsProvider.select((state) => state.weeklyRankedTopics));
+    final showSearchResult = ref
+        .watch(loadedTopicsProvider.select((state) => state.showSearchResult));
+    final loadedTopicsAsync = ref.watch(displaySettings.timePeriod ==
+                Collection.monthlyRanking &&
+            showSearchResult
+        ? loadedTopicsProvider.select((state) => state.monthlySearchedTopics)
+        : displaySettings.timePeriod == Collection.weeklyRanking &&
+                showSearchResult
+            ? loadedTopicsProvider.select((state) => state.weeklySearchedTopics)
+            : displaySettings.timePeriod == Collection.monthlyRanking
+                ? loadedTopicsProvider
+                    .select((state) => state.monthlyRankedTopics)
+                : loadedTopicsProvider
+                    .select((state) => state.weeklyRankedTopics));
     final isSearching = ref.watch(
         displaySettings.timePeriod == Collection.monthlyRanking
             ? loadedTopicsProvider.select((state) => state.isSearching)
             : loadedTopicsProvider.select((state) => state.isSearching));
     final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
-    final lastDoc = ref.watch(
-        displaySettings.timePeriod == Collection.monthlyRanking
-            ? loadedTopicsProvider.select((state) => state.monthlyLastDoc)
-            : loadedTopicsProvider.select((state) => state.weeklyLastDoc));
+    final lastDoc = ref.watch(displaySettings.timePeriod ==
+            Collection.monthlyRanking
+        ? loadedTopicsProvider.select((state) => state.monthlyRankedLastDoc)
+        : loadedTopicsProvider.select((state) => state.weeklyRankedLastDoc));
     final scrollController = ref.watch(scrollControllerNotifierProvider);
     final googleAuth = ref.watch(googleAuthProvider);
     final showChart = ref.watch(displaySettingsProvider.select((state) {
@@ -61,9 +71,6 @@ class RankingPage extends ConsumerWidget {
           ref.watch(favoriteTopicsProvider);
         });
       }
-      // else {
-      //   ref.read(favoriteTopicsProvider.notifier).initialize();
-      // }
     });
     ref.listen<bool>(loadedTopicsProvider.select((state) => state.isSearching),
         (_, user) {
@@ -74,20 +81,26 @@ class RankingPage extends ConsumerWidget {
             .getFavoriteTopics(user: user.value!);
         ref.watch(favoriteTopicsProvider);
       }
-      // else {
-      //   ref.read(favoriteTopicsProvider.notifier).initialize();
-      // }
     });
 
     return Scaffold(
       appBar: AppBar(
-        leading: !isSearching
+        leading: !isSearching && !showSearchResult
             ? IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () {
                   loadedTopicsNotifier.startSearching();
                 })
-            : null,
+            : !isSearching
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      loadedTopicsNotifier.stopSearching();
+                      loadedTopicsNotifier.getRankedTopics(
+                          timePeriod: displaySettings.timePeriod,
+                          sortOrder: displaySettings.sortOrder);
+                    })
+                : null,
         title: isSearching
             ? const SearchTopic()
             : (searchWord != null && searchWord.isNotEmpty)
