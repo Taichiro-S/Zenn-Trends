@@ -37,7 +37,6 @@ class FavoriteTopics extends _$FavoriteTopics {
         state = state.copyWith(topicIds: AsyncValue.error(e, s));
       }
     }
-    print('use cached favorite topics');
   }
 
   Future<void> addFavoriteTopic(
