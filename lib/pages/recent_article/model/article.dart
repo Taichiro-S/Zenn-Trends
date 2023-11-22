@@ -10,7 +10,7 @@ class Article with _$Article {
     required String title,
     required String? emoji,
     @JsonKey(name: 'published_at') required String publishedAt,
-    @JsonKey(name: 'path') required String path,
+    required String path,
   }) = _Article;
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);

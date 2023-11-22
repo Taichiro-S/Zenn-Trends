@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'topic_history_state.dart';
+part of 'taggings_count_change_history.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,28 +15,30 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$TopicHistoryState {
+mixin _$TaggingsCountChangeHistory {
   Timestamp get date => throw _privateConstructorUsedError;
   int get change => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $TopicHistoryStateCopyWith<TopicHistoryState> get copyWith =>
-      throw _privateConstructorUsedError;
+  $TaggingsCountChangeHistoryCopyWith<TaggingsCountChangeHistory>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TopicHistoryStateCopyWith<$Res> {
-  factory $TopicHistoryStateCopyWith(
-          TopicHistoryState value, $Res Function(TopicHistoryState) then) =
-      _$TopicHistoryStateCopyWithImpl<$Res, TopicHistoryState>;
+abstract class $TaggingsCountChangeHistoryCopyWith<$Res> {
+  factory $TaggingsCountChangeHistoryCopyWith(TaggingsCountChangeHistory value,
+          $Res Function(TaggingsCountChangeHistory) then) =
+      _$TaggingsCountChangeHistoryCopyWithImpl<$Res,
+          TaggingsCountChangeHistory>;
   @useResult
   $Res call({Timestamp date, int change});
 }
 
 /// @nodoc
-class _$TopicHistoryStateCopyWithImpl<$Res, $Val extends TopicHistoryState>
-    implements $TopicHistoryStateCopyWith<$Res> {
-  _$TopicHistoryStateCopyWithImpl(this._value, this._then);
+class _$TaggingsCountChangeHistoryCopyWithImpl<$Res,
+        $Val extends TaggingsCountChangeHistory>
+    implements $TaggingsCountChangeHistoryCopyWith<$Res> {
+  _$TaggingsCountChangeHistoryCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -63,22 +65,25 @@ class _$TopicHistoryStateCopyWithImpl<$Res, $Val extends TopicHistoryState>
 }
 
 /// @nodoc
-abstract class _$$TopicHistoryStateImplCopyWith<$Res>
-    implements $TopicHistoryStateCopyWith<$Res> {
-  factory _$$TopicHistoryStateImplCopyWith(_$TopicHistoryStateImpl value,
-          $Res Function(_$TopicHistoryStateImpl) then) =
-      __$$TopicHistoryStateImplCopyWithImpl<$Res>;
+abstract class _$$TaggingsCountChangeHistoryImplCopyWith<$Res>
+    implements $TaggingsCountChangeHistoryCopyWith<$Res> {
+  factory _$$TaggingsCountChangeHistoryImplCopyWith(
+          _$TaggingsCountChangeHistoryImpl value,
+          $Res Function(_$TaggingsCountChangeHistoryImpl) then) =
+      __$$TaggingsCountChangeHistoryImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Timestamp date, int change});
 }
 
 /// @nodoc
-class __$$TopicHistoryStateImplCopyWithImpl<$Res>
-    extends _$TopicHistoryStateCopyWithImpl<$Res, _$TopicHistoryStateImpl>
-    implements _$$TopicHistoryStateImplCopyWith<$Res> {
-  __$$TopicHistoryStateImplCopyWithImpl(_$TopicHistoryStateImpl _value,
-      $Res Function(_$TopicHistoryStateImpl) _then)
+class __$$TaggingsCountChangeHistoryImplCopyWithImpl<$Res>
+    extends _$TaggingsCountChangeHistoryCopyWithImpl<$Res,
+        _$TaggingsCountChangeHistoryImpl>
+    implements _$$TaggingsCountChangeHistoryImplCopyWith<$Res> {
+  __$$TaggingsCountChangeHistoryImplCopyWithImpl(
+      _$TaggingsCountChangeHistoryImpl _value,
+      $Res Function(_$TaggingsCountChangeHistoryImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +92,7 @@ class __$$TopicHistoryStateImplCopyWithImpl<$Res>
     Object? date = null,
     Object? change = null,
   }) {
-    return _then(_$TopicHistoryStateImpl(
+    return _then(_$TaggingsCountChangeHistoryImpl(
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -102,10 +107,11 @@ class __$$TopicHistoryStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TopicHistoryStateImpl
+class _$TaggingsCountChangeHistoryImpl
     with DiagnosticableTreeMixin
-    implements _TopicHistoryState {
-  const _$TopicHistoryStateImpl({required this.date, required this.change});
+    implements _TaggingsCountChangeHistory {
+  const _$TaggingsCountChangeHistoryImpl(
+      {required this.date, required this.change});
 
   @override
   final Timestamp date;
@@ -114,14 +120,14 @@ class _$TopicHistoryStateImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TopicHistoryState(date: $date, change: $change)';
+    return 'TaggingsCountChangeHistory(date: $date, change: $change)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'TopicHistoryState'))
+      ..add(DiagnosticsProperty('type', 'TaggingsCountChangeHistory'))
       ..add(DiagnosticsProperty('date', date))
       ..add(DiagnosticsProperty('change', change));
   }
@@ -130,7 +136,7 @@ class _$TopicHistoryStateImpl
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TopicHistoryStateImpl &&
+            other is _$TaggingsCountChangeHistoryImpl &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.change, change) || other.change == change));
   }
@@ -141,15 +147,16 @@ class _$TopicHistoryStateImpl
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TopicHistoryStateImplCopyWith<_$TopicHistoryStateImpl> get copyWith =>
-      __$$TopicHistoryStateImplCopyWithImpl<_$TopicHistoryStateImpl>(
-          this, _$identity);
+  _$$TaggingsCountChangeHistoryImplCopyWith<_$TaggingsCountChangeHistoryImpl>
+      get copyWith => __$$TaggingsCountChangeHistoryImplCopyWithImpl<
+          _$TaggingsCountChangeHistoryImpl>(this, _$identity);
 }
 
-abstract class _TopicHistoryState implements TopicHistoryState {
-  const factory _TopicHistoryState(
+abstract class _TaggingsCountChangeHistory
+    implements TaggingsCountChangeHistory {
+  const factory _TaggingsCountChangeHistory(
       {required final Timestamp date,
-      required final int change}) = _$TopicHistoryStateImpl;
+      required final int change}) = _$TaggingsCountChangeHistoryImpl;
 
   @override
   Timestamp get date;
@@ -157,6 +164,6 @@ abstract class _TopicHistoryState implements TopicHistoryState {
   int get change;
   @override
   @JsonKey(ignore: true)
-  _$$TopicHistoryStateImplCopyWith<_$TopicHistoryStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$TaggingsCountChangeHistoryImplCopyWith<_$TaggingsCountChangeHistoryImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

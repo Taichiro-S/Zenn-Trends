@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:zenn_trends/pages/display_settings/display_settings_page.dart';
-import 'package:zenn_trends/pages/profile/profile_page.dart';
+import 'package:zenn_trends/pages/privacy_policy/privacy_policy_page.dart';
+import 'package:zenn_trends/pages/account/account_page.dart';
 import 'package:zenn_trends/pages/ranking/ranking_page.dart';
 import 'package:zenn_trends/pages/recent_article/recent_article_page.dart';
+import 'package:zenn_trends/pages/user_settings/user_settings_page.dart';
 import 'package:zenn_trends/root_page.dart';
 
 part 'router.gr.dart';
@@ -13,13 +14,9 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
         AutoRoute(path: '/', page: RootRoute.page, children: [
           AutoRoute(path: '', page: RankingRoute.page),
-          AutoRoute(path: 'recent_article', page: RecentArticleRoute.page),
-          AutoRoute(path: 'profile', page: ProfileRoute.page),
+          AutoRoute(path: 'user_settings', page: UserSettingsRoute.page),
         ]),
-        AutoRoute(path: '/display_settings', page: DisplaySettingsRoute.page),
-        // AutoRoute(
-        //     path: '/daily_articles', page: DailyArticlesOfTopicRoute.page),
-
-        // AutoRoute(path: '/article_body', page: ArticleBodyRoute.page)
+        AutoRoute(path: '/account', page: AccountRoute.page),
+        AutoRoute(path: '/privacy_policy', page: PrivacyPolicyRoute.page),
       ];
 }

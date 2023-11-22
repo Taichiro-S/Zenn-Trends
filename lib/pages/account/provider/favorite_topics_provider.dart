@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:zenn_trends/pages/profile/model/favorite_topics_state.dart';
-import 'package:zenn_trends/pages/profile/repository/favorite_topics_repository.dart';
+import 'package:zenn_trends/pages/account/model/favorite_topics_state.dart';
+import 'package:zenn_trends/pages/account/repository/favorite_topics_repository.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 
 part 'favorite_topics_provider.g.dart';
@@ -19,11 +19,12 @@ class FavoriteTopics extends _$FavoriteTopics {
     );
   }
 
-  void initialize() {
-    state = state.copyWith(topicIds: const AsyncValue.data([]));
-  }
+  // void initialize() {
+  //   state = state.copyWith(topicIds: const AsyncValue.data([]));
+  // }
 
   Future<void> getFavoriteTopics({required User user}) async {
+    print('getFavoriteTopics');
     final favoriteTopicsRepository =
         ref.watch(favoriteTopicsRepositoryProvider);
     state = state.copyWith(topicIds: const AsyncValue.loading());

@@ -8,11 +8,7 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      routes: const [
-        RankingRoute(),
-        ProfileRoute(),
-        RecentArticleRoute(),
-      ],
+      routes: const [RankingRoute(), UserSettingsRoute()],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -24,12 +20,8 @@ class RootPage extends StatelessWidget {
               label: 'Ranking',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.description),
-              label: 'Article',
+              icon: Icon(Icons.settings),
+              label: 'Settings',
             ),
           ],
         );

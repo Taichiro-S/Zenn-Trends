@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
-import 'package:zenn_trends/pages/display_settings/provider/display_settings_provider.dart';
+import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 class BarIndicator extends ConsumerWidget {
@@ -17,12 +17,14 @@ class BarIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loadedTopicsAsync = ref.watch(loadedTopicsProvider);
-    final double maxWidth = MediaQuery.of(context).size.width - 150;
+    final double maxWidth = MediaQuery.of(context).size.width - 160;
     final displaySettings = ref.watch(displaySettingsProvider);
-
+    final loadedTopicsAsync = ref.watch(
+        displaySettings.timePeriod == Collection.monthlyRanking
+            ? loadedTopicsProvider.select((state) => state.monthlyRankedTopics)
+            : loadedTopicsProvider.select((state) => state.weeklyRankedTopics));
     return Container(
-        child: loadedTopicsAsync.rankedTopics.when(
+        child: loadedTopicsAsync.when(
       data: (topics) {
         int maxValue = 0;
         if (displaySettings.sortOrder == RankedTopicsSortOrder.taggingsCount) {

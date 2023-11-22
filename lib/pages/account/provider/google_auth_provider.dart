@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:zenn_trends/pages/profile/api/google_auth_api.dart';
-import 'package:zenn_trends/pages/profile/model/google_auth_state.dart';
+import 'package:zenn_trends/pages/account/api/google_auth_api.dart';
+import 'package:zenn_trends/pages/account/model/google_auth_state.dart';
 
 part 'google_auth_provider.g.dart';
 
@@ -15,26 +16,30 @@ class GoogleAuth extends _$GoogleAuth {
     return const GoogleAuthState(user: AsyncValue.loading());
   }
 
-  Future<void> _getSignedInUser() async {
+  Future<User?> _getSignedInUser() async {
     final googleAuthAPi = ref.watch(googleAuthApiProvider);
     state = state.copyWith(user: const AsyncValue.loading());
+    User? user;
     try {
-      final user = await googleAuthAPi.getSignedInUser();
+      user = await googleAuthAPi.getSignedInUser();
       state = state.copyWith(user: AsyncValue.data(user));
     } catch (e, s) {
       state = state.copyWith(user: AsyncValue.error(e, s));
     }
+    return user;
   }
 
-  Future<void> singIn() async {
+  Future<User?> singIn() async {
     final googleAuthAPi = ref.watch(googleAuthApiProvider);
+    User? user;
     state = state.copyWith(user: const AsyncValue.loading());
     try {
-      final user = await googleAuthAPi.signIn();
+      user = await googleAuthAPi.signIn();
       state = state.copyWith(user: AsyncValue.data(user));
     } catch (e, s) {
       state = state.copyWith(user: AsyncValue.error(e, s));
     }
+    return user;
   }
 
   Future<void> signOut() async {

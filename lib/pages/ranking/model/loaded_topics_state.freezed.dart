@@ -16,12 +16,18 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoadedTopicsState {
-  AsyncValue<List<RankedTopic>> get rankedTopics =>
+  AsyncValue<List<RankedTopic>> get weeklyRankedTopics =>
       throw _privateConstructorUsedError;
-  DocumentSnapshot<Object?>? get lastDoc => throw _privateConstructorUsedError;
+  AsyncValue<List<RankedTopic>> get monthlyRankedTopics =>
+      throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get weeklyLastDoc =>
+      throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get monthlyLastDoc =>
+      throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
   bool get isSearching => throw _privateConstructorUsedError;
   bool get showSearchResult => throw _privateConstructorUsedError;
+  Timestamp get lastUpdatedAt => throw _privateConstructorUsedError;
   String? get searchWord => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -36,11 +42,14 @@ abstract class $LoadedTopicsStateCopyWith<$Res> {
       _$LoadedTopicsStateCopyWithImpl<$Res, LoadedTopicsState>;
   @useResult
   $Res call(
-      {AsyncValue<List<RankedTopic>> rankedTopics,
-      DocumentSnapshot<Object?>? lastDoc,
+      {AsyncValue<List<RankedTopic>> weeklyRankedTopics,
+      AsyncValue<List<RankedTopic>> monthlyRankedTopics,
+      DocumentSnapshot<Object?>? weeklyLastDoc,
+      DocumentSnapshot<Object?>? monthlyLastDoc,
       bool isLoadingMore,
       bool isSearching,
       bool showSearchResult,
+      Timestamp lastUpdatedAt,
       String? searchWord});
 }
 
@@ -57,21 +66,32 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rankedTopics = null,
-    Object? lastDoc = freezed,
+    Object? weeklyRankedTopics = null,
+    Object? monthlyRankedTopics = null,
+    Object? weeklyLastDoc = freezed,
+    Object? monthlyLastDoc = freezed,
     Object? isLoadingMore = null,
     Object? isSearching = null,
     Object? showSearchResult = null,
+    Object? lastUpdatedAt = null,
     Object? searchWord = freezed,
   }) {
     return _then(_value.copyWith(
-      rankedTopics: null == rankedTopics
-          ? _value.rankedTopics
-          : rankedTopics // ignore: cast_nullable_to_non_nullable
+      weeklyRankedTopics: null == weeklyRankedTopics
+          ? _value.weeklyRankedTopics
+          : weeklyRankedTopics // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<RankedTopic>>,
-      lastDoc: freezed == lastDoc
-          ? _value.lastDoc
-          : lastDoc // ignore: cast_nullable_to_non_nullable
+      monthlyRankedTopics: null == monthlyRankedTopics
+          ? _value.monthlyRankedTopics
+          : monthlyRankedTopics // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTopic>>,
+      weeklyLastDoc: freezed == weeklyLastDoc
+          ? _value.weeklyLastDoc
+          : weeklyLastDoc // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
+      monthlyLastDoc: freezed == monthlyLastDoc
+          ? _value.monthlyLastDoc
+          : monthlyLastDoc // ignore: cast_nullable_to_non_nullable
               as DocumentSnapshot<Object?>?,
       isLoadingMore: null == isLoadingMore
           ? _value.isLoadingMore
@@ -85,6 +105,10 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
           ? _value.showSearchResult
           : showSearchResult // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastUpdatedAt: null == lastUpdatedAt
+          ? _value.lastUpdatedAt
+          : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
+              as Timestamp,
       searchWord: freezed == searchWord
           ? _value.searchWord
           : searchWord // ignore: cast_nullable_to_non_nullable
@@ -94,48 +118,62 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
 }
 
 /// @nodoc
-abstract class _$$LoadedTopicsStateeImplCopyWith<$Res>
+abstract class _$$LoadedTopicsStateImplCopyWith<$Res>
     implements $LoadedTopicsStateCopyWith<$Res> {
-  factory _$$LoadedTopicsStateeImplCopyWith(_$LoadedTopicsStateeImpl value,
-          $Res Function(_$LoadedTopicsStateeImpl) then) =
-      __$$LoadedTopicsStateeImplCopyWithImpl<$Res>;
+  factory _$$LoadedTopicsStateImplCopyWith(_$LoadedTopicsStateImpl value,
+          $Res Function(_$LoadedTopicsStateImpl) then) =
+      __$$LoadedTopicsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {AsyncValue<List<RankedTopic>> rankedTopics,
-      DocumentSnapshot<Object?>? lastDoc,
+      {AsyncValue<List<RankedTopic>> weeklyRankedTopics,
+      AsyncValue<List<RankedTopic>> monthlyRankedTopics,
+      DocumentSnapshot<Object?>? weeklyLastDoc,
+      DocumentSnapshot<Object?>? monthlyLastDoc,
       bool isLoadingMore,
       bool isSearching,
       bool showSearchResult,
+      Timestamp lastUpdatedAt,
       String? searchWord});
 }
 
 /// @nodoc
-class __$$LoadedTopicsStateeImplCopyWithImpl<$Res>
-    extends _$LoadedTopicsStateCopyWithImpl<$Res, _$LoadedTopicsStateeImpl>
-    implements _$$LoadedTopicsStateeImplCopyWith<$Res> {
-  __$$LoadedTopicsStateeImplCopyWithImpl(_$LoadedTopicsStateeImpl _value,
-      $Res Function(_$LoadedTopicsStateeImpl) _then)
+class __$$LoadedTopicsStateImplCopyWithImpl<$Res>
+    extends _$LoadedTopicsStateCopyWithImpl<$Res, _$LoadedTopicsStateImpl>
+    implements _$$LoadedTopicsStateImplCopyWith<$Res> {
+  __$$LoadedTopicsStateImplCopyWithImpl(_$LoadedTopicsStateImpl _value,
+      $Res Function(_$LoadedTopicsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rankedTopics = null,
-    Object? lastDoc = freezed,
+    Object? weeklyRankedTopics = null,
+    Object? monthlyRankedTopics = null,
+    Object? weeklyLastDoc = freezed,
+    Object? monthlyLastDoc = freezed,
     Object? isLoadingMore = null,
     Object? isSearching = null,
     Object? showSearchResult = null,
+    Object? lastUpdatedAt = null,
     Object? searchWord = freezed,
   }) {
-    return _then(_$LoadedTopicsStateeImpl(
-      rankedTopics: null == rankedTopics
-          ? _value.rankedTopics
-          : rankedTopics // ignore: cast_nullable_to_non_nullable
+    return _then(_$LoadedTopicsStateImpl(
+      weeklyRankedTopics: null == weeklyRankedTopics
+          ? _value.weeklyRankedTopics
+          : weeklyRankedTopics // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<RankedTopic>>,
-      lastDoc: freezed == lastDoc
-          ? _value.lastDoc
-          : lastDoc // ignore: cast_nullable_to_non_nullable
+      monthlyRankedTopics: null == monthlyRankedTopics
+          ? _value.monthlyRankedTopics
+          : monthlyRankedTopics // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTopic>>,
+      weeklyLastDoc: freezed == weeklyLastDoc
+          ? _value.weeklyLastDoc
+          : weeklyLastDoc // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
+      monthlyLastDoc: freezed == monthlyLastDoc
+          ? _value.monthlyLastDoc
+          : monthlyLastDoc // ignore: cast_nullable_to_non_nullable
               as DocumentSnapshot<Object?>?,
       isLoadingMore: null == isLoadingMore
           ? _value.isLoadingMore
@@ -149,6 +187,10 @@ class __$$LoadedTopicsStateeImplCopyWithImpl<$Res>
           ? _value.showSearchResult
           : showSearchResult // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastUpdatedAt: null == lastUpdatedAt
+          ? _value.lastUpdatedAt
+          : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
+              as Timestamp,
       searchWord: freezed == searchWord
           ? _value.searchWord
           : searchWord // ignore: cast_nullable_to_non_nullable
@@ -159,19 +201,26 @@ class __$$LoadedTopicsStateeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadedTopicsStateeImpl implements _LoadedTopicsStatee {
-  const _$LoadedTopicsStateeImpl(
-      {required this.rankedTopics,
-      required this.lastDoc,
+class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
+  const _$LoadedTopicsStateImpl(
+      {required this.weeklyRankedTopics,
+      required this.monthlyRankedTopics,
+      required this.weeklyLastDoc,
+      required this.monthlyLastDoc,
       required this.isLoadingMore,
       required this.isSearching,
       required this.showSearchResult,
+      required this.lastUpdatedAt,
       this.searchWord});
 
   @override
-  final AsyncValue<List<RankedTopic>> rankedTopics;
+  final AsyncValue<List<RankedTopic>> weeklyRankedTopics;
   @override
-  final DocumentSnapshot<Object?>? lastDoc;
+  final AsyncValue<List<RankedTopic>> monthlyRankedTopics;
+  @override
+  final DocumentSnapshot<Object?>? weeklyLastDoc;
+  @override
+  final DocumentSnapshot<Object?>? monthlyLastDoc;
   @override
   final bool isLoadingMore;
   @override
@@ -179,56 +228,81 @@ class _$LoadedTopicsStateeImpl implements _LoadedTopicsStatee {
   @override
   final bool showSearchResult;
   @override
+  final Timestamp lastUpdatedAt;
+  @override
   final String? searchWord;
 
   @override
   String toString() {
-    return 'LoadedTopicsState(rankedTopics: $rankedTopics, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, showSearchResult: $showSearchResult, searchWord: $searchWord)';
+    return 'LoadedTopicsState(weeklyRankedTopics: $weeklyRankedTopics, monthlyRankedTopics: $monthlyRankedTopics, weeklyLastDoc: $weeklyLastDoc, monthlyLastDoc: $monthlyLastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, showSearchResult: $showSearchResult, lastUpdatedAt: $lastUpdatedAt, searchWord: $searchWord)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoadedTopicsStateeImpl &&
-            (identical(other.rankedTopics, rankedTopics) ||
-                other.rankedTopics == rankedTopics) &&
-            (identical(other.lastDoc, lastDoc) || other.lastDoc == lastDoc) &&
+            other is _$LoadedTopicsStateImpl &&
+            (identical(other.weeklyRankedTopics, weeklyRankedTopics) ||
+                other.weeklyRankedTopics == weeklyRankedTopics) &&
+            (identical(other.monthlyRankedTopics, monthlyRankedTopics) ||
+                other.monthlyRankedTopics == monthlyRankedTopics) &&
+            (identical(other.weeklyLastDoc, weeklyLastDoc) ||
+                other.weeklyLastDoc == weeklyLastDoc) &&
+            (identical(other.monthlyLastDoc, monthlyLastDoc) ||
+                other.monthlyLastDoc == monthlyLastDoc) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore) &&
             (identical(other.isSearching, isSearching) ||
                 other.isSearching == isSearching) &&
             (identical(other.showSearchResult, showSearchResult) ||
                 other.showSearchResult == showSearchResult) &&
+            (identical(other.lastUpdatedAt, lastUpdatedAt) ||
+                other.lastUpdatedAt == lastUpdatedAt) &&
             (identical(other.searchWord, searchWord) ||
                 other.searchWord == searchWord));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, rankedTopics, lastDoc,
-      isLoadingMore, isSearching, showSearchResult, searchWord);
+  int get hashCode => Object.hash(
+      runtimeType,
+      weeklyRankedTopics,
+      monthlyRankedTopics,
+      weeklyLastDoc,
+      monthlyLastDoc,
+      isLoadingMore,
+      isSearching,
+      showSearchResult,
+      lastUpdatedAt,
+      searchWord);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoadedTopicsStateeImplCopyWith<_$LoadedTopicsStateeImpl> get copyWith =>
-      __$$LoadedTopicsStateeImplCopyWithImpl<_$LoadedTopicsStateeImpl>(
+  _$$LoadedTopicsStateImplCopyWith<_$LoadedTopicsStateImpl> get copyWith =>
+      __$$LoadedTopicsStateImplCopyWithImpl<_$LoadedTopicsStateImpl>(
           this, _$identity);
 }
 
-abstract class _LoadedTopicsStatee implements LoadedTopicsState {
-  const factory _LoadedTopicsStatee(
-      {required final AsyncValue<List<RankedTopic>> rankedTopics,
-      required final DocumentSnapshot<Object?>? lastDoc,
+abstract class _LoadedTopicsState implements LoadedTopicsState {
+  const factory _LoadedTopicsState(
+      {required final AsyncValue<List<RankedTopic>> weeklyRankedTopics,
+      required final AsyncValue<List<RankedTopic>> monthlyRankedTopics,
+      required final DocumentSnapshot<Object?>? weeklyLastDoc,
+      required final DocumentSnapshot<Object?>? monthlyLastDoc,
       required final bool isLoadingMore,
       required final bool isSearching,
       required final bool showSearchResult,
-      final String? searchWord}) = _$LoadedTopicsStateeImpl;
+      required final Timestamp lastUpdatedAt,
+      final String? searchWord}) = _$LoadedTopicsStateImpl;
 
   @override
-  AsyncValue<List<RankedTopic>> get rankedTopics;
+  AsyncValue<List<RankedTopic>> get weeklyRankedTopics;
   @override
-  DocumentSnapshot<Object?>? get lastDoc;
+  AsyncValue<List<RankedTopic>> get monthlyRankedTopics;
+  @override
+  DocumentSnapshot<Object?>? get weeklyLastDoc;
+  @override
+  DocumentSnapshot<Object?>? get monthlyLastDoc;
   @override
   bool get isLoadingMore;
   @override
@@ -236,9 +310,11 @@ abstract class _LoadedTopicsStatee implements LoadedTopicsState {
   @override
   bool get showSearchResult;
   @override
+  Timestamp get lastUpdatedAt;
+  @override
   String? get searchWord;
   @override
   @JsonKey(ignore: true)
-  _$$LoadedTopicsStateeImplCopyWith<_$LoadedTopicsStateeImpl> get copyWith =>
+  _$$LoadedTopicsStateImplCopyWith<_$LoadedTopicsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -24,7 +24,6 @@ mixin _$Article {
   String? get emoji => throw _privateConstructorUsedError;
   @JsonKey(name: 'published_at')
   String get publishedAt => throw _privateConstructorUsedError;
-  @JsonKey(name: 'path')
   String get path => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +40,7 @@ abstract class $ArticleCopyWith<$Res> {
       {String title,
       String? emoji,
       @JsonKey(name: 'published_at') String publishedAt,
-      @JsonKey(name: 'path') String path});
+      String path});
 }
 
 /// @nodoc
@@ -94,7 +93,7 @@ abstract class _$$ArticleImplCopyWith<$Res> implements $ArticleCopyWith<$Res> {
       {String title,
       String? emoji,
       @JsonKey(name: 'published_at') String publishedAt,
-      @JsonKey(name: 'path') String path});
+      String path});
 }
 
 /// @nodoc
@@ -141,7 +140,7 @@ class _$ArticleImpl implements _Article {
       {required this.title,
       required this.emoji,
       @JsonKey(name: 'published_at') required this.publishedAt,
-      @JsonKey(name: 'path') required this.path});
+      required this.path});
 
   factory _$ArticleImpl.fromJson(Map<String, dynamic> json) =>
       _$$ArticleImplFromJson(json);
@@ -154,7 +153,6 @@ class _$ArticleImpl implements _Article {
   @JsonKey(name: 'published_at')
   final String publishedAt;
   @override
-  @JsonKey(name: 'path')
   final String path;
 
   @override
@@ -197,7 +195,7 @@ abstract class _Article implements Article {
       {required final String title,
       required final String? emoji,
       @JsonKey(name: 'published_at') required final String publishedAt,
-      @JsonKey(name: 'path') required final String path}) = _$ArticleImpl;
+      required final String path}) = _$ArticleImpl;
 
   factory _Article.fromJson(Map<String, dynamic> json) = _$ArticleImpl.fromJson;
 
@@ -209,7 +207,6 @@ abstract class _Article implements Article {
   @JsonKey(name: 'published_at')
   String get publishedAt;
   @override
-  @JsonKey(name: 'path')
   String get path;
   @override
   @JsonKey(ignore: true)
