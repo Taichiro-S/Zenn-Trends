@@ -24,17 +24,20 @@ class FavoriteTopics extends _$FavoriteTopics {
   // }
 
   Future<void> getFavoriteTopics({required User user}) async {
-    print('getFavoriteTopics');
     final favoriteTopicsRepository =
         ref.watch(favoriteTopicsRepositoryProvider);
-    state = state.copyWith(topicIds: const AsyncValue.loading());
-    try {
-      final topicIds =
-          await favoriteTopicsRepository.getFavoriteTopics(user: user);
-      state = state.copyWith(topicIds: AsyncValue.data(topicIds));
-    } catch (e, s) {
-      state = state.copyWith(topicIds: AsyncValue.error(e, s));
+    final topicIds = state.topicIds.value ?? [];
+    if (topicIds.isEmpty) {
+      state = state.copyWith(topicIds: const AsyncValue.loading());
+      try {
+        final topicIds =
+            await favoriteTopicsRepository.fetchFavoriteTopics(user: user);
+        state = state.copyWith(topicIds: AsyncValue.data(topicIds));
+      } catch (e, s) {
+        state = state.copyWith(topicIds: AsyncValue.error(e, s));
+      }
     }
+    print('use cached favorite topics');
   }
 
   Future<void> addFavoriteTopic(

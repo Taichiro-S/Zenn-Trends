@@ -20,14 +20,14 @@ class FavoriteTopicsRepository {
         'topic_name': topic.name,
         'timestamp': FieldValue.serverTimestamp()
       });
-      return await getFavoriteTopics(user: user);
+      return await fetchFavoriteTopics(user: user);
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  // お気に入りトピックの取得
-  Future<List<String>> getFavoriteTopics({required User user}) async {
+  Future<List<String>> fetchFavoriteTopics({required User user}) async {
+    print('fetch favorite topics');
     List<String> topicIds = [];
     try {
       QuerySnapshot snapshot = await _firestore
@@ -44,7 +44,6 @@ class FavoriteTopicsRepository {
     return topicIds;
   }
 
-  // お気に入りトピックの削除
   Future<List<String>> removeFavoriteTopic(
       {required String topicId, required User user}) async {
     try {
@@ -55,7 +54,7 @@ class FavoriteTopicsRepository {
           .doc(topicId);
 
       await favoriteTopicDocRef.delete();
-      return await getFavoriteTopics(user: user);
+      return await fetchFavoriteTopics(user: user);
     } catch (e) {
       throw Exception(e);
     }
