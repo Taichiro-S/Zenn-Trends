@@ -6,7 +6,7 @@ part of 'favorite_topics_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$favoriteTopicsHash() => r'8e74a6e695a233d6c57ca7efdc3533c3a5b558d1';
+String _$favoriteTopicsHash() => r'5207e10d445bfe19180e3608868e7bec098c0eaf';
 
 /// See also [FavoriteTopics].
 @ProviderFor(FavoriteTopics)
