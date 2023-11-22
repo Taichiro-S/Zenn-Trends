@@ -14,8 +14,6 @@ class DisplaySettingsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTimePeriod =
         ref.watch(displaySettingsProvider.select((state) => state.timePeriod));
-    final selectedSortOrder =
-        ref.watch(displaySettingsProvider.select((state) => state.sortOrder));
     ref.watch(displaySettingsProvider);
     final settingsNotifier = ref.read(displaySettingsProvider.notifier);
     return IconButton(

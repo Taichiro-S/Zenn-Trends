@@ -20,9 +20,17 @@ mixin _$LoadedTopicsState {
       throw _privateConstructorUsedError;
   AsyncValue<List<RankedTopic>> get monthlyRankedTopics =>
       throw _privateConstructorUsedError;
-  DocumentSnapshot<Object?>? get weeklyLastDoc =>
+  AsyncValue<List<RankedTopic>> get weeklySearchedTopics =>
       throw _privateConstructorUsedError;
-  DocumentSnapshot<Object?>? get monthlyLastDoc =>
+  AsyncValue<List<RankedTopic>> get monthlySearchedTopics =>
+      throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get weeklyRankedLastDoc =>
+      throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get monthlyRankedLastDoc =>
+      throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get weeklySearchedLastDoc =>
+      throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get monthlySearchedLastDoc =>
       throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
   bool get isSearching => throw _privateConstructorUsedError;
@@ -44,8 +52,12 @@ abstract class $LoadedTopicsStateCopyWith<$Res> {
   $Res call(
       {AsyncValue<List<RankedTopic>> weeklyRankedTopics,
       AsyncValue<List<RankedTopic>> monthlyRankedTopics,
-      DocumentSnapshot<Object?>? weeklyLastDoc,
-      DocumentSnapshot<Object?>? monthlyLastDoc,
+      AsyncValue<List<RankedTopic>> weeklySearchedTopics,
+      AsyncValue<List<RankedTopic>> monthlySearchedTopics,
+      DocumentSnapshot<Object?>? weeklyRankedLastDoc,
+      DocumentSnapshot<Object?>? monthlyRankedLastDoc,
+      DocumentSnapshot<Object?>? weeklySearchedLastDoc,
+      DocumentSnapshot<Object?>? monthlySearchedLastDoc,
       bool isLoadingMore,
       bool isSearching,
       bool showSearchResult,
@@ -68,8 +80,12 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
   $Res call({
     Object? weeklyRankedTopics = null,
     Object? monthlyRankedTopics = null,
-    Object? weeklyLastDoc = freezed,
-    Object? monthlyLastDoc = freezed,
+    Object? weeklySearchedTopics = null,
+    Object? monthlySearchedTopics = null,
+    Object? weeklyRankedLastDoc = freezed,
+    Object? monthlyRankedLastDoc = freezed,
+    Object? weeklySearchedLastDoc = freezed,
+    Object? monthlySearchedLastDoc = freezed,
     Object? isLoadingMore = null,
     Object? isSearching = null,
     Object? showSearchResult = null,
@@ -85,13 +101,29 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
           ? _value.monthlyRankedTopics
           : monthlyRankedTopics // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<RankedTopic>>,
-      weeklyLastDoc: freezed == weeklyLastDoc
-          ? _value.weeklyLastDoc
-          : weeklyLastDoc // ignore: cast_nullable_to_non_nullable
+      weeklySearchedTopics: null == weeklySearchedTopics
+          ? _value.weeklySearchedTopics
+          : weeklySearchedTopics // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTopic>>,
+      monthlySearchedTopics: null == monthlySearchedTopics
+          ? _value.monthlySearchedTopics
+          : monthlySearchedTopics // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTopic>>,
+      weeklyRankedLastDoc: freezed == weeklyRankedLastDoc
+          ? _value.weeklyRankedLastDoc
+          : weeklyRankedLastDoc // ignore: cast_nullable_to_non_nullable
               as DocumentSnapshot<Object?>?,
-      monthlyLastDoc: freezed == monthlyLastDoc
-          ? _value.monthlyLastDoc
-          : monthlyLastDoc // ignore: cast_nullable_to_non_nullable
+      monthlyRankedLastDoc: freezed == monthlyRankedLastDoc
+          ? _value.monthlyRankedLastDoc
+          : monthlyRankedLastDoc // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
+      weeklySearchedLastDoc: freezed == weeklySearchedLastDoc
+          ? _value.weeklySearchedLastDoc
+          : weeklySearchedLastDoc // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
+      monthlySearchedLastDoc: freezed == monthlySearchedLastDoc
+          ? _value.monthlySearchedLastDoc
+          : monthlySearchedLastDoc // ignore: cast_nullable_to_non_nullable
               as DocumentSnapshot<Object?>?,
       isLoadingMore: null == isLoadingMore
           ? _value.isLoadingMore
@@ -128,8 +160,12 @@ abstract class _$$LoadedTopicsStateImplCopyWith<$Res>
   $Res call(
       {AsyncValue<List<RankedTopic>> weeklyRankedTopics,
       AsyncValue<List<RankedTopic>> monthlyRankedTopics,
-      DocumentSnapshot<Object?>? weeklyLastDoc,
-      DocumentSnapshot<Object?>? monthlyLastDoc,
+      AsyncValue<List<RankedTopic>> weeklySearchedTopics,
+      AsyncValue<List<RankedTopic>> monthlySearchedTopics,
+      DocumentSnapshot<Object?>? weeklyRankedLastDoc,
+      DocumentSnapshot<Object?>? monthlyRankedLastDoc,
+      DocumentSnapshot<Object?>? weeklySearchedLastDoc,
+      DocumentSnapshot<Object?>? monthlySearchedLastDoc,
       bool isLoadingMore,
       bool isSearching,
       bool showSearchResult,
@@ -150,8 +186,12 @@ class __$$LoadedTopicsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? weeklyRankedTopics = null,
     Object? monthlyRankedTopics = null,
-    Object? weeklyLastDoc = freezed,
-    Object? monthlyLastDoc = freezed,
+    Object? weeklySearchedTopics = null,
+    Object? monthlySearchedTopics = null,
+    Object? weeklyRankedLastDoc = freezed,
+    Object? monthlyRankedLastDoc = freezed,
+    Object? weeklySearchedLastDoc = freezed,
+    Object? monthlySearchedLastDoc = freezed,
     Object? isLoadingMore = null,
     Object? isSearching = null,
     Object? showSearchResult = null,
@@ -167,13 +207,29 @@ class __$$LoadedTopicsStateImplCopyWithImpl<$Res>
           ? _value.monthlyRankedTopics
           : monthlyRankedTopics // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<RankedTopic>>,
-      weeklyLastDoc: freezed == weeklyLastDoc
-          ? _value.weeklyLastDoc
-          : weeklyLastDoc // ignore: cast_nullable_to_non_nullable
+      weeklySearchedTopics: null == weeklySearchedTopics
+          ? _value.weeklySearchedTopics
+          : weeklySearchedTopics // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTopic>>,
+      monthlySearchedTopics: null == monthlySearchedTopics
+          ? _value.monthlySearchedTopics
+          : monthlySearchedTopics // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTopic>>,
+      weeklyRankedLastDoc: freezed == weeklyRankedLastDoc
+          ? _value.weeklyRankedLastDoc
+          : weeklyRankedLastDoc // ignore: cast_nullable_to_non_nullable
               as DocumentSnapshot<Object?>?,
-      monthlyLastDoc: freezed == monthlyLastDoc
-          ? _value.monthlyLastDoc
-          : monthlyLastDoc // ignore: cast_nullable_to_non_nullable
+      monthlyRankedLastDoc: freezed == monthlyRankedLastDoc
+          ? _value.monthlyRankedLastDoc
+          : monthlyRankedLastDoc // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
+      weeklySearchedLastDoc: freezed == weeklySearchedLastDoc
+          ? _value.weeklySearchedLastDoc
+          : weeklySearchedLastDoc // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
+      monthlySearchedLastDoc: freezed == monthlySearchedLastDoc
+          ? _value.monthlySearchedLastDoc
+          : monthlySearchedLastDoc // ignore: cast_nullable_to_non_nullable
               as DocumentSnapshot<Object?>?,
       isLoadingMore: null == isLoadingMore
           ? _value.isLoadingMore
@@ -205,8 +261,12 @@ class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
   const _$LoadedTopicsStateImpl(
       {required this.weeklyRankedTopics,
       required this.monthlyRankedTopics,
-      required this.weeklyLastDoc,
-      required this.monthlyLastDoc,
+      required this.weeklySearchedTopics,
+      required this.monthlySearchedTopics,
+      required this.weeklyRankedLastDoc,
+      required this.monthlyRankedLastDoc,
+      required this.weeklySearchedLastDoc,
+      required this.monthlySearchedLastDoc,
       required this.isLoadingMore,
       required this.isSearching,
       required this.showSearchResult,
@@ -218,9 +278,17 @@ class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
   @override
   final AsyncValue<List<RankedTopic>> monthlyRankedTopics;
   @override
-  final DocumentSnapshot<Object?>? weeklyLastDoc;
+  final AsyncValue<List<RankedTopic>> weeklySearchedTopics;
   @override
-  final DocumentSnapshot<Object?>? monthlyLastDoc;
+  final AsyncValue<List<RankedTopic>> monthlySearchedTopics;
+  @override
+  final DocumentSnapshot<Object?>? weeklyRankedLastDoc;
+  @override
+  final DocumentSnapshot<Object?>? monthlyRankedLastDoc;
+  @override
+  final DocumentSnapshot<Object?>? weeklySearchedLastDoc;
+  @override
+  final DocumentSnapshot<Object?>? monthlySearchedLastDoc;
   @override
   final bool isLoadingMore;
   @override
@@ -234,7 +302,7 @@ class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
 
   @override
   String toString() {
-    return 'LoadedTopicsState(weeklyRankedTopics: $weeklyRankedTopics, monthlyRankedTopics: $monthlyRankedTopics, weeklyLastDoc: $weeklyLastDoc, monthlyLastDoc: $monthlyLastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, showSearchResult: $showSearchResult, lastUpdatedAt: $lastUpdatedAt, searchWord: $searchWord)';
+    return 'LoadedTopicsState(weeklyRankedTopics: $weeklyRankedTopics, monthlyRankedTopics: $monthlyRankedTopics, weeklySearchedTopics: $weeklySearchedTopics, monthlySearchedTopics: $monthlySearchedTopics, weeklyRankedLastDoc: $weeklyRankedLastDoc, monthlyRankedLastDoc: $monthlyRankedLastDoc, weeklySearchedLastDoc: $weeklySearchedLastDoc, monthlySearchedLastDoc: $monthlySearchedLastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, showSearchResult: $showSearchResult, lastUpdatedAt: $lastUpdatedAt, searchWord: $searchWord)';
   }
 
   @override
@@ -246,10 +314,18 @@ class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
                 other.weeklyRankedTopics == weeklyRankedTopics) &&
             (identical(other.monthlyRankedTopics, monthlyRankedTopics) ||
                 other.monthlyRankedTopics == monthlyRankedTopics) &&
-            (identical(other.weeklyLastDoc, weeklyLastDoc) ||
-                other.weeklyLastDoc == weeklyLastDoc) &&
-            (identical(other.monthlyLastDoc, monthlyLastDoc) ||
-                other.monthlyLastDoc == monthlyLastDoc) &&
+            (identical(other.weeklySearchedTopics, weeklySearchedTopics) ||
+                other.weeklySearchedTopics == weeklySearchedTopics) &&
+            (identical(other.monthlySearchedTopics, monthlySearchedTopics) ||
+                other.monthlySearchedTopics == monthlySearchedTopics) &&
+            (identical(other.weeklyRankedLastDoc, weeklyRankedLastDoc) ||
+                other.weeklyRankedLastDoc == weeklyRankedLastDoc) &&
+            (identical(other.monthlyRankedLastDoc, monthlyRankedLastDoc) ||
+                other.monthlyRankedLastDoc == monthlyRankedLastDoc) &&
+            (identical(other.weeklySearchedLastDoc, weeklySearchedLastDoc) ||
+                other.weeklySearchedLastDoc == weeklySearchedLastDoc) &&
+            (identical(other.monthlySearchedLastDoc, monthlySearchedLastDoc) ||
+                other.monthlySearchedLastDoc == monthlySearchedLastDoc) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore) &&
             (identical(other.isSearching, isSearching) ||
@@ -267,8 +343,12 @@ class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
       runtimeType,
       weeklyRankedTopics,
       monthlyRankedTopics,
-      weeklyLastDoc,
-      monthlyLastDoc,
+      weeklySearchedTopics,
+      monthlySearchedTopics,
+      weeklyRankedLastDoc,
+      monthlyRankedLastDoc,
+      weeklySearchedLastDoc,
+      monthlySearchedLastDoc,
       isLoadingMore,
       isSearching,
       showSearchResult,
@@ -287,8 +367,12 @@ abstract class _LoadedTopicsState implements LoadedTopicsState {
   const factory _LoadedTopicsState(
       {required final AsyncValue<List<RankedTopic>> weeklyRankedTopics,
       required final AsyncValue<List<RankedTopic>> monthlyRankedTopics,
-      required final DocumentSnapshot<Object?>? weeklyLastDoc,
-      required final DocumentSnapshot<Object?>? monthlyLastDoc,
+      required final AsyncValue<List<RankedTopic>> weeklySearchedTopics,
+      required final AsyncValue<List<RankedTopic>> monthlySearchedTopics,
+      required final DocumentSnapshot<Object?>? weeklyRankedLastDoc,
+      required final DocumentSnapshot<Object?>? monthlyRankedLastDoc,
+      required final DocumentSnapshot<Object?>? weeklySearchedLastDoc,
+      required final DocumentSnapshot<Object?>? monthlySearchedLastDoc,
       required final bool isLoadingMore,
       required final bool isSearching,
       required final bool showSearchResult,
@@ -300,9 +384,17 @@ abstract class _LoadedTopicsState implements LoadedTopicsState {
   @override
   AsyncValue<List<RankedTopic>> get monthlyRankedTopics;
   @override
-  DocumentSnapshot<Object?>? get weeklyLastDoc;
+  AsyncValue<List<RankedTopic>> get weeklySearchedTopics;
   @override
-  DocumentSnapshot<Object?>? get monthlyLastDoc;
+  AsyncValue<List<RankedTopic>> get monthlySearchedTopics;
+  @override
+  DocumentSnapshot<Object?>? get weeklyRankedLastDoc;
+  @override
+  DocumentSnapshot<Object?>? get monthlyRankedLastDoc;
+  @override
+  DocumentSnapshot<Object?>? get weeklySearchedLastDoc;
+  @override
+  DocumentSnapshot<Object?>? get monthlySearchedLastDoc;
   @override
   bool get isLoadingMore;
   @override

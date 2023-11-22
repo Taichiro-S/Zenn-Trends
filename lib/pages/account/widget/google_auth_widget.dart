@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
-import 'package:zenn_trends/pages/account/widget/google_login_button.dart';
 import 'package:zenn_trends/routes/router.dart';
 import 'package:zenn_trends/theme/app_theme.dart';
 
