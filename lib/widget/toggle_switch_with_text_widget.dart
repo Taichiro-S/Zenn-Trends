@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class ToggleSwitchWidget extends ConsumerWidget {
-  const ToggleSwitchWidget({
+class ToggleSwitchWithTextWidget extends ConsumerWidget {
+  const ToggleSwitchWithTextWidget({
     super.key,
     required this.labels,
     required this.onToggle,

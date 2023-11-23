@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
-import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 class SearchTopic extends ConsumerWidget {
@@ -11,7 +10,11 @@ class SearchTopic extends ConsumerWidget {
     final searchController = TextEditingController();
     final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
     final loadedTopics = ref.watch(loadedTopicsProvider);
-    final displaySettings = ref.watch(displaySettingsProvider);
+    void quitSearching() {
+      searchController.clear();
+      loadedTopicsNotifier.stopSearching();
+    }
+
     ref.watch(favoriteTopicsProvider);
     return TextField(
       autocorrect: false,
@@ -34,18 +37,10 @@ class SearchTopic extends ConsumerWidget {
                   onPressed: () {
                     if (loadedTopics.isSearching) {
                       FocusScope.of(context).unfocus();
-                      searchController.clear();
-                      loadedTopicsNotifier.stopSearching();
-                      loadedTopicsNotifier.getRankedTopics(
-                          timePeriod: displaySettings.timePeriod,
-                          sortOrder: displaySettings.sortOrder);
+                      quitSearching();
                     } else if (loadedTopics.showSearchResult) {
                       FocusScope.of(context).unfocus();
-                      searchController.clear();
-                      loadedTopicsNotifier.stopSearching();
-                      loadedTopicsNotifier.getRankedTopics(
-                          timePeriod: displaySettings.timePeriod,
-                          sortOrder: displaySettings.sortOrder);
+                      quitSearching();
                     }
                   },
                   icon: const Icon(Icons.arrow_back, size: 20))
@@ -70,7 +65,11 @@ class SearchTopic extends ConsumerWidget {
       },
       onSubmitted: (value) {
         FocusScope.of(context).unfocus();
-        loadedTopicsNotifier.search(searchWord: value);
+        if (value.trim().isEmpty) {
+          quitSearching();
+        } else {
+          loadedTopicsNotifier.search(searchWord: value);
+        }
       },
     );
   }

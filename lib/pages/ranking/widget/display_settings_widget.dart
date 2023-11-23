@@ -4,6 +4,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
 import 'package:zenn_trends/constant/settings_property.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
+import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 import 'package:zenn_trends/pages/ranking/widget/cupertion_toggle_switch_widget.dart';
 import 'package:zenn_trends/widget/toggle_switch_with_text_widget.dart';
 
@@ -16,6 +17,7 @@ class DisplaySettingsWidget extends ConsumerWidget {
         ref.watch(displaySettingsProvider.select((state) => state.timePeriod));
     ref.watch(displaySettingsProvider);
     final settingsNotifier = ref.read(displaySettingsProvider.notifier);
+    final loadedTopicsNotifier = ref.read(loadedTopicsProvider.notifier);
     return IconButton(
       icon: const Icon(Icons.tune),
       onPressed: () {
@@ -34,7 +36,7 @@ class DisplaySettingsWidget extends ConsumerWidget {
                   ListTile(
                     title: const Text('表示期間'),
                     leading: const Icon(Icons.calendar_month),
-                    trailing: ToggleSwitchWidget(
+                    trailing: ToggleSwitchWithTextWidget(
                       labels: TIME_PERIOD,
                       initialIndex:
                           selectedTimePeriod == Collection.weeklyRanking
@@ -44,31 +46,13 @@ class DisplaySettingsWidget extends ConsumerWidget {
                         if (index == null) {
                           return;
                         }
+                        loadedTopicsNotifier.stopSearching();
                         settingsNotifier.toggleTimePeriod(index);
                       },
-                      minWidth: 100,
+                      minWidth: 60,
                       minHeight: 35,
                     ),
                   ),
-                  // ListTile(
-                  //   title: const Text('表示項目'),
-                  //   leading: const Icon(Icons.description),
-                  //   trailing: ToggleSwitchWidget(
-                  //     labels: SORT_ORDER,
-                  //     initialIndex: selectedSortOrder ==
-                  //             RankedTopicsSortOrder.taggingsCountChange
-                  //         ? 0
-                  //         : 1,
-                  //     onToggle: (index) {
-                  //       if (index == null) {
-                  //         return;
-                  //       }
-                  //       settingsNotifier.toggleSortOrder(index);
-                  //     },
-                  //     minWidth: 100,
-                  //     minHeight: 35,
-                  //   ),
-                  // ),
                 ],
               ),
             ),
