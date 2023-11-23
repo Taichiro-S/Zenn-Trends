@@ -7,11 +7,13 @@ void main() {
       final numToDisplay = displayNum(123);
       expect(numToDisplay, '123');
     });
-
-    // fromDocument メソッドのテスト
     test('数字が1000より大きい場合は1000の位と小数点第一位にkをつけて出力する', () {
-      final numToDisplay = displayNum(1234);
-      expect(numToDisplay, '1.2k');
+      final num1 = displayNum(1000);
+      expect(num1, '1.0k');
+      final num2 = displayNum(1234);
+      expect(num2, '1.2k');
+      final num3 = displayNum(12345);
+      expect(num3, '12k');
     });
   });
 }

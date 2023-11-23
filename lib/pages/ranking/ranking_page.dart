@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/constant/default_value.dart';
 import 'package:zenn_trends/constant/firestore_arg.dart';
 import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
@@ -14,6 +15,7 @@ import 'package:zenn_trends/pages/ranking/widget/display_settings_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/search_topic_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/topic_container_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/topic_history_widget.dart';
+import 'package:zenn_trends/theme/app_theme.dart';
 import 'package:zenn_trends/widget/circle_loading_widget.dart';
 
 @RoutePage()
@@ -125,53 +127,63 @@ class RankingPage extends ConsumerWidget {
                     child: CircleLoadingWidget(color: Colors.yellow));
               } else {
                 return RefreshIndicator(
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: loadedTopics.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == loadedTopics.length) {
-                        if (lastDoc != null &&
-                            loadedTopics.length >= DEFAULT_LOAD_TOPICS) {
-                          return const Center(
-                              child: Padding(
-                                  padding: EdgeInsets.only(top: 5),
-                                  child: SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: CircularProgressIndicator(
-                                          color: Colors.blue))));
-                        } else if (loadedTopics.length > 1) {
-                          return const Center(
-                              child: Padding(
-                                  padding: EdgeInsets.only(top: 5),
-                                  child: Text('トピックがありません')));
-                        } else {
-                          return Container();
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: loadedTopics.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == loadedTopics.length) {
+                          if (lastDoc != null &&
+                              loadedTopics.length >= DEFAULT_LOAD_TOPICS) {
+                            return const Center(
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
+                                            color: Colors.blue))));
+                          } else if (loadedTopics.length > 1) {
+                            return const Center(
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Text('トピックがありません')));
+                          } else {
+                            return Container();
+                          }
                         }
+                        final rankedTopic = loadedTopics[index];
+                        return Card(
+                            elevation: 3,
+                            margin: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                TopicContainerWidget(
+                                    rankedTopic: rankedTopic, index: index),
+                                showChart
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: TopicHistoryWidget(
+                                            rankedTopic: rankedTopic))
+                                    : Container(),
+                              ],
+                            ));
+                      },
+                    ),
+                    onRefresh: () async {
+                      if (await loadedTopicsNotifier.getRankedTopics(
+                          timePeriod: timePeriod, sortOrder: sortOrder)) {
+                        Fluttertoast.showToast(
+                            msg: 'データを更新しました',
+                            backgroundColor:
+                                AppTheme.light().appColors.primary);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: 'データは最新です',
+                            backgroundColor:
+                                AppTheme.light().appColors.primary);
                       }
-                      final rankedTopic = loadedTopics[index];
-                      return Card(
-                          elevation: 3,
-                          margin: const EdgeInsets.all(8),
-                          child: Column(
-                            children: [
-                              TopicContainerWidget(
-                                  rankedTopic: rankedTopic, index: index),
-                              showChart
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: TopicHistoryWidget(
-                                          rankedTopic: rankedTopic))
-                                  : Container(),
-                            ],
-                          ));
-                    },
-                  ),
-                  onRefresh: () async {
-                    loadedTopicsNotifier.getRankedTopics(
-                        timePeriod: timePeriod, sortOrder: sortOrder);
-                  },
-                );
+                    });
               }
             },
           );

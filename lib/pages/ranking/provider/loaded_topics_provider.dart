@@ -30,7 +30,7 @@ class LoadedTopics extends _$LoadedTopics {
   /*
   topicの取得
   */
-  Future<void> getRankedTopics({
+  Future<bool> getRankedTopics({
     required Collection timePeriod,
     required RankedTopicsSortOrder sortOrder,
   }) async {
@@ -87,6 +87,9 @@ class LoadedTopics extends _$LoadedTopics {
             ? state.copyWith(weeklyRankedTopics: AsyncValue.error(e, s))
             : state.copyWith(monthlyRankedTopics: AsyncValue.error(e, s));
       }
+      return true;
+    } else {
+      return false;
     }
   }
 
