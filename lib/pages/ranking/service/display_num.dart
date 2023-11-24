@@ -1,7 +1,10 @@
-String displayNum(int num) {
-  if (num > 1000) {
-    return '${(num / 1000).toStringAsFixed(1)}k';
+String displayNum(int number) {
+  if (number >= 10000) {
+    return '${(number ~/ 1000)}k';
+  }
+  if (10000 > number && number >= 1000) {
+    return '${(number / 1000).toStringAsFixed(1)}k';
   } else {
-    return num.toString();
+    return number.toString();
   }
 }

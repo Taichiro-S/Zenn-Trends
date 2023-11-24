@@ -7,17 +7,17 @@ import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 part 'ranked_topics_repository.g.dart';
 
 class RankedTopicsRepository {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<List<RankedTopic>> fetchRankedTopics({
     required Collection timePeriod,
     required RankedTopicsSortOrder sortOrder,
     int limit = DEFAULT_LOAD_TOPICS,
+    int? cutoff,
     DocumentSnapshot? startAfter,
     String? searchWord,
   }) async {
     try {
-      String searchWordLower = '';
-      final QuerySnapshot rankedTopicsSnapshot = await FirebaseFirestore
-          .instance
+      final QuerySnapshot rankedTopicsSnapshot = await _firestore
           .collection(timePeriod.name)
           .orderBy('date', descending: true)
           .limit(1)
@@ -29,7 +29,7 @@ class RankedTopicsRepository {
           rankedTopicsSnapshot.docs.first.reference;
       Query query;
       if (searchWord != null && searchWord.isNotEmpty) {
-        searchWordLower = searchWord.toLowerCase();
+        String searchWordLower = searchWord.toLowerCase();
         query = rankedTopicsDocRef
             .collection('topics')
             .where('name', isGreaterThanOrEqualTo: searchWordLower)
@@ -37,18 +37,17 @@ class RankedTopicsRepository {
             .orderBy('name')
             .limit(limit);
       } else {
+        if (sortOrder == RankedTopicsSortOrder.taggingsCount) {
+          cutoff = DEFAULT_TAGGINGS_COUNT_CUTOFF;
+        } else if (timePeriod == Collection.weeklyRanking) {
+          cutoff = DEFAULT_WEEKLY_TAGGINGS_COUNT_CHANGE_CUTOFF;
+        } else {
+          cutoff = DEFAULT_MONTHLY_TAGGINGS_COUNT_CHANGE_CUTOFF;
+        }
+
         query = rankedTopicsDocRef
             .collection('topics')
-            .where(sortOrder.name,
-                isGreaterThanOrEqualTo: timePeriod.name ==
-                            Collection.weeklyRanking.name &&
-                        sortOrder == RankedTopicsSortOrder.taggingsCountChange
-                    ? DEFAULT_WEEKLY_TAGGINGS_CHANGE_CUTOFF
-                    : timePeriod.name == Collection.monthlyRanking.name &&
-                            sortOrder ==
-                                RankedTopicsSortOrder.taggingsCountChange
-                        ? DEFAULT_MONTHLY_TAGGINGS_CHANGE_CUTOFF
-                        : 0)
+            .where(sortOrder.name, isGreaterThanOrEqualTo: cutoff)
             .orderBy(sortOrder.name, descending: true)
             .limit(limit);
       }
