@@ -7,26 +7,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/routes/router.dart';
 
 void main() async {
-  final appRouter = AppRouter();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await dotenv.load(fileName: '.env');
-  OpenAI.apiKey = dotenv.env['OPENAI_API_KEY'] ?? '';
+  // OpenAI.apiKey = dotenv.env['OPENAI_API_KEY'] ?? '';
 
   runApp(
-    ProviderScope(
-        child: MyApp(
-      appRouter: appRouter,
-    )),
+    const ProviderScope(child: MyApp()),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.appRouter});
-  final AppRouter appRouter;
-
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    final appRouter = AppRouter();
     return MaterialApp.router(
       title: 'Zenn Trends',
       theme: ThemeData(

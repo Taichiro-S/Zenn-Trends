@@ -2,18 +2,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zenn_trends/pages/ranking/service/display_num.dart';
 
 void main() {
-  group('RankedTopic', () {
-    test('数字が1000より小さい場合はそのまま出力する', () {
-      final numToDisplay = displayNum(123);
-      expect(numToDisplay, '123');
+  group('displayNum', () {
+    test('num < 1000 の時はそのまま出力する', () {
+      final num1 = displayNum(123);
+      expect(num1, '123');
     });
-    test('数字が1000より大きい場合は1000の位と小数点第一位にkをつけて出力する', () {
+    test('1000 <= num < 10000 の時は一の位と小数点第一位にkをつけて出力する', () {
       final num1 = displayNum(1000);
       expect(num1, '1.0k');
       final num2 = displayNum(1234);
       expect(num2, '1.2k');
-      final num3 = displayNum(12345);
-      expect(num3, '12k');
+    });
+    test('10000 <= num の時は整数部分にkをつけて出力する', () {
+      final num1 = displayNum(10000);
+      expect(num1, '10k');
+      final num2 = displayNum(1234567);
+      expect(num2, '1234k');
     });
   });
 }
