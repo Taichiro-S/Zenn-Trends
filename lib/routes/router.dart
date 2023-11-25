@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:zenn_trends/pages/account/account_page.dart';
 import 'package:zenn_trends/pages/privacy_policy/privacy_policy_page.dart';
+import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/ranking_page.dart';
-import 'package:zenn_trends/pages/recent_article/recent_article_page.dart';
+import 'package:zenn_trends/pages/rss_feed/rss_feed_page.dart';
 import 'package:zenn_trends/pages/user_settings/user_settings_page.dart';
 import 'package:zenn_trends/root_page.dart';
 
@@ -18,5 +20,6 @@ class AppRouter extends _$AppRouter {
         ]),
         AutoRoute(path: '/account', page: AccountRoute.page),
         AutoRoute(path: '/privacy_policy', page: PrivacyPolicyRoute.page),
+        AutoRoute(path: '/rss_feed', page: RssFeedRoute.page),
       ];
 }

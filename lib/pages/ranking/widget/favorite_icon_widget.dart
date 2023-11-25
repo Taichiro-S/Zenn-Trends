@@ -215,7 +215,13 @@ class _FavoriteIconWidgetState extends ConsumerState<FavoriteIconWidget>
         },
       );
     }, loading: () {
-      return const CircularProgressIndicator();
+      return IconButton(
+          icon: Icon(
+            Icons.favorite_border,
+            color: Colors.grey,
+            size: _animation.value,
+          ),
+          onPressed: () {});
     }, error: (error, stackTrace) {
       return Text(error.toString());
     }));

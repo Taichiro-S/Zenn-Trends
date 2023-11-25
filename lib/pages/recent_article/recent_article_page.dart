@@ -5,7 +5,7 @@ import 'package:zenn_trends/pages/recent_article/api/zenn_recent_articles.dart';
 import 'package:zenn_trends/pages/recent_article/article_body_page.dart';
 import 'package:zenn_trends/pages/recent_article/model/zenn_article.dart';
 
-@RoutePage()
+// @RoutePage()
 class RecentArticlePage extends ConsumerWidget {
   const RecentArticlePage({Key? key}) : super(key: key);
   @override

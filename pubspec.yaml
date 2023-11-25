@@ -44,6 +44,7 @@ dependencies:
   fluttertoast: ^8.2.4
   flutter_easyloading: ^3.0.5
   mockito: ^5.4.3
+  sticky_headers: "^0.3.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter

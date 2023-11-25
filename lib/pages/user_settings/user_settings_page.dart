@@ -32,7 +32,7 @@ class UserSettingsPage extends ConsumerWidget {
                 leading: const Icon(Icons.privacy_tip_outlined),
                 title: const Text('プライバシーポリシー'),
                 onPressed: (context) {
-                  AutoRouter.of(context).pushNamed('/privacy_policy');
+                  router.push(const PrivacyPolicyRoute());
                 },
               ),
               SettingsTile.navigation(

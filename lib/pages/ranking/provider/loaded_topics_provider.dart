@@ -39,13 +39,13 @@ class LoadedTopics extends _$LoadedTopics {
     final lastUpdate =
         state.lastUpdatedAt.toDate().toUtc().add(const Duration(hours: 9));
 
-    // 最終更新日の翌日の朝6時を計算
+    // 最終更新日の翌日の朝6時10分（firestoreのデータ更新が完了している時刻）を計算
     final nextDay6Am =
-        DateTime(lastUpdate.year, lastUpdate.month, lastUpdate.day + 1, 6)
+        DateTime(lastUpdate.year, lastUpdate.month, lastUpdate.day + 1, 6, 10)
             .toUtc()
             .add(const Duration(hours: 9));
 
-    // 現在の時刻が最終更新日の翌日の朝6時を過ぎているか、
+    // 現在の時刻が最終更新日の翌日の朝6時10分を過ぎているか、
     // またはデータがまだロードされていない場合にのみデータを取得
     bool shouldFetchData = now.isAfter(nextDay6Am);
     if (timePeriod == Collection.weeklyRanking) {
