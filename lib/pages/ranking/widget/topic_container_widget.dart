@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:url_launcher/url_launcher.dart';
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 // import 'package:zenn_trends/constant/url.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
@@ -61,7 +61,7 @@ class TopicContainerWidget extends ConsumerWidget {
         FavoriteIconWidget(rankedTopic: rankedTopic),
         IconButton(
             onPressed: () async {
-              router.push(RssFeedRoute(topic: rankedTopic));
+              // router.push(RssFeedRoute(selectedTopic: rankedTopic));
               // if (await canLaunchUrl(uri)) {
               //   launchUrl(uri);
               // }

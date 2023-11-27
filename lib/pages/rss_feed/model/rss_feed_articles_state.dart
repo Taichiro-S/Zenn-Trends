@@ -9,6 +9,8 @@ part 'rss_feed_articles_state.freezed.dart';
 class RssFeedArticlesState with _$RssFeedArticlesState {
   const factory RssFeedArticlesState({
     required AsyncValue<List<RssFeedArticle>> rssFeedArticles,
+    required String selectedTopicName,
+    required DocumentSnapshot? lastDocument,
     required Timestamp lastUpdatedAt,
   }) = _RssFeedArticlesState;
 }

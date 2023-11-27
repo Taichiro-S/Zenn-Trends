@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/constant/default_value.dart';
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
 import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
 import 'package:zenn_trends/pages/ranking/model/display_settings_state.dart';
@@ -155,7 +155,8 @@ class RankingPage extends ConsumerWidget {
                     final rankedTopic = loadedTopics[index];
                     return Card(
                         elevation: 3,
-                        margin: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
                         child: Column(
                           children: [
                             TopicContainerWidget(

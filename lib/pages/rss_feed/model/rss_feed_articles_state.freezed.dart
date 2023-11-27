@@ -18,6 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RssFeedArticlesState {
   AsyncValue<List<RssFeedArticle>> get rssFeedArticles =>
       throw _privateConstructorUsedError;
+  String get selectedTopicName => throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get lastDocument =>
+      throw _privateConstructorUsedError;
   Timestamp get lastUpdatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -33,6 +36,8 @@ abstract class $RssFeedArticlesStateCopyWith<$Res> {
   @useResult
   $Res call(
       {AsyncValue<List<RssFeedArticle>> rssFeedArticles,
+      String selectedTopicName,
+      DocumentSnapshot<Object?>? lastDocument,
       Timestamp lastUpdatedAt});
 }
 
@@ -51,6 +56,8 @@ class _$RssFeedArticlesStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? rssFeedArticles = null,
+    Object? selectedTopicName = null,
+    Object? lastDocument = freezed,
     Object? lastUpdatedAt = null,
   }) {
     return _then(_value.copyWith(
@@ -58,6 +65,14 @@ class _$RssFeedArticlesStateCopyWithImpl<$Res,
           ? _value.rssFeedArticles
           : rssFeedArticles // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<RssFeedArticle>>,
+      selectedTopicName: null == selectedTopicName
+          ? _value.selectedTopicName
+          : selectedTopicName // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastDocument: freezed == lastDocument
+          ? _value.lastDocument
+          : lastDocument // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
       lastUpdatedAt: null == lastUpdatedAt
           ? _value.lastUpdatedAt
           : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
@@ -76,6 +91,8 @@ abstract class _$$RssFeedArticlesStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {AsyncValue<List<RssFeedArticle>> rssFeedArticles,
+      String selectedTopicName,
+      DocumentSnapshot<Object?>? lastDocument,
       Timestamp lastUpdatedAt});
 }
 
@@ -91,6 +108,8 @@ class __$$RssFeedArticlesStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? rssFeedArticles = null,
+    Object? selectedTopicName = null,
+    Object? lastDocument = freezed,
     Object? lastUpdatedAt = null,
   }) {
     return _then(_$RssFeedArticlesStateImpl(
@@ -98,6 +117,14 @@ class __$$RssFeedArticlesStateImplCopyWithImpl<$Res>
           ? _value.rssFeedArticles
           : rssFeedArticles // ignore: cast_nullable_to_non_nullable
               as AsyncValue<List<RssFeedArticle>>,
+      selectedTopicName: null == selectedTopicName
+          ? _value.selectedTopicName
+          : selectedTopicName // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastDocument: freezed == lastDocument
+          ? _value.lastDocument
+          : lastDocument // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
       lastUpdatedAt: null == lastUpdatedAt
           ? _value.lastUpdatedAt
           : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
@@ -110,16 +137,23 @@ class __$$RssFeedArticlesStateImplCopyWithImpl<$Res>
 
 class _$RssFeedArticlesStateImpl implements _RssFeedArticlesState {
   const _$RssFeedArticlesStateImpl(
-      {required this.rssFeedArticles, required this.lastUpdatedAt});
+      {required this.rssFeedArticles,
+      required this.selectedTopicName,
+      required this.lastDocument,
+      required this.lastUpdatedAt});
 
   @override
   final AsyncValue<List<RssFeedArticle>> rssFeedArticles;
+  @override
+  final String selectedTopicName;
+  @override
+  final DocumentSnapshot<Object?>? lastDocument;
   @override
   final Timestamp lastUpdatedAt;
 
   @override
   String toString() {
-    return 'RssFeedArticlesState(rssFeedArticles: $rssFeedArticles, lastUpdatedAt: $lastUpdatedAt)';
+    return 'RssFeedArticlesState(rssFeedArticles: $rssFeedArticles, selectedTopicName: $selectedTopicName, lastDocument: $lastDocument, lastUpdatedAt: $lastUpdatedAt)';
   }
 
   @override
@@ -129,12 +163,17 @@ class _$RssFeedArticlesStateImpl implements _RssFeedArticlesState {
             other is _$RssFeedArticlesStateImpl &&
             (identical(other.rssFeedArticles, rssFeedArticles) ||
                 other.rssFeedArticles == rssFeedArticles) &&
+            (identical(other.selectedTopicName, selectedTopicName) ||
+                other.selectedTopicName == selectedTopicName) &&
+            (identical(other.lastDocument, lastDocument) ||
+                other.lastDocument == lastDocument) &&
             (identical(other.lastUpdatedAt, lastUpdatedAt) ||
                 other.lastUpdatedAt == lastUpdatedAt));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, rssFeedArticles, lastUpdatedAt);
+  int get hashCode => Object.hash(runtimeType, rssFeedArticles,
+      selectedTopicName, lastDocument, lastUpdatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -148,10 +187,16 @@ class _$RssFeedArticlesStateImpl implements _RssFeedArticlesState {
 abstract class _RssFeedArticlesState implements RssFeedArticlesState {
   const factory _RssFeedArticlesState(
       {required final AsyncValue<List<RssFeedArticle>> rssFeedArticles,
+      required final String selectedTopicName,
+      required final DocumentSnapshot<Object?>? lastDocument,
       required final Timestamp lastUpdatedAt}) = _$RssFeedArticlesStateImpl;
 
   @override
   AsyncValue<List<RssFeedArticle>> get rssFeedArticles;
+  @override
+  String get selectedTopicName;
+  @override
+  DocumentSnapshot<Object?>? get lastDocument;
   @override
   Timestamp get lastUpdatedAt;
   @override

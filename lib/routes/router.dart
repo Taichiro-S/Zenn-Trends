@@ -17,9 +17,9 @@ class AppRouter extends _$AppRouter {
         AutoRoute(path: '/', page: RootRoute.page, children: [
           AutoRoute(path: '', page: RankingRoute.page),
           AutoRoute(path: 'user_settings', page: UserSettingsRoute.page),
+          AutoRoute(path: 'rss_feed', page: RssFeedRoute.page),
         ]),
         AutoRoute(path: '/account', page: AccountRoute.page),
         AutoRoute(path: '/privacy_policy', page: PrivacyPolicyRoute.page),
-        AutoRoute(path: '/rss_feed', page: RssFeedRoute.page),
       ];
 }

@@ -1,5 +1,5 @@
 // ignore_for_file: constant_identifier_names
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 
 const DEFAULT_LOAD_TOPICS = 30;
 const QIITA_SCOPE = 'read_qiita write_qiita';

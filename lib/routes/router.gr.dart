@@ -40,12 +40,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     RssFeedRoute.name: (routeData) {
-      final args = routeData.argsAs<RssFeedRouteArgs>();
+      final args = routeData.argsAs<RssFeedRouteArgs>(
+          orElse: () => const RssFeedRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: RssFeedPage(
           key: args.key,
-          topic: args.topic,
+          selectedTopic: args.selectedTopic,
         ),
       );
     },
@@ -119,13 +120,13 @@ class RootRoute extends PageRouteInfo<void> {
 class RssFeedRoute extends PageRouteInfo<RssFeedRouteArgs> {
   RssFeedRoute({
     Key? key,
-    required RankedTopic topic,
+    RankedTopic? selectedTopic,
     List<PageRouteInfo>? children,
   }) : super(
           RssFeedRoute.name,
           args: RssFeedRouteArgs(
             key: key,
-            topic: topic,
+            selectedTopic: selectedTopic,
           ),
           initialChildren: children,
         );
@@ -139,16 +140,16 @@ class RssFeedRoute extends PageRouteInfo<RssFeedRouteArgs> {
 class RssFeedRouteArgs {
   const RssFeedRouteArgs({
     this.key,
-    required this.topic,
+    this.selectedTopic,
   });
 
   final Key? key;
 
-  final RankedTopic topic;
+  final RankedTopic? selectedTopic;
 
   @override
   String toString() {
-    return 'RssFeedRouteArgs{key: $key, topic: $topic}';
+    return 'RssFeedRouteArgs{key: $key, selectedTopic: $selectedTopic}';
   }
 }
 

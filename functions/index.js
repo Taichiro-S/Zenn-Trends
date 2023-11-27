@@ -10,14 +10,14 @@ const PAGES = 3
 
 const TOPICS_COLLECTION = 'topics'
 // const TOPICS_TEST_COLLECTION = 'topics_test'
+
 const MONTHLY_RANKING_COLLECTION = 'monthly_ranking'
 const WEEKLY_RANKING_COLLECTION = 'weekly_ranking'
-
 const TOPICS_HISTORY_SUBCOLLECTION = 'history'
 
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
 const TIME_TO_CALC_RANKING = '10 6 * * *'
-const TIME_TO_FETCH_ARTICLES = '20 6 * * *'
+const TIME_TO_FETCH_ARTICLES = '20 0,6,12,18 * * *'
 
 // fetching zenn tags takes about 10s
 // calculating weekly ranking takes about 160s
@@ -338,6 +338,10 @@ exports.getTopicsRssFeed = functions
         .get()
 
       const topicNames = []
+      const imageUrls = []
+      const topicDisplayNames = []
+      const topicIds = []
+      const topicTaggingsCounts = []
 
       if (!monthlyRankingSnapshot.empty) {
         const monthlyTopicsSnapshot = await monthlyRankingSnapshot.docs[0].ref
@@ -345,8 +349,16 @@ exports.getTopicsRssFeed = functions
           .get()
         monthlyTopicsSnapshot.forEach((doc) => {
           const topicName = doc.data().name
+          const imageUrl = doc.data().image_url
+          const topicDisplayName = doc.data().display_name
+          const topicId = doc.data().id
+          const topicTaggingsCount = doc.data().taggings_count
           if (topicNames.indexOf(topicName) === -1) {
             topicNames.push(topicName)
+            imageUrls.push(imageUrl)
+            topicDisplayNames.push(topicDisplayName)
+            topicIds.push(topicId)
+            topicTaggingsCounts.push(topicTaggingsCount)
           }
         })
       }
@@ -357,15 +369,28 @@ exports.getTopicsRssFeed = functions
           .get()
         weeklyTopicsSnapshot.forEach((doc) => {
           const topicName = doc.data().name
+          const imageUrl = doc.data().image_url
+          const topicDisplayName = doc.data().display_name
+          const topicId = doc.data().id
+          const topicTaggingsCount = doc.data().taggings_count
           if (topicNames.indexOf(topicName) === -1) {
             topicNames.push(topicName)
+            imageUrls.push(imageUrl)
+            topicDisplayNames.push(topicDisplayName)
+            topicIds.push(topicId)
+            topicTaggingsCounts.push(topicTaggingsCount)
           }
         })
       }
       console.log('topicNames', topicNames)
       const currentTime = admin.firestore.Timestamp.now()
       // 保存されたトピック名からRSSフィードを取得して保存する
-      for (const topicName of topicNames) {
+      for (let i = 0; i < topicNames.length; i++) {
+        const topicName = topicNames[i]
+        const imageUrl = imageUrls[i]
+        const displayName = topicDisplayNames[i]
+        const topicId = topicIds[i]
+        const taggingsCount = topicTaggingsCounts[i]
         const url = `https://zenn.dev/topics/${topicName}/feed`
         const response = await axios.get(url)
         const xml = response.data
@@ -377,14 +402,25 @@ exports.getTopicsRssFeed = functions
           }
           const batch = db.batch()
           const items = result.rss.channel[0].item
-          const oneWeekAgo = new Date()
-          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+          const oneMonthAgo = new Date()
+          oneMonthAgo.setDate(oneMonthAgo.getDate() - 30)
           const topicRef = db.collection('rss_feed').doc(topicName)
-          batch.set(topicRef, { updated_at: currentTime }, { merge: true })
+          batch.set(
+            topicRef,
+            {
+              updated_at: currentTime,
+              id: topicId,
+              image_url: imageUrl,
+              display_name: displayName,
+              name: topicName,
+              taggings_count: taggingsCount,
+            },
+            { merge: true },
+          )
           for (const item of items) {
             const pubDate = new Date(item.pubDate[0])
-            if (pubDate < oneWeekAgo) {
-              // 一週間以上前の記事はスキップ
+            if (pubDate < oneMonthAgo) {
+              // １ヶ月以上前の記事はスキップ
               continue
             }
             const guid = item.guid[0]._
@@ -421,7 +457,7 @@ exports.getTopicsRssFeed = functions
       }
       return null
     } catch (error) {
-      console.error('Error fetching topics:', error)
+      console.error('Error fetching articles:', error)
       throw error
     }
   })

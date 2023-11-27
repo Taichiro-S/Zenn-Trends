@@ -1,96 +1,128 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
+import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
+import 'package:zenn_trends/pages/rss_feed/model/rss_feed_articles_state.dart';
 import 'package:zenn_trends/pages/rss_feed/provider/rss_feed_articles_provider.dart';
-import 'package:zenn_trends/pages/rss_feed/service/format_published_date.dart';
-import 'package:zenn_trends/pages/rss_feed/widget/article_container_widget.dart';
-import 'package:zenn_trends/theme/app_theme.dart';
+import 'package:zenn_trends/pages/rss_feed/provider/topics_rss_feed_articles_provider.dart';
+import 'package:zenn_trends/pages/rss_feed/provider/trend_topics_provider.dart';
+import 'package:zenn_trends/pages/rss_feed/widget/rss_feed_of_topic.dart';
 import 'package:zenn_trends/widget/circle_loading_widget.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 @RoutePage()
 class RssFeedPage extends ConsumerWidget {
-  const RssFeedPage({Key? key, required this.topic}) : super(key: key);
-  final RankedTopic topic;
+  const RssFeedPage({Key? key, this.selectedTopic}) : super(key: key);
+  final RankedTopic? selectedTopic;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loadedArticlesAsync = ref.watch(
-        rssFeedArticlesProvider.select((state) => state.rssFeedArticles));
-    final loadedArticlesNotifier = ref.read(rssFeedArticlesProvider.notifier);
-    final scrollController = ScrollController();
-    final googleAuth = ref.watch(googleAuthProvider);
+    final loadedTopicsAsync =
+        ref.watch(trendTopicsProvider.select((state) => state.trendTopics));
+    final loadedTopicsRssFeedArticles = ref.watch(topicsRssFeedArticlesProvider
+        .select((state) => state.topicsRssFeedArticles));
+    final loadedTrendTopicsNotifier = ref.read(trendTopicsProvider.notifier);
+
     ref.listen<AsyncValue<User?>>(
         googleAuthProvider.select((state) => state.user), (_, user) {
       if (user.value != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {});
       }
     });
+    ref.listen<int>(trendTopicsProvider.select((state) => state.index),
+        (prev, next) {
+      if (prev != next) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref
+              .read(topicsRssFeedArticlesProvider.notifier)
+              .getTopicsRssFeedArticles(
+                  topicName: loadedTopicsAsync.value![next].name);
+        });
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final loadedArticlesNotifier = ref.read(rssFeedArticlesProvider.notifier);
-      loadedArticlesNotifier.getRssFeedArticles(topicName: topic.name);
+      loadedTrendTopicsNotifier.getTrendTopics();
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${topic.displayName}の記事'),
-      ),
-      body: googleAuth.user.when(
-        data: (user) {
-          return loadedArticlesAsync.when(
-            loading: () => const Center(
-                child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
-            error: (error, stack) {
-              print(error);
-              return Center(child: Text('エラー: $error'));
-            },
-            data: (articles) {
-              if (articles.isEmpty) {
-                return const Center(
-                    child: Text('記事がありません😢',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)));
-              } else {
-                return RefreshIndicator(
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: articles.length,
-                      itemBuilder: (context, index) {
-                        final article = articles[index];
-
-                        return ArticleContainerWidget(
-                            article: article, index: index);
-                      },
-                    ),
-                    onRefresh: () async {
-                      if (await loadedArticlesNotifier.getRssFeedArticles(
-                          topicName: topic.name)) {
-                        Fluttertoast.showToast(
-                            msg: 'データを更新しました',
-                            backgroundColor:
-                                AppTheme.light().appColors.primary);
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: 'データは最新です',
-                            backgroundColor:
-                                AppTheme.light().appColors.primary);
-                      }
-                    });
-              }
-            },
-          );
-        },
+    return loadedTopicsAsync.when(
         loading: () => const Center(
             child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
         error: (error, stack) {
           print(error);
-          return Center(child: Text('$error'));
+          return Center(child: Text('エラー: $error'));
         },
-      ),
-    );
+        data: (topics) {
+          if (topics.isEmpty) {
+            return const Center(
+                child: Text('トピックがありません😢',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)));
+          } else {
+            var initialIndex = 0;
+            bool init = true;
+            for (var topic in topics) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (selectedTopic != null &&
+                    selectedTopic!.name == topic.name) {
+                  loadedTrendTopicsNotifier.setIndex(topics.indexOf(topic));
+                  initialIndex = topics.indexOf(topic);
+                  ref
+                      .read(topicsRssFeedArticlesProvider.notifier)
+                      .getTopicsRssFeedArticles(topicName: selectedTopic!.name);
+                } else if (loadedTopicsRssFeedArticles.isEmpty && init) {
+                  init = false;
+                  ref
+                      .read(topicsRssFeedArticlesProvider.notifier)
+                      .getTopicsRssFeedArticles(topicName: topics[0].name);
+                }
+                if (!loadedTopicsRssFeedArticles.keys.contains(topic.name)) {
+                  ref
+                      .read(topicsRssFeedArticlesProvider.notifier)
+                      .initializeTopicsRssFeedArticles(topicName: topic.name);
+                }
+              });
+            }
+            return DefaultTabController(
+                initialIndex: initialIndex,
+                animationDuration: const Duration(milliseconds: 500),
+                length: topics.length,
+                child: Scaffold(
+                  appBar: AppBar(
+                    bottom: TabBar(
+                      isScrollable: true,
+                      tabs: topics
+                          .map((topic) => Tab(text: topic.displayName))
+                          .toList(),
+                      onTap: (value) async {
+                        // loadedTrendTopicsNotifier.setIndex(value);
+                        await ref
+                            .read(topicsRssFeedArticlesProvider.notifier)
+                            .getTopicsRssFeedArticles(
+                                topicName: topics[value].name);
+                      },
+                    ),
+                  ),
+                  body: TabBarView(
+                      children: loadedTopicsRssFeedArticles.values
+                          .map<Widget>((state) {
+                    if (state.rssFeedArticles.isLoading) {
+                      return const Center(
+                          child: CircleLoadingWidget(
+                              color: Colors.blue, fontSize: 20));
+                    } else if (state.rssFeedArticles.hasValue) {
+                      return RssFeedOfTopicWidget(
+                        topicName: state.selectedTopicName,
+                      );
+                    } else {
+                      return const Center(
+                          child: Text('エラーが発生しました😢',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)));
+                    }
+                  }).toList()),
+                ));
+          }
+        });
   }
 }

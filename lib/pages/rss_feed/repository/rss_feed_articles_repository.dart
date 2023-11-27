@@ -9,6 +9,8 @@ class RssFeedArticlesRepository {
   Future<List<RssFeedArticle>> fetchRssFeedArticles(
       {required String topicName, String? searchWord}) async {
     try {
+      print('fetchRssFeedArticles');
+
       final QuerySnapshot rssFeedArticleSnapshot = await _firestore
           .collection('rss_feed')
           .doc(topicName)
