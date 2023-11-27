@@ -9,13 +9,13 @@ class RssFeedArticlesRepository {
   Future<List<RssFeedArticle>> fetchRssFeedArticles(
       {required String topicName, String? searchWord}) async {
     try {
-      print('fetchRssFeedArticles');
+      print('fetch $topicName articles');
 
       final QuerySnapshot rssFeedArticleSnapshot = await _firestore
           .collection('rss_feed')
           .doc(topicName)
           .collection('articles')
-          .orderBy('publishedDate', descending: true)
+          .orderBy('published_date', descending: true)
           .limit(20)
           .get();
 

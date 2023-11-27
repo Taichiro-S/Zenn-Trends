@@ -443,10 +443,11 @@ exports.getTopicsRssFeed = functions
                 {
                   title: item.title[0],
                   link: item.link[0],
-                  publishedDate: item.pubDate[0],
+                  published_date: item.pubDate[0],
                   description: item.description[0],
                   creator: item['dc:creator'][0],
                   enclosure: enclosureUrl,
+                  slug: slug,
                 },
                 { merge: true },
               )

@@ -1,5 +1,4 @@
-String formatPublishedDate(DateTime publishedDate) {
-  final now = DateTime.now();
+String formatPublishedDate(DateTime publishedDate, DateTime now) {
   final duration = now.difference(publishedDate);
 
   if (duration.inDays > 0) {

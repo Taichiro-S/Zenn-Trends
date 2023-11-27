@@ -11,6 +11,7 @@ class RssFeedArticle with _$RssFeedArticle {
     required DateTime publishedDate,
     required String description,
     required String creator,
+    required String slug,
     String? enclosure,
   }) = _RssFeedArticle;
 
@@ -18,13 +19,14 @@ class RssFeedArticle with _$RssFeedArticle {
     final dateFormatter = DateFormat('EEE, d MMM yyyy HH:mm:ss \'GMT\'');
     final data = doc.data()! as Map<String, dynamic>;
     final publishedDate =
-        dateFormatter.parse(data['publishedDate'] as String, true).toUtc();
+        dateFormatter.parse(data['published_date'] as String, true).toUtc();
     return RssFeedArticle(
       title: data['title'] as String,
       link: data['link'] as String,
       publishedDate: publishedDate,
       description: data['description'] as String,
       creator: data['creator'] as String,
+      slug: data['slug'] as String,
       enclosure: data['enclosure'] as String?,
     );
   }

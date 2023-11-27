@@ -17,7 +17,6 @@ class RssFeedOfTopicWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final articles = ref.watch(topicsRssFeedArticlesProvider.select(
         (state) => state.topicsRssFeedArticles[topicName]!.rssFeedArticles));
-    print('topicName: $topicName');
     final scrollController = ScrollController();
     return articles.when(
         loading: () => const Center(

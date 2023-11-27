@@ -5,6 +5,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'google_auth_api.g.dart';
 
+/*TODO
+サインインしたユーザをサーバ側で削除した時に、
+クライアント側でサインアウトする処理を追加する
+*/
 class GoogleAuthApi {
   Future<User?> getSignedInUser() async {
     User? user = FirebaseAuth.instance.currentUser;

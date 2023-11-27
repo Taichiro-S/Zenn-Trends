@@ -12,9 +12,9 @@ class FavoriteTopicsRepository {
       {required RankedTopic topic, required User user}) async {
     try {
       DocumentReference userDocRef =
-          _firestore.collection('usersInfo').doc(user.uid);
+          _firestore.collection('users_info').doc(user.uid);
       DocumentReference favoriteTopicDocRef =
-          userDocRef.collection('favoriteTopics').doc(topic.id);
+          userDocRef.collection('favorite_topics').doc(topic.id);
       await favoriteTopicDocRef.set({
         'topic_id': topic.id,
         'topic_name': topic.name,
@@ -30,9 +30,9 @@ class FavoriteTopicsRepository {
     List<String> topicIds = [];
     try {
       QuerySnapshot snapshot = await _firestore
-          .collection('usersInfo')
+          .collection('users_info')
           .doc(user.uid)
-          .collection('favoriteTopics')
+          .collection('favorite_topics')
           .get();
       for (var doc in snapshot.docs) {
         topicIds.add(doc.id);
@@ -47,9 +47,9 @@ class FavoriteTopicsRepository {
       {required String topicId, required User user}) async {
     try {
       DocumentReference favoriteTopicDocRef = _firestore
-          .collection('usersInfo')
+          .collection('users_info')
           .doc(user.uid)
-          .collection('favoriteTopics')
+          .collection('favorite_topics')
           .doc(topicId);
 
       await favoriteTopicDocRef.delete();

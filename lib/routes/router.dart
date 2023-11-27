@@ -15,9 +15,9 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(path: '/', page: RootRoute.page, children: [
-          AutoRoute(path: '', page: RankingRoute.page),
+          AutoRoute(path: 'ranking', page: RankingRoute.page),
           AutoRoute(path: 'user_settings', page: UserSettingsRoute.page),
-          AutoRoute(path: 'rss_feed', page: RssFeedRoute.page),
+          AutoRoute(path: '', page: RssFeedRoute.page),
         ]),
         AutoRoute(path: '/account', page: AccountRoute.page),
         AutoRoute(path: '/privacy_policy', page: PrivacyPolicyRoute.page),
