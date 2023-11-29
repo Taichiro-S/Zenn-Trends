@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/pages/account/provider/bookmarked_articles_provider.dart';
-import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
 import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
-import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/rss_feed/model/rss_feed_article.dart';
 import 'package:zenn_trends/routes/router.dart';
 import 'package:zenn_trends/theme/app_theme.dart';
@@ -24,9 +22,33 @@ class _BookmarkButtonWidgetState extends ConsumerState<BookmarkButtonWidget>
     with SingleTickerProviderStateMixin {
   bool isBookmarked = false;
   bool isLoading = false;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+    _animation =
+        Tween<double>(begin: 24.0, end: 28.0).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _toggleFavorite() async {
+    if (isBookmarked) {
+      _animationController.reverse();
+    } else {
+      await _animationController.forward();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await _animationController.reverse();
+    }
   }
 
   @override
@@ -123,8 +145,8 @@ class _BookmarkButtonWidgetState extends ConsumerState<BookmarkButtonWidget>
               return IconButton(
                 icon: Icon(
                   isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                  color: isBookmarked ? Colors.cyan[300] : Colors.grey,
-                  size: 24,
+                  color: isBookmarked ? Colors.cyan[600] : Colors.grey,
+                  size: _animation.value,
                 ),
                 onPressed: () async {
                   if (isLoading) return;
@@ -144,6 +166,7 @@ class _BookmarkButtonWidgetState extends ConsumerState<BookmarkButtonWidget>
                     Fluttertoast.showToast(
                         backgroundColor: AppTheme.light().appColors.primary,
                         msg: "記事をブックマークから削除しました");
+                    await _toggleFavorite();
 
                     await Future<void>.delayed(
                         const Duration(milliseconds: 300));
@@ -159,6 +182,8 @@ class _BookmarkButtonWidgetState extends ConsumerState<BookmarkButtonWidget>
                     Fluttertoast.showToast(
                         backgroundColor: AppTheme.light().appColors.primary,
                         msg: "記事をブックマークに追加しました");
+                    await _toggleFavorite();
+
                     await Future<void>.delayed(
                         const Duration(milliseconds: 300));
                   }
@@ -170,10 +195,10 @@ class _BookmarkButtonWidgetState extends ConsumerState<BookmarkButtonWidget>
               );
             },
             loading: () => IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.bookmark_border,
                   color: Colors.grey,
-                  size: 24,
+                  size: _animation.value,
                 ),
                 onPressed: () {}),
             error: (error, stackTrace) {
@@ -182,10 +207,10 @@ class _BookmarkButtonWidgetState extends ConsumerState<BookmarkButtonWidget>
       }
     }, loading: () {
       return IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.bookmark_border,
             color: Colors.grey,
-            size: 24,
+            size: _animation.value,
           ),
           onPressed: () {});
     }, error: (error, stackTrace) {

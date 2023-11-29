@@ -7,7 +7,7 @@ part of 'topics_rss_feed_articles_provider.dart';
 // **************************************************************************
 
 String _$topicsRssFeedArticlesHash() =>
-    r'459fba0eb94f8f2e25274cc19a5779167665569a';
+    r'9131307f5bf95c3a0f58320a8aa345765df9796c';
 
 /// See also [TopicsRssFeedArticles].
 @ProviderFor(TopicsRssFeedArticles)

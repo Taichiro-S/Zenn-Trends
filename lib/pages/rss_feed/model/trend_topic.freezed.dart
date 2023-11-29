@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TrendTopic {
   String get name => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  Timestamp get updatedAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   int get taggingsCount => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $TrendTopicCopyWith<$Res> {
   $Res call(
       {String name,
       String id,
-      Timestamp updatedAt,
+      DateTime updatedAt,
       int taggingsCount,
       String displayName,
       String? imageUrl});
@@ -75,7 +75,7 @@ class _$TrendTopicCopyWithImpl<$Res, $Val extends TrendTopic>
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
       taggingsCount: null == taggingsCount
           ? _value.taggingsCount
           : taggingsCount // ignore: cast_nullable_to_non_nullable
@@ -103,7 +103,7 @@ abstract class _$$TrendTopicImplCopyWith<$Res>
   $Res call(
       {String name,
       String id,
-      Timestamp updatedAt,
+      DateTime updatedAt,
       int taggingsCount,
       String displayName,
       String? imageUrl});
@@ -139,7 +139,7 @@ class __$$TrendTopicImplCopyWithImpl<$Res>
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
       taggingsCount: null == taggingsCount
           ? _value.taggingsCount
           : taggingsCount // ignore: cast_nullable_to_non_nullable
@@ -172,7 +172,7 @@ class _$TrendTopicImpl implements _TrendTopic {
   @override
   final String id;
   @override
-  final Timestamp updatedAt;
+  final DateTime updatedAt;
   @override
   final int taggingsCount;
   @override
@@ -217,7 +217,7 @@ abstract class _TrendTopic implements TrendTopic {
   const factory _TrendTopic(
       {required final String name,
       required final String id,
-      required final Timestamp updatedAt,
+      required final DateTime updatedAt,
       required final int taggingsCount,
       required final String displayName,
       final String? imageUrl}) = _$TrendTopicImpl;
@@ -227,7 +227,7 @@ abstract class _TrendTopic implements TrendTopic {
   @override
   String get id;
   @override
-  Timestamp get updatedAt;
+  DateTime get updatedAt;
   @override
   int get taggingsCount;
   @override

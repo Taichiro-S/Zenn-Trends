@@ -19,7 +19,7 @@ mixin _$TrendTopicsState {
   AsyncValue<List<TrendTopic>> get trendTopics =>
       throw _privateConstructorUsedError;
   int get index => throw _privateConstructorUsedError;
-  Timestamp get lastUpdatedAt => throw _privateConstructorUsedError;
+  DateTime get lastUpdatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TrendTopicsStateCopyWith<TrendTopicsState> get copyWith =>
@@ -35,7 +35,7 @@ abstract class $TrendTopicsStateCopyWith<$Res> {
   $Res call(
       {AsyncValue<List<TrendTopic>> trendTopics,
       int index,
-      Timestamp lastUpdatedAt});
+      DateTime lastUpdatedAt});
 }
 
 /// @nodoc
@@ -67,7 +67,7 @@ class _$TrendTopicsStateCopyWithImpl<$Res, $Val extends TrendTopicsState>
       lastUpdatedAt: null == lastUpdatedAt
           ? _value.lastUpdatedAt
           : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
     ) as $Val);
   }
 }
@@ -83,7 +83,7 @@ abstract class _$$TrendTopicsStateImplCopyWith<$Res>
   $Res call(
       {AsyncValue<List<TrendTopic>> trendTopics,
       int index,
-      Timestamp lastUpdatedAt});
+      DateTime lastUpdatedAt});
 }
 
 /// @nodoc
@@ -113,7 +113,7 @@ class __$$TrendTopicsStateImplCopyWithImpl<$Res>
       lastUpdatedAt: null == lastUpdatedAt
           ? _value.lastUpdatedAt
           : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
     ));
   }
 }
@@ -131,7 +131,7 @@ class _$TrendTopicsStateImpl implements _TrendTopicsState {
   @override
   final int index;
   @override
-  final Timestamp lastUpdatedAt;
+  final DateTime lastUpdatedAt;
 
   @override
   String toString() {
@@ -166,14 +166,14 @@ abstract class _TrendTopicsState implements TrendTopicsState {
   const factory _TrendTopicsState(
       {required final AsyncValue<List<TrendTopic>> trendTopics,
       required final int index,
-      required final Timestamp lastUpdatedAt}) = _$TrendTopicsStateImpl;
+      required final DateTime lastUpdatedAt}) = _$TrendTopicsStateImpl;
 
   @override
   AsyncValue<List<TrendTopic>> get trendTopics;
   @override
   int get index;
   @override
-  Timestamp get lastUpdatedAt;
+  DateTime get lastUpdatedAt;
   @override
   @JsonKey(ignore: true)
   _$$TrendTopicsStateImplCopyWith<_$TrendTopicsStateImpl> get copyWith =>

@@ -6,7 +6,7 @@ part of 'trend_topics_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$trendTopicsHash() => r'47580eccb991c4340752a097ad9e03d0fead9440';
+String _$trendTopicsHash() => r'753f1fa44614df59f2194b9e67e1cdbd403990a4';
 
 /// See also [TrendTopics].
 @ProviderFor(TrendTopics)

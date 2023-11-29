@@ -7,7 +7,6 @@ part 'trend_topics_repository.g.dart';
 class TrendTopicsRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<List<TrendTopic>> fetchTrendTopics() async {
-    print('fetchTrendTopics');
     try {
       final QuerySnapshot trendTopicsSnapshot =
           await _firestore.collection('rss_feed').orderBy('name').get();

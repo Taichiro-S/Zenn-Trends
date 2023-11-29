@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$RankedTopic {
   String get id => throw _privateConstructorUsedError;
-  Timestamp get date => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   int get taggingsCount => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $RankedTopicCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      Timestamp date,
+      DateTime updatedAt,
       String displayName,
       String name,
       int taggingsCount,
@@ -67,7 +67,7 @@ class _$RankedTopicCopyWithImpl<$Res, $Val extends RankedTopic>
   @override
   $Res call({
     Object? id = null,
-    Object? date = null,
+    Object? updatedAt = null,
     Object? displayName = null,
     Object? name = null,
     Object? taggingsCount = null,
@@ -82,10 +82,10 @@ class _$RankedTopicCopyWithImpl<$Res, $Val extends RankedTopic>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -132,7 +132,7 @@ abstract class _$$RankedTopicImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      Timestamp date,
+      DateTime updatedAt,
       String displayName,
       String name,
       int taggingsCount,
@@ -155,7 +155,7 @@ class __$$RankedTopicImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? date = null,
+    Object? updatedAt = null,
     Object? displayName = null,
     Object? name = null,
     Object? taggingsCount = null,
@@ -170,10 +170,10 @@ class __$$RankedTopicImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -215,7 +215,7 @@ class __$$RankedTopicImplCopyWithImpl<$Res>
 class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
   const _$RankedTopicImpl(
       {required this.id,
-      required this.date,
+      required this.updatedAt,
       required this.displayName,
       required this.name,
       required this.taggingsCount,
@@ -229,7 +229,7 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
   @override
   final String id;
   @override
-  final Timestamp date;
+  final DateTime updatedAt;
   @override
   final String displayName;
   @override
@@ -257,7 +257,7 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RankedTopic(id: $id, date: $date, displayName: $displayName, name: $name, taggingsCount: $taggingsCount, taggingsCountChange: $taggingsCountChange, documentSnapshot: $documentSnapshot, imageUrl: $imageUrl, isFavorite: $isFavorite, taggingsCountHistory: $taggingsCountHistory)';
+    return 'RankedTopic(id: $id, updatedAt: $updatedAt, displayName: $displayName, name: $name, taggingsCount: $taggingsCount, taggingsCountChange: $taggingsCountChange, documentSnapshot: $documentSnapshot, imageUrl: $imageUrl, isFavorite: $isFavorite, taggingsCountHistory: $taggingsCountHistory)';
   }
 
   @override
@@ -266,7 +266,7 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
     properties
       ..add(DiagnosticsProperty('type', 'RankedTopic'))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('date', date))
+      ..add(DiagnosticsProperty('updatedAt', updatedAt))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('taggingsCount', taggingsCount))
@@ -283,7 +283,8 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
         (other.runtimeType == runtimeType &&
             other is _$RankedTopicImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.date, date) || other.date == date) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.name, name) || other.name == name) &&
@@ -305,7 +306,7 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      date,
+      updatedAt,
       displayName,
       name,
       taggingsCount,
@@ -325,7 +326,7 @@ class _$RankedTopicImpl with DiagnosticableTreeMixin implements _RankedTopic {
 abstract class _RankedTopic implements RankedTopic {
   const factory _RankedTopic(
           {required final String id,
-          required final Timestamp date,
+          required final DateTime updatedAt,
           required final String displayName,
           required final String name,
           required final int taggingsCount,
@@ -339,7 +340,7 @@ abstract class _RankedTopic implements RankedTopic {
   @override
   String get id;
   @override
-  Timestamp get date;
+  DateTime get updatedAt;
   @override
   String get displayName;
   @override

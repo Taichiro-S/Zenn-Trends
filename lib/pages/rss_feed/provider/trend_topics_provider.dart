@@ -13,7 +13,7 @@ class TrendTopics extends _$TrendTopics {
     return TrendTopicsState(
       trendTopics: const AsyncValue.loading(),
       index: 0,
-      lastUpdatedAt: Timestamp(0, 0),
+      lastUpdatedAt: Timestamp(0, 0).toDate(),
     );
   }
 
@@ -23,7 +23,7 @@ class TrendTopics extends _$TrendTopics {
   Future<bool> getTrendTopics() async {
     // 現在の日時と最終更新日時を取得
     final now = DateTime.now();
-    final lastUpdate = state.lastUpdatedAt.toDate();
+    final lastUpdate = state.lastUpdatedAt;
 
     if (isOverUpdateTime(
         lastUpdatedAt: lastUpdate, now: now, updateTimes: [15])) {
@@ -35,7 +35,7 @@ class TrendTopics extends _$TrendTopics {
 
         state = state.copyWith(
           trendTopics: AsyncValue.data(newTopics),
-          lastUpdatedAt: Timestamp.now(),
+          lastUpdatedAt: DateTime.now(),
         );
       } catch (e, s) {
         state = state.copyWith(trendTopics: AsyncValue.error(e, s));

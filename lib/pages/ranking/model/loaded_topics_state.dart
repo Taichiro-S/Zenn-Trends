@@ -19,7 +19,7 @@ class LoadedTopicsState with _$LoadedTopicsState {
     required bool isLoadingMore,
     required bool isSearching,
     required bool showSearchResult,
-    required Timestamp lastUpdatedAt,
+    required DateTime lastUpdatedAt,
     String? searchWord,
   }) = _LoadedTopicsState;
 }

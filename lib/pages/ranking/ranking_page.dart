@@ -33,6 +33,7 @@ class RankingPage extends ConsumerWidget {
         ref.watch(loadedTopicsProvider.select((state) => state.isSearching));
     final searchWord =
         ref.watch(loadedTopicsProvider.select((state) => state.searchWord));
+    final googleAuth = ref.watch(googleAuthProvider);
     ref.watch(favoriteTopicsProvider);
     final loadedTopicsAsync = ref.watch(timePeriod ==
                 Collection.monthlyRanking &&
@@ -53,7 +54,6 @@ class RankingPage extends ConsumerWidget {
     final showChart = ref.watch(displaySettingsProvider.select((state) {
       return state.showChart;
     }));
-
     ref.listen<DisplaySettingsState>(displaySettingsProvider,
         (previousState, state) {
       if (state != previousState) {
@@ -68,10 +68,13 @@ class RankingPage extends ConsumerWidget {
           ref
               .read(favoriteTopicsProvider.notifier)
               .getFavoriteTopics(user: user.value!);
-          ref.watch(favoriteTopicsProvider);
         });
       }
     });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   print('user');
+    //   ref.read(googleAuthProvider.notifier).getSignedInUser();
+    // });
     return Scaffold(
       appBar: AppBar(
         leading: !isSearching && !showSearchResult
@@ -101,96 +104,108 @@ class RankingPage extends ConsumerWidget {
           DisplaySettingsWidget(),
         ],
       ),
-      body:
-          // googleAuth.user.when(
-          //   data: (user) {
-          // return
-          loadedTopicsAsync.when(
+      body: googleAuth.user.when(
+        data: (user) {
+          if (user != null) {
+            /*TODO
+            favorite topicsのfetchが8回くらい走る
+            この処理をウィジェットの外に出したい
+            */
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ref
+                  .read(favoriteTopicsProvider.notifier)
+                  .getFavoriteTopics(user: user);
+            });
+          }
+          return loadedTopicsAsync.when(
+            loading: () => const Center(
+                child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
+            error: (error, stack) => Center(child: Text('エラー: $error')),
+            data: (loadedTopics) {
+              if (isSearching) {
+                return GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    loadedTopicsNotifier.stopSearching();
+                  },
+                  child: Container(),
+                );
+              } else if (loadedTopics.isEmpty && showSearchResult) {
+                return const Center(
+                    child: Text('トピックが見つかりませんでした😢',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)));
+              } else if (loadedTopics.isEmpty) {
+                return const Center(
+                    child: CircleLoadingWidget(color: Colors.yellow));
+              } else {
+                return RefreshIndicator(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: loadedTopics.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == loadedTopics.length) {
+                          if (lastDoc != null &&
+                              loadedTopics.length >= DEFAULT_LOAD_TOPICS) {
+                            return const Center(
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
+                                            color: Colors.blue))));
+                          } else if (loadedTopics.length > 1) {
+                            return const Center(
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Text('トピックがありません')));
+                          } else {
+                            return Container();
+                          }
+                        }
+                        final rankedTopic = loadedTopics[index];
+                        return Card(
+                            elevation: 3,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 8),
+                            child: Column(
+                              children: [
+                                TopicContainerWidget(
+                                    rankedTopic: rankedTopic, index: index),
+                                showChart
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: TopicHistoryWidget(
+                                            rankedTopic: rankedTopic))
+                                    : Container(),
+                              ],
+                            ));
+                      },
+                    ),
+                    onRefresh: () async {
+                      if (await loadedTopicsNotifier.getRankedTopics(
+                          timePeriod: timePeriod, sortOrder: sortOrder)) {
+                        Fluttertoast.showToast(
+                            msg: 'データを更新しました',
+                            backgroundColor:
+                                AppTheme.light().appColors.primary);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: 'データは最新です',
+                            backgroundColor:
+                                AppTheme.light().appColors.primary);
+                      }
+                    });
+              }
+            },
+          );
+        },
         loading: () => const Center(
             child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
         error: (error, stack) => Center(child: Text('エラー: $error')),
-        data: (loadedTopics) {
-          if (isSearching) {
-            return GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-                loadedTopicsNotifier.stopSearching();
-              },
-              child: Container(),
-            );
-          } else if (loadedTopics.isEmpty && showSearchResult) {
-            return const Center(
-                child: Text('トピックが見つかりませんでした😢',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)));
-          } else if (loadedTopics.isEmpty) {
-            return const Center(
-                child: CircleLoadingWidget(color: Colors.yellow));
-          } else {
-            return RefreshIndicator(
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: loadedTopics.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == loadedTopics.length) {
-                      if (lastDoc != null &&
-                          loadedTopics.length >= DEFAULT_LOAD_TOPICS) {
-                        return const Center(
-                            child: Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: CircularProgressIndicator(
-                                        color: Colors.blue))));
-                      } else if (loadedTopics.length > 1) {
-                        return const Center(
-                            child: Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text('トピックがありません')));
-                      } else {
-                        return Container();
-                      }
-                    }
-                    final rankedTopic = loadedTopics[index];
-                    return Card(
-                        elevation: 3,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        child: Column(
-                          children: [
-                            TopicContainerWidget(
-                                rankedTopic: rankedTopic, index: index),
-                            showChart
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: TopicHistoryWidget(
-                                        rankedTopic: rankedTopic))
-                                : Container(),
-                          ],
-                        ));
-                  },
-                ),
-                onRefresh: () async {
-                  if (await loadedTopicsNotifier.getRankedTopics(
-                      timePeriod: timePeriod, sortOrder: sortOrder)) {
-                    Fluttertoast.showToast(
-                        msg: 'データを更新しました',
-                        backgroundColor: AppTheme.light().appColors.primary);
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: 'データは最新です',
-                        backgroundColor: AppTheme.light().appColors.primary);
-                  }
-                });
-          }
-        },
       ),
-      // },
-      //   loading: () => const Center(
-      //       child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
-      //   error: (error, stack) => Center(child: Text('エラー: $error')),
-      // ),
     );
   }
 }

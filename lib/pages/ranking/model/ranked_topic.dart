@@ -9,7 +9,7 @@ part 'ranked_topic.freezed.dart';
 class RankedTopic with _$RankedTopic {
   const factory RankedTopic({
     required String id,
-    required Timestamp date,
+    required DateTime updatedAt,
     required String displayName,
     required String name,
     required int taggingsCount,
@@ -25,15 +25,14 @@ class RankedTopic with _$RankedTopic {
     (doc['taggings_count_history'] as Map<String, dynamic>)
         .forEach((key, value) {
       DateTime dateTime = DateTime.parse(key);
-      Timestamp timestamp = Timestamp.fromDate(dateTime);
       int change = value as int;
       taggingsCountHistory
-          .add(TaggingsCountChangeHistory(date: timestamp, change: change));
+          .add(TaggingsCountChangeHistory(date: dateTime, change: change));
     });
     taggingsCountHistory.sort((a, b) => a.date.compareTo(b.date));
     return RankedTopic(
       id: doc['id'].toString(),
-      date: doc['date'] as Timestamp,
+      updatedAt: (doc['date'] as Timestamp).toDate(),
       displayName: doc['display_name'] as String,
       name: doc['name'] as String,
       taggingsCount: doc['taggings_count'] as int,

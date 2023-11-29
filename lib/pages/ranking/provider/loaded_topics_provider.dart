@@ -23,7 +23,7 @@ class LoadedTopics extends _$LoadedTopics {
       isLoadingMore: false,
       isSearching: false,
       showSearchResult: false,
-      lastUpdatedAt: Timestamp(0, 0),
+      lastUpdatedAt: Timestamp(0, 0).toDate(),
     );
   }
 
@@ -37,7 +37,7 @@ class LoadedTopics extends _$LoadedTopics {
     // 現在の日時と最終更新日時を取得
     final now = DateTime.now().toUtc().add(const Duration(hours: 9));
     final lastUpdate =
-        state.lastUpdatedAt.toDate().toUtc().add(const Duration(hours: 9));
+        state.lastUpdatedAt.toUtc().add(const Duration(hours: 9));
 
     // 最終更新日の翌日の朝6時10分（firestoreのデータ更新が完了している時刻）を計算
     final nextDay6Am =
@@ -72,14 +72,14 @@ class LoadedTopics extends _$LoadedTopics {
             weeklyRankedTopics: AsyncValue.data(newTopics),
             weeklyRankedLastDoc:
                 newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
-            lastUpdatedAt: Timestamp.now(),
+            lastUpdatedAt: DateTime.now(),
           );
         } else {
           state = state.copyWith(
             monthlyRankedTopics: AsyncValue.data(newTopics),
             monthlyRankedLastDoc:
                 newTopics.isNotEmpty ? newTopics.last.documentSnapshot : null,
-            lastUpdatedAt: Timestamp.now(),
+            lastUpdatedAt: DateTime.now(),
           );
         }
       } catch (e, s) {

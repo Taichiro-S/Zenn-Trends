@@ -5,18 +5,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'google_auth_api.g.dart';
 
-/*TODO
-サインインしたユーザをサーバ側で削除した時に、
-クライアント側でサインアウトする処理を追加する
-*/
 class GoogleAuthApi {
+  final _firebaseAuth = FirebaseAuth.instance;
   Future<User?> getSignedInUser() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = _firebaseAuth.currentUser;
     return user;
   }
 
   Future<User?> signIn() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -29,7 +25,7 @@ class GoogleAuthApi {
         idToken: googleAuth.idToken,
       );
       UserCredential userCredential =
-          await auth.signInWithCredential(credential);
+          await _firebaseAuth.signInWithCredential(credential);
       user = userCredential.user;
     } on FirebaseException catch (e) {
       throw Exception(e);
@@ -44,7 +40,7 @@ class GoogleAuthApi {
       if (!kIsWeb) {
         await GoogleSignIn().signOut();
       }
-      await FirebaseAuth.instance.signOut();
+      await _firebaseAuth.signOut();
     } catch (e) {
       throw Exception(e);
     }

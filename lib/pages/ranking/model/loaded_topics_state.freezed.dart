@@ -35,7 +35,7 @@ mixin _$LoadedTopicsState {
   bool get isLoadingMore => throw _privateConstructorUsedError;
   bool get isSearching => throw _privateConstructorUsedError;
   bool get showSearchResult => throw _privateConstructorUsedError;
-  Timestamp get lastUpdatedAt => throw _privateConstructorUsedError;
+  DateTime get lastUpdatedAt => throw _privateConstructorUsedError;
   String? get searchWord => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -61,7 +61,7 @@ abstract class $LoadedTopicsStateCopyWith<$Res> {
       bool isLoadingMore,
       bool isSearching,
       bool showSearchResult,
-      Timestamp lastUpdatedAt,
+      DateTime lastUpdatedAt,
       String? searchWord});
 }
 
@@ -140,7 +140,7 @@ class _$LoadedTopicsStateCopyWithImpl<$Res, $Val extends LoadedTopicsState>
       lastUpdatedAt: null == lastUpdatedAt
           ? _value.lastUpdatedAt
           : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
       searchWord: freezed == searchWord
           ? _value.searchWord
           : searchWord // ignore: cast_nullable_to_non_nullable
@@ -169,7 +169,7 @@ abstract class _$$LoadedTopicsStateImplCopyWith<$Res>
       bool isLoadingMore,
       bool isSearching,
       bool showSearchResult,
-      Timestamp lastUpdatedAt,
+      DateTime lastUpdatedAt,
       String? searchWord});
 }
 
@@ -246,7 +246,7 @@ class __$$LoadedTopicsStateImplCopyWithImpl<$Res>
       lastUpdatedAt: null == lastUpdatedAt
           ? _value.lastUpdatedAt
           : lastUpdatedAt // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
       searchWord: freezed == searchWord
           ? _value.searchWord
           : searchWord // ignore: cast_nullable_to_non_nullable
@@ -296,7 +296,7 @@ class _$LoadedTopicsStateImpl implements _LoadedTopicsState {
   @override
   final bool showSearchResult;
   @override
-  final Timestamp lastUpdatedAt;
+  final DateTime lastUpdatedAt;
   @override
   final String? searchWord;
 
@@ -376,7 +376,7 @@ abstract class _LoadedTopicsState implements LoadedTopicsState {
       required final bool isLoadingMore,
       required final bool isSearching,
       required final bool showSearchResult,
-      required final Timestamp lastUpdatedAt,
+      required final DateTime lastUpdatedAt,
       final String? searchWord}) = _$LoadedTopicsStateImpl;
 
   @override
@@ -402,7 +402,7 @@ abstract class _LoadedTopicsState implements LoadedTopicsState {
   @override
   bool get showSearchResult;
   @override
-  Timestamp get lastUpdatedAt;
+  DateTime get lastUpdatedAt;
   @override
   String? get searchWord;
   @override

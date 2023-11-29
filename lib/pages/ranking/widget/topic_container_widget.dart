@@ -2,9 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:url_launcher/url_launcher.dart';
 import 'package:zenn_trends/constant/firestore.dart';
-// import 'package:zenn_trends/constant/url.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/service/display_num.dart';
@@ -24,9 +22,7 @@ class TopicContainerWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final displaySettings = ref.watch(displaySettingsProvider);
-    // final uri = Uri.parse('$ZENN_TOPICS_URL${rankedTopic.name}?order=latest');
     final router = AutoRouter.of(context);
-
     return ListTile(
       leading: Column(children: [
         CircleAvatar(
@@ -61,7 +57,7 @@ class TopicContainerWidget extends ConsumerWidget {
         FavoriteIconWidget(rankedTopic: rankedTopic),
         IconButton(
             onPressed: () async {
-              // router.push(RssFeedRoute(selectedTopic: rankedTopic));
+              router.push(RssFeedRoute(selectedTopic: rankedTopic));
               // if (await canLaunchUrl(uri)) {
               //   launchUrl(uri);
               // }

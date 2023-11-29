@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -19,61 +20,61 @@ class ArticleContainerWidget extends ConsumerWidget {
     final now = DateTime.now();
     final publishedDate = formatPublishedDate(article.publishedDate, now);
     return StickyHeaderBuilder(
-      builder: (context, stuckAmount) {
-        // stuckAmount = 1.0 - stuckAmount.clamp(0.0, 1.0);
-        return Container(
-          height: 50.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: FractionalOffset.bottomLeft,
-              end: FractionalOffset.topRight,
-              colors: [
-                const Color.fromARGB(255, 107, 202, 255)
-                    .withOpacity(0.6 + 0.4 * stuckAmount),
-                const Color.fromARGB(255, 179, 152, 255)
-                    .withOpacity(0.6 + 0.4 * stuckAmount),
-              ],
-              stops: const [
-                0.0,
-                1.0,
-              ],
+        builder: (context, stuckAmount) {
+          return Container(
+            height: 50.0,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: FractionalOffset.bottomLeft,
+                end: FractionalOffset.topRight,
+                colors: [
+                  Color.fromARGB(255, 107, 202, 255),
+                  Color.fromARGB(255, 179, 152, 255)
+                ],
+                stops: [
+                  0.0,
+                  1.0,
+                ],
+              ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          alignment: Alignment.centerLeft,
-          child: Row(children: [
-            Text(
-              publishedDate,
-              style: const TextStyle(color: Colors.white),
-            ),
-            BookmarkButtonWidget(article: article),
-            // IconButton(
-            //     onPressed: () async {},
-            //     icon: const Icon(
-            //       Icons.bookmark_border,
-            //       color: Colors.grey,
-            //       size: 20,
-            //     ))
-          ]),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            alignment: Alignment.centerLeft,
+            child: Row(children: [
+              Text(
+                publishedDate,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              BookmarkButtonWidget(article: article),
+            ]),
+          );
+        },
+        content: Stack(
+          children: [
+            SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: CachedNetworkImage(imageUrl: article.enclosure ?? '')),
+          ],
+        )
+        // Card(
+        //     elevation: 3,
+        //     child: Padding(
+        //         padding: const EdgeInsets.all(16),
+        //         child: Column(children: [
+        //           RichText(
+        //               overflow: TextOverflow.ellipsis,
+        //               maxLines: 4,
+        //               text: TextSpan(children: [
+        //                 TextSpan(
+        //                     text: article.title,
+        //                     style: const TextStyle(
+        //                         color: Colors.black,
+        //                         fontSize: 18,
+        //                         fontWeight: FontWeight.bold)),
+        //               ])),
+        //         ]))),
         );
-      },
-      content: Card(
-          elevation: 3,
-          child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(children: [
-                RichText(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 4,
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: article.title,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
-                    ])),
-              ]))),
-    );
   }
 }

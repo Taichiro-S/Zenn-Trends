@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$TaggingsCountChangeHistory {
-  Timestamp get date => throw _privateConstructorUsedError;
+  DateTime get date => throw _privateConstructorUsedError;
   int get change => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,7 +31,7 @@ abstract class $TaggingsCountChangeHistoryCopyWith<$Res> {
       _$TaggingsCountChangeHistoryCopyWithImpl<$Res,
           TaggingsCountChangeHistory>;
   @useResult
-  $Res call({Timestamp date, int change});
+  $Res call({DateTime date, int change});
 }
 
 /// @nodoc
@@ -55,7 +55,7 @@ class _$TaggingsCountChangeHistoryCopyWithImpl<$Res,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
       change: null == change
           ? _value.change
           : change // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,7 @@ abstract class _$$TaggingsCountChangeHistoryImplCopyWith<$Res>
       __$$TaggingsCountChangeHistoryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Timestamp date, int change});
+  $Res call({DateTime date, int change});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$TaggingsCountChangeHistoryImplCopyWithImpl<$Res>
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp,
+              as DateTime,
       change: null == change
           ? _value.change
           : change // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ class _$TaggingsCountChangeHistoryImpl
       {required this.date, required this.change});
 
   @override
-  final Timestamp date;
+  final DateTime date;
   @override
   final int change;
 
@@ -155,11 +155,11 @@ class _$TaggingsCountChangeHistoryImpl
 abstract class _TaggingsCountChangeHistory
     implements TaggingsCountChangeHistory {
   const factory _TaggingsCountChangeHistory(
-      {required final Timestamp date,
+      {required final DateTime date,
       required final int change}) = _$TaggingsCountChangeHistoryImpl;
 
   @override
-  Timestamp get date;
+  DateTime get date;
   @override
   int get change;
   @override

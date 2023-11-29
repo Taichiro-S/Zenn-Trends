@@ -1,7 +1,8 @@
 // ignore_for_file: constant_identifier_names
 import 'package:zenn_trends/constant/firestore.dart';
 
-const DEFAULT_LOAD_TOPICS = 30;
+const DEFAULT_LOAD_TOPICS = 20;
+const DEFAULT_LOAD_ARTICLES = 20;
 const QIITA_SCOPE = 'read_qiita write_qiita';
 const DEFAULT_TIME_PERIOD = Collection.weeklyRanking;
 const DEFAULT_SORT_ORDER = RankedTopicsSortOrder.taggingsCountChange;

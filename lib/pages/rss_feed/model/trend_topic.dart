@@ -7,7 +7,7 @@ class TrendTopic with _$TrendTopic {
   const factory TrendTopic({
     required String name,
     required String id,
-    required Timestamp updatedAt,
+    required DateTime updatedAt,
     required int taggingsCount,
     required String displayName,
     String? imageUrl,
@@ -18,7 +18,7 @@ class TrendTopic with _$TrendTopic {
     return TrendTopic(
       name: data['name'] as String,
       id: data['id'] as String,
-      updatedAt: data['updated_at'] as Timestamp,
+      updatedAt: (data['updated_at'] as Timestamp).toDate(),
       taggingsCount: data['taggings_count'] as int,
       displayName: data['display_name'] as String,
       imageUrl: data['image_url'] as String?,

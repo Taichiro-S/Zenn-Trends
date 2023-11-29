@@ -7,5 +7,7 @@ part 'topics_rss_feed_articles_state.freezed.dart';
 class TopicsRssFeedArticlesState with _$TopicsRssFeedArticlesState {
   const factory TopicsRssFeedArticlesState({
     required Map<String, RssFeedArticlesState> topicsRssFeedArticles,
+    required String selectedTopicName,
+    required bool isLoadingMore,
   }) = _TopicsRssFeedArticlesState;
 }

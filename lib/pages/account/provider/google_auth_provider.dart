@@ -17,7 +17,7 @@ class GoogleAuth extends _$GoogleAuth {
   }
 
   Future<User?> _getSignedInUser() async {
-    final googleAuthAPi = ref.watch(googleAuthApiProvider);
+    final googleAuthAPi = ref.read(googleAuthApiProvider);
     state = state.copyWith(user: const AsyncValue.loading());
     User? user;
     try {
@@ -30,7 +30,7 @@ class GoogleAuth extends _$GoogleAuth {
   }
 
   Future<User?> singIn() async {
-    final googleAuthAPi = ref.watch(googleAuthApiProvider);
+    final googleAuthAPi = ref.read(googleAuthApiProvider);
     User? user;
     state = state.copyWith(user: const AsyncValue.loading());
     try {
@@ -43,7 +43,7 @@ class GoogleAuth extends _$GoogleAuth {
   }
 
   Future<void> signOut() async {
-    final googleAuthAPi = ref.watch(googleAuthApiProvider);
+    final googleAuthAPi = ref.read(googleAuthApiProvider);
     state = state.copyWith(user: const AsyncValue.loading());
     try {
       await googleAuthAPi.signOut();

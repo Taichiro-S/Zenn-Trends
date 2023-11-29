@@ -22,6 +22,8 @@ mixin _$RssFeedArticle {
   String get description => throw _privateConstructorUsedError;
   String get creator => throw _privateConstructorUsedError;
   String get slug => throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?> get documentSnapshot =>
+      throw _privateConstructorUsedError;
   String? get enclosure => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -42,6 +44,7 @@ abstract class $RssFeedArticleCopyWith<$Res> {
       String description,
       String creator,
       String slug,
+      DocumentSnapshot<Object?> documentSnapshot,
       String? enclosure});
 }
 
@@ -64,6 +67,7 @@ class _$RssFeedArticleCopyWithImpl<$Res, $Val extends RssFeedArticle>
     Object? description = null,
     Object? creator = null,
     Object? slug = null,
+    Object? documentSnapshot = null,
     Object? enclosure = freezed,
   }) {
     return _then(_value.copyWith(
@@ -91,6 +95,10 @@ class _$RssFeedArticleCopyWithImpl<$Res, $Val extends RssFeedArticle>
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
               as String,
+      documentSnapshot: null == documentSnapshot
+          ? _value.documentSnapshot
+          : documentSnapshot // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>,
       enclosure: freezed == enclosure
           ? _value.enclosure
           : enclosure // ignore: cast_nullable_to_non_nullable
@@ -114,6 +122,7 @@ abstract class _$$RssFeedArticleImplCopyWith<$Res>
       String description,
       String creator,
       String slug,
+      DocumentSnapshot<Object?> documentSnapshot,
       String? enclosure});
 }
 
@@ -134,6 +143,7 @@ class __$$RssFeedArticleImplCopyWithImpl<$Res>
     Object? description = null,
     Object? creator = null,
     Object? slug = null,
+    Object? documentSnapshot = null,
     Object? enclosure = freezed,
   }) {
     return _then(_$RssFeedArticleImpl(
@@ -161,6 +171,10 @@ class __$$RssFeedArticleImplCopyWithImpl<$Res>
           ? _value.slug
           : slug // ignore: cast_nullable_to_non_nullable
               as String,
+      documentSnapshot: null == documentSnapshot
+          ? _value.documentSnapshot
+          : documentSnapshot // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>,
       enclosure: freezed == enclosure
           ? _value.enclosure
           : enclosure // ignore: cast_nullable_to_non_nullable
@@ -179,6 +193,7 @@ class _$RssFeedArticleImpl implements _RssFeedArticle {
       required this.description,
       required this.creator,
       required this.slug,
+      required this.documentSnapshot,
       this.enclosure});
 
   @override
@@ -194,11 +209,13 @@ class _$RssFeedArticleImpl implements _RssFeedArticle {
   @override
   final String slug;
   @override
+  final DocumentSnapshot<Object?> documentSnapshot;
+  @override
   final String? enclosure;
 
   @override
   String toString() {
-    return 'RssFeedArticle(title: $title, link: $link, publishedDate: $publishedDate, description: $description, creator: $creator, slug: $slug, enclosure: $enclosure)';
+    return 'RssFeedArticle(title: $title, link: $link, publishedDate: $publishedDate, description: $description, creator: $creator, slug: $slug, documentSnapshot: $documentSnapshot, enclosure: $enclosure)';
   }
 
   @override
@@ -214,13 +231,15 @@ class _$RssFeedArticleImpl implements _RssFeedArticle {
                 other.description == description) &&
             (identical(other.creator, creator) || other.creator == creator) &&
             (identical(other.slug, slug) || other.slug == slug) &&
+            (identical(other.documentSnapshot, documentSnapshot) ||
+                other.documentSnapshot == documentSnapshot) &&
             (identical(other.enclosure, enclosure) ||
                 other.enclosure == enclosure));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, link, publishedDate,
-      description, creator, slug, enclosure);
+      description, creator, slug, documentSnapshot, enclosure);
 
   @JsonKey(ignore: true)
   @override
@@ -238,6 +257,7 @@ abstract class _RssFeedArticle implements RssFeedArticle {
       required final String description,
       required final String creator,
       required final String slug,
+      required final DocumentSnapshot<Object?> documentSnapshot,
       final String? enclosure}) = _$RssFeedArticleImpl;
 
   @override
@@ -252,6 +272,8 @@ abstract class _RssFeedArticle implements RssFeedArticle {
   String get creator;
   @override
   String get slug;
+  @override
+  DocumentSnapshot<Object?> get documentSnapshot;
   @override
   String? get enclosure;
   @override

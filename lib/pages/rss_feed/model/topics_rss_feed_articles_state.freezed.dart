@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TopicsRssFeedArticlesState {
   Map<String, RssFeedArticlesState> get topicsRssFeedArticles =>
       throw _privateConstructorUsedError;
+  String get selectedTopicName => throw _privateConstructorUsedError;
+  bool get isLoadingMore => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TopicsRssFeedArticlesStateCopyWith<TopicsRssFeedArticlesState>
@@ -31,7 +33,10 @@ abstract class $TopicsRssFeedArticlesStateCopyWith<$Res> {
       _$TopicsRssFeedArticlesStateCopyWithImpl<$Res,
           TopicsRssFeedArticlesState>;
   @useResult
-  $Res call({Map<String, RssFeedArticlesState> topicsRssFeedArticles});
+  $Res call(
+      {Map<String, RssFeedArticlesState> topicsRssFeedArticles,
+      String selectedTopicName,
+      bool isLoadingMore});
 }
 
 /// @nodoc
@@ -49,12 +54,22 @@ class _$TopicsRssFeedArticlesStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? topicsRssFeedArticles = null,
+    Object? selectedTopicName = null,
+    Object? isLoadingMore = null,
   }) {
     return _then(_value.copyWith(
       topicsRssFeedArticles: null == topicsRssFeedArticles
           ? _value.topicsRssFeedArticles
           : topicsRssFeedArticles // ignore: cast_nullable_to_non_nullable
               as Map<String, RssFeedArticlesState>,
+      selectedTopicName: null == selectedTopicName
+          ? _value.selectedTopicName
+          : selectedTopicName // ignore: cast_nullable_to_non_nullable
+              as String,
+      isLoadingMore: null == isLoadingMore
+          ? _value.isLoadingMore
+          : isLoadingMore // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -68,7 +83,10 @@ abstract class _$$TopicsRssFeedArticlesStateImplCopyWith<$Res>
       __$$TopicsRssFeedArticlesStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, RssFeedArticlesState> topicsRssFeedArticles});
+  $Res call(
+      {Map<String, RssFeedArticlesState> topicsRssFeedArticles,
+      String selectedTopicName,
+      bool isLoadingMore});
 }
 
 /// @nodoc
@@ -85,12 +103,22 @@ class __$$TopicsRssFeedArticlesStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? topicsRssFeedArticles = null,
+    Object? selectedTopicName = null,
+    Object? isLoadingMore = null,
   }) {
     return _then(_$TopicsRssFeedArticlesStateImpl(
       topicsRssFeedArticles: null == topicsRssFeedArticles
           ? _value._topicsRssFeedArticles
           : topicsRssFeedArticles // ignore: cast_nullable_to_non_nullable
               as Map<String, RssFeedArticlesState>,
+      selectedTopicName: null == selectedTopicName
+          ? _value.selectedTopicName
+          : selectedTopicName // ignore: cast_nullable_to_non_nullable
+              as String,
+      isLoadingMore: null == isLoadingMore
+          ? _value.isLoadingMore
+          : isLoadingMore // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -99,7 +127,9 @@ class __$$TopicsRssFeedArticlesStateImplCopyWithImpl<$Res>
 
 class _$TopicsRssFeedArticlesStateImpl implements _TopicsRssFeedArticlesState {
   const _$TopicsRssFeedArticlesStateImpl(
-      {required final Map<String, RssFeedArticlesState> topicsRssFeedArticles})
+      {required final Map<String, RssFeedArticlesState> topicsRssFeedArticles,
+      required this.selectedTopicName,
+      required this.isLoadingMore})
       : _topicsRssFeedArticles = topicsRssFeedArticles;
 
   final Map<String, RssFeedArticlesState> _topicsRssFeedArticles;
@@ -112,8 +142,13 @@ class _$TopicsRssFeedArticlesStateImpl implements _TopicsRssFeedArticlesState {
   }
 
   @override
+  final String selectedTopicName;
+  @override
+  final bool isLoadingMore;
+
+  @override
   String toString() {
-    return 'TopicsRssFeedArticlesState(topicsRssFeedArticles: $topicsRssFeedArticles)';
+    return 'TopicsRssFeedArticlesState(topicsRssFeedArticles: $topicsRssFeedArticles, selectedTopicName: $selectedTopicName, isLoadingMore: $isLoadingMore)';
   }
 
   @override
@@ -122,12 +157,19 @@ class _$TopicsRssFeedArticlesStateImpl implements _TopicsRssFeedArticlesState {
         (other.runtimeType == runtimeType &&
             other is _$TopicsRssFeedArticlesStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._topicsRssFeedArticles, _topicsRssFeedArticles));
+                .equals(other._topicsRssFeedArticles, _topicsRssFeedArticles) &&
+            (identical(other.selectedTopicName, selectedTopicName) ||
+                other.selectedTopicName == selectedTopicName) &&
+            (identical(other.isLoadingMore, isLoadingMore) ||
+                other.isLoadingMore == isLoadingMore));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_topicsRssFeedArticles));
+      runtimeType,
+      const DeepCollectionEquality().hash(_topicsRssFeedArticles),
+      selectedTopicName,
+      isLoadingMore);
 
   @JsonKey(ignore: true)
   @override
@@ -140,11 +182,16 @@ class _$TopicsRssFeedArticlesStateImpl implements _TopicsRssFeedArticlesState {
 abstract class _TopicsRssFeedArticlesState
     implements TopicsRssFeedArticlesState {
   const factory _TopicsRssFeedArticlesState(
-      {required final Map<String, RssFeedArticlesState>
-          topicsRssFeedArticles}) = _$TopicsRssFeedArticlesStateImpl;
+      {required final Map<String, RssFeedArticlesState> topicsRssFeedArticles,
+      required final String selectedTopicName,
+      required final bool isLoadingMore}) = _$TopicsRssFeedArticlesStateImpl;
 
   @override
   Map<String, RssFeedArticlesState> get topicsRssFeedArticles;
+  @override
+  String get selectedTopicName;
+  @override
+  bool get isLoadingMore;
   @override
   @JsonKey(ignore: true)
   _$$TopicsRssFeedArticlesStateImplCopyWith<_$TopicsRssFeedArticlesStateImpl>

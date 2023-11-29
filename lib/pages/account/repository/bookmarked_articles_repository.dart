@@ -14,9 +14,17 @@ class BookmarkedArticlesRepository {
       String articleId = '${article.creator}${article.slug}';
       DocumentReference userDocRef =
           _firestore.collection('users_info').doc(user.uid);
-      DocumentReference favoriteTopicDocRef =
+      DocumentReference bookmrkedArticlesRef =
           userDocRef.collection('bookmarked_articles').doc(articleId);
-      await favoriteTopicDocRef.set(article);
+      await bookmrkedArticlesRef.set({
+        'title': article.title,
+        'link': article.link,
+        'creator': article.creator,
+        'slug': article.slug,
+        'published_date': Timestamp.fromDate(article.publishedDate),
+        'description': article.description,
+        'enclosure': article.enclosure,
+      });
       return await fetchBookmarkedArticle(user: user);
     } catch (e) {
       throw Exception(e);
@@ -35,10 +43,10 @@ class BookmarkedArticlesRepository {
       for (var doc in snapshot.docs) {
         articles.add(RssFeedArticle.fromDocument(doc));
       }
+      return articles;
     } catch (e) {
       throw Exception(e);
     }
-    return articles;
   }
 
   Future<List<RssFeedArticle>> removeBookmarkedArticle(

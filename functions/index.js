@@ -16,8 +16,9 @@ const WEEKLY_RANKING_COLLECTION = 'weekly_ranking'
 const TOPICS_HISTORY_SUBCOLLECTION = 'history'
 
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
-const TIME_TO_CALC_RANKING = '10 6 * * *'
-const TIME_TO_FETCH_ARTICLES = '20 0,6,12,18 * * *'
+const TIME_TO_CALC_RANKING = '5 6 * * *'
+const TIME_TO_FETCH_ARTICLES = '15 0,6,12,18 * * *'
+const TIME_TO_DELETE_OLD_ARTICLES = '30 6 * * *'
 
 // fetching zenn tags takes about 10s
 // calculating weekly ranking takes about 160s
@@ -435,7 +436,7 @@ exports.getTopicsRssFeed = functions
               item.enclosure && item.enclosure[0]
                 ? item.enclosure[0].$.url
                 : null
-            // 重複チェック
+            const publishedDate = new Date(item.pubDate[0])
             const doc = await articleRef.get()
             if (!doc.exists) {
               batch.set(
@@ -443,7 +444,7 @@ exports.getTopicsRssFeed = functions
                 {
                   title: item.title[0],
                   link: item.link[0],
-                  published_date: item.pubDate[0],
+                  published_date: publishedDate,
                   description: item.description[0],
                   creator: item['dc:creator'][0],
                   enclosure: enclosureUrl,
@@ -459,6 +460,40 @@ exports.getTopicsRssFeed = functions
       return null
     } catch (error) {
       console.error('Error fetching articles:', error)
+      throw error
+    }
+  })
+
+exports.deleteOldArticles = functions
+  .runWith({ timeoutSeconds: CALC_RANKING_TIMEOUT })
+  .pubsub.schedule(TIME_TO_DELETE_OLD_ARTICLES)
+  .onRun(async (context) => {
+    const db = admin.firestore()
+    const oneMonthAgo = new Date()
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
+
+    try {
+      const rssFeedRef = db.collection('rss_feed')
+      const topicsSnapshot = await rssFeedRef.get()
+
+      for (const topicDoc of topicsSnapshot.docs) {
+        const articlesRef = topicDoc.ref.collection('articles')
+        const oldArticlesSnapshot = await articlesRef
+          .where('published_date', '<', oneMonthAgo)
+          .get()
+
+        const batch = db.batch()
+        oldArticlesSnapshot.forEach((doc) => {
+          batch.delete(doc.ref)
+        })
+
+        await batch.commit()
+      }
+
+      console.log('Old articles deleted successfully')
+      return null
+    } catch (error) {
+      console.error('Error deleting old articles:', error)
       throw error
     }
   })
