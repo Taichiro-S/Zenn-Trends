@@ -20,7 +20,6 @@ class RssFeedArticlesRepository {
           .orderBy('published_date', descending: true)
           .limit(limit);
       if (startAfter != null) {
-        print(startAfter.id);
         rssFeedArticlesRef = rssFeedArticlesRef.startAfterDocument(startAfter);
       }
       final QuerySnapshot rssFeedArticleSnapshot =
@@ -28,7 +27,6 @@ class RssFeedArticlesRepository {
       List<RssFeedArticle> articles = rssFeedArticleSnapshot.docs
           .map((doc) => RssFeedArticle.fromDocument(doc))
           .toList();
-      print(articles.length);
       return articles;
     } catch (e) {
       throw Exception(e);

@@ -69,7 +69,6 @@ class RssFeedPage extends ConsumerWidget {
                       topicName: selectedTopic!.name);
                   topicsRssFeedAticlesNotifier.setSelectedTopicName(
                       topicName: selectedTopic!.name);
-                  print(initialIndex);
                 });
               } else if (loadedTopicsRssFeedArticles.isEmpty &&
                   init &&

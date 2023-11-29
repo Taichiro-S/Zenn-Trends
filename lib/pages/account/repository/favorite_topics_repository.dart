@@ -29,7 +29,6 @@ class FavoriteTopicsRepository {
   Future<List<String>> fetchFavoriteTopics({required User user}) async {
     List<String> topicIds = [];
     try {
-      print('fetch favorite topics');
       QuerySnapshot snapshot = await _firestore
           .collection('users_info')
           .doc(user.uid)

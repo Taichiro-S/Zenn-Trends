@@ -86,9 +86,6 @@ class TopicsRssFeedArticles extends _$TopicsRssFeedArticles {
             state.topicsRssFeedArticles[topicName]!.rssFeedArticles
                 is! AsyncData) ||
         state.isLoadingMore) {
-      print(topicName);
-      print(state
-          .topicsRssFeedArticles[topicName]!.rssFeedArticles.value!.length);
       return;
     }
     state = state.copyWith(isLoadingMore: true);

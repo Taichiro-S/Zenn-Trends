@@ -57,24 +57,6 @@ class ArticleContainerWidget extends ConsumerWidget {
                 width: MediaQuery.of(context).size.width,
                 child: CachedNetworkImage(imageUrl: article.enclosure ?? '')),
           ],
-        )
-        // Card(
-        //     elevation: 3,
-        //     child: Padding(
-        //         padding: const EdgeInsets.all(16),
-        //         child: Column(children: [
-        //           RichText(
-        //               overflow: TextOverflow.ellipsis,
-        //               maxLines: 4,
-        //               text: TextSpan(children: [
-        //                 TextSpan(
-        //                     text: article.title,
-        //                     style: const TextStyle(
-        //                         color: Colors.black,
-        //                         fontSize: 18,
-        //                         fontWeight: FontWeight.bold)),
-        //               ])),
-        //         ]))),
-        );
+        ));
   }
 }
