@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:zenn_trends/constant/firestore.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
@@ -9,6 +10,7 @@ import 'package:zenn_trends/pages/ranking/service/display_num.dart';
 import 'package:zenn_trends/pages/ranking/widget/bar_indicator_widget.dart';
 import 'package:zenn_trends/pages/ranking/widget/favorite_icon_widget.dart';
 import 'package:zenn_trends/routes/router.dart';
+import 'package:zenn_trends/widget/custom_circle_avator.dart';
 
 class TopicContainerWidget extends ConsumerWidget {
   const TopicContainerWidget({
@@ -25,14 +27,15 @@ class TopicContainerWidget extends ConsumerWidget {
     final router = AutoRouter.of(context);
     return ListTile(
       leading: Column(children: [
-        CircleAvatar(
-          backgroundColor: Colors.white70,
-          backgroundImage: rankedTopic.imageUrl != null
-              ? CachedNetworkImageProvider(rankedTopic.imageUrl!)
-              : const AssetImage('assets/images/no_image.png')
-                  as ImageProvider<Object>,
-          radius: 16,
-        ),
+        // CircleAvatar(
+        //   backgroundColor: Colors.white70,
+        //   backgroundImage: rankedTopic.imageUrl != null
+        //       ? CachedNetworkImageProvider(rankedTopic.imageUrl!)
+        //       : const AssetImage('assets/images/no_image.png')
+        //           as ImageProvider<Object>,
+        //   radius: 16,
+        // ),
+        CustomCircleAvator(imageUrl: rankedTopic.imageUrl),
         Expanded(
             child: Padding(
           padding: const EdgeInsets.only(top: 5),
@@ -57,15 +60,13 @@ class TopicContainerWidget extends ConsumerWidget {
         FavoriteIconWidget(rankedTopic: rankedTopic),
         IconButton(
             onPressed: () async {
-              router.push(RssFeedRoute(selectedTopic: rankedTopic));
-              // if (await canLaunchUrl(uri)) {
-              //   launchUrl(uri);
-              // }
+              router.push(
+                RssFeedOfTopicRoute(selectedTopic: rankedTopic),
+              );
             },
             icon: const Icon(
               Icons.description,
               size: 20,
-              // size: 24,
             ))
       ]),
       subtitle: Column(

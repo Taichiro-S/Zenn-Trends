@@ -1,43 +1,55 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/constant/default_value.dart';
-import 'package:zenn_trends/pages/rss_feed/provider/scroll_controller_provider.dart';
 import 'package:zenn_trends/pages/rss_feed/provider/topics_rss_feed_articles_provider.dart';
 import 'package:zenn_trends/pages/rss_feed/widget/article_container_widget.dart';
-import 'package:zenn_trends/widget/skelton_container_widget.dart';
 import 'package:zenn_trends/theme/app_theme.dart';
-import 'package:zenn_trends/widget/circle_loading_widget.dart';
+import 'package:zenn_trends/widget/skeleton_for_stickyheader_widget.dart';
 
 class RssFeedOfTopicWidget extends ConsumerWidget {
   const RssFeedOfTopicWidget({
     Key? key,
     required this.topicName,
+    this.user,
   }) : super(key: key);
   final String topicName;
-
+  final User? user;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final articles = ref.watch(topicsRssFeedArticlesProvider.select(
         (state) => state.topicsRssFeedArticles[topicName]?.rssFeedArticles));
-    final scrollController = ref.watch(scrollControllerNotifierProvider);
+    final articlesScrollController = ScrollController();
+    articlesScrollController.addListener(() {
+      if (articlesScrollController.position.pixels ==
+          articlesScrollController.position.maxScrollExtent) {
+        final topicName = ref.watch(topicsRssFeedArticlesProvider
+            .select((state) => state.selectedTopicName));
+        if (topicName != '') {
+          ref
+              .read(topicsRssFeedArticlesProvider.notifier)
+              .getMoreTopicsRssFeedArticles(topicName: topicName);
+        }
+      }
+    });
     final lastDoc = ref.watch(topicsRssFeedArticlesProvider.select(
         (state) => state.topicsRssFeedArticles[topicName]?.lastDocument));
     if (articles == null) {
       return ListView.builder(
-        controller: scrollController,
+        controller: articlesScrollController,
         itemCount: 3,
         itemBuilder: (context, index) {
-          return const SkeltonContainerWidget();
+          return const SkeltonContainerForStickyHeaderWidget();
         },
       );
     }
     return articles.when(loading: () {
       return ListView.builder(
-        controller: scrollController,
+        controller: articlesScrollController,
         itemCount: 3,
         itemBuilder: (context, index) {
-          return const SkeltonContainerWidget();
+          return const SkeltonContainerForStickyHeaderWidget();
         },
       );
     }, error: (error, stack) {
@@ -50,7 +62,7 @@ class RssFeedOfTopicWidget extends ConsumerWidget {
       } else {
         return RefreshIndicator(
             child: ListView.builder(
-              controller: scrollController,
+              controller: articlesScrollController,
               itemCount: articles.length + 1,
               itemBuilder: (context, index) {
                 if (index == articles.length) {
@@ -76,7 +88,8 @@ class RssFeedOfTopicWidget extends ConsumerWidget {
 
                 final article = articles[index];
 
-                return ArticleContainerWidget(article: article, index: index);
+                return ArticleContainerWidget(
+                    user: user, article: article, index: index);
               },
             ),
             onRefresh: () async {

@@ -9,22 +9,27 @@ const ZENN_API_TOPICS = 'https://zenn.dev/api/topics?count=100&page='
 const PAGES = 3
 
 const TOPICS_COLLECTION = 'topics'
-// const TOPICS_TEST_COLLECTION = 'topics_test'
-
+const TOPICS_CHANGE_COLLECTION = 'topics_change'
 const MONTHLY_RANKING_COLLECTION = 'monthly_ranking'
 const WEEKLY_RANKING_COLLECTION = 'weekly_ranking'
 const TOPICS_HISTORY_SUBCOLLECTION = 'history'
+const RSS_FEED_COLLECTION = 'rss_feed'
+const TOPICS_ARTICLES_SUBCOLLECTION = 'articles'
 
 const TIME_TO_FETCH_ZENN_TAGS = '0 6 * * *'
-const TIME_TO_CALC_RANKING = '5 6 * * *'
-const TIME_TO_FETCH_ARTICLES = '15 0,6,12,18 * * *'
-const TIME_TO_DELETE_OLD_ARTICLES = '30 6 * * *'
+const TIME_TO_CALC_RANKING = '1 6 * * *'
+const TIME_TO_FETCH_ARTICLES = '11 0,6,12,18 * * *'
+const TIME_TO_DELETE_OLD_ARTICLES = '12 6 * * *'
 
-// fetching zenn tags takes about 10s
-// calculating weekly ranking takes about 160s
-// calculating monthly ranking takes about 340s
+// fetching zenn tags takes about 4s
+// calculating weekly ranking takes about 280s
+// calculating monthly ranking takes about 450s
+// updating rss feed takes about 30s
+// deleting old articles takes about 30s
 const FETCH_ZENN_TAG_TIMEOUT = 60
 const CALC_RANKING_TIMEOUT = 540
+const FETCH_ARTICLES_TIMEOUT = 60
+const DELETE_OLD_ARTICLES_TIMEOUT = 60
 
 const WEEKLY_TAGGING_COUNT_CUTOFF = 7
 const MONTHLY_TAGGING_COUNT_CUTOFF = 30
@@ -33,7 +38,7 @@ admin.initializeApp()
 const db = admin.firestore()
 
 // 毎日6時にZennのタグ情報をAPIから取得して保存する
-exports.fetchZennTagsWithBatch = functions
+exports.fetchZennTopics = functions
   .runWith({ timeoutSeconds: FETCH_ZENN_TAG_TIMEOUT })
   .pubsub.schedule(TIME_TO_FETCH_ZENN_TAGS)
   .timeZone('Asia/Tokyo')
@@ -45,8 +50,6 @@ exports.fetchZennTagsWithBatch = functions
         allTopics = allTopics.concat(response.data.topics)
       }
 
-      console.log('Fetched data:', allTopics.length)
-
       const saveDate = new Date()
       const batch = db.batch()
       for (const topic of allTopics) {
@@ -54,7 +57,6 @@ exports.fetchZennTagsWithBatch = functions
           .collection(TOPICS_COLLECTION)
           .doc(topic.id.toString())
 
-        // 更新または新規作成のバッチを追加
         batch.set(topicRef, { ...topic, updated_at: saveDate }, { merge: true })
         batch.set(
           topicRef
@@ -78,8 +80,108 @@ exports.fetchZennTagsWithBatch = functions
     }
   })
 
+exports.calcTopicChages = functions
+  .runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule(TIME_TO_CALC_RANKING)
+  .timeZone('Asia/Tokyo')
+  .onRun(async (context) => {
+    try {
+      let allTopics = []
+      for (let page = 1; page <= PAGES; page++) {
+        const response = await axios.get(ZENN_API_TOPICS + page)
+        allTopics = allTopics.concat(response.data.topics)
+      }
+
+      const getOneDayRange = (date) => {
+        const startOfDay = new Date(date)
+        startOfDay.setHours(startOfDay.getHours() - 24)
+        const endOfDay = new Date(date)
+        return { startOfDay, endOfDay }
+      }
+      const now = new Date()
+      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+      const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+      const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+      const { startOfDay: startOfOneDayAgo, endOfDay: endOfOneDayAgo } =
+        getOneDayRange(oneDayAgo)
+      const { startOfDay: startOfOneWeekAgo, endOfDay: endOfOneWeekAgo } =
+        getOneDayRange(oneWeekAgo)
+      const { startOfDay: startOfOneMonthAgo, endOfDay: endOfOneMonthAgo } =
+        getOneDayRange(oneMonthAgo)
+      const batch = db.batch()
+      for (const topic of allTopics) {
+        const topicSaveRef = db
+          .collection(TOPICS_CHANGE_COLLECTION)
+          .doc(topic.name.toString())
+        const topicRef = db
+          .collection(TOPICS_COLLECTION)
+          .doc(topic.id.toString())
+        let dailyTaggingsCountChange = null
+        let weeklyTaggingsCountChange = null
+        let monthlyTaggingsCountChange = null
+        const historyRef = topicRef.collection(TOPICS_HISTORY_SUBCOLLECTION)
+        const oneDayAgoSnapshot = await historyRef
+          .where('date', '>=', startOfOneDayAgo)
+          .where('date', '<=', endOfOneDayAgo)
+          .orderBy('date', 'desc')
+          .limit(1)
+          .get()
+        const oneWeekAgoSnapshot = await historyRef
+          .where('date', '>=', startOfOneWeekAgo)
+          .where('date', '<=', endOfOneWeekAgo)
+          .orderBy('date', 'desc')
+          .limit(1)
+          .get()
+        const oneMonthAgoSnapshot = await historyRef
+          .where('date', '>=', startOfOneMonthAgo)
+          .where('date', '<=', endOfOneMonthAgo)
+          .orderBy('date', 'desc')
+          .limit(1)
+          .get()
+        if (!oneDayAgoSnapshot.empty) {
+          dailyTaggingsCountChange =
+            topic.taggings_count -
+            oneDayAgoSnapshot.docs[0].data().taggings_count
+        }
+        if (!oneMonthAgoSnapshot.empty) {
+          monthlyTaggingsCountChange =
+            topic.taggings_count -
+            oneMonthAgoSnapshot.docs[0].data().taggings_count
+        }
+        if (!oneWeekAgoSnapshot.empty) {
+          weeklyTaggingsCountChange =
+            topic.taggings_count -
+            oneWeekAgoSnapshot.docs[0].data().taggings_count
+        }
+
+        batch.set(topicSaveRef, { ...topic, updated_at: now }, { merge: true })
+        batch.set(
+          topicSaveRef
+            .collection(TOPICS_HISTORY_SUBCOLLECTION)
+            .doc(now.toISOString()),
+          {
+            taggings_count: topic.taggings_count,
+            daily_taggings_count_change: dailyTaggingsCountChange,
+            weekly_taggings_count_change: weeklyTaggingsCountChange,
+            monthly_taggings_count_change: monthlyTaggingsCountChange,
+            date: now,
+          },
+          { merge: true },
+        )
+      }
+      await batch.commit()
+      return null
+    } catch (error) {
+      console.error('Error fetching data:', error.message)
+      throw new functions.https.HttpsError(
+        'internal',
+        'Failed to fetch and store data.',
+      )
+    }
+  })
+
 // 毎日6:30に、Firestoreに保存されているタグ情報を元に、ランキングを作成する
-exports.calculateMonthlyRankingWithBatch = functions
+exports.calculateMonthlyRanking = functions
   .runWith({ timeoutSeconds: CALC_RANKING_TIMEOUT })
   .pubsub.schedule(TIME_TO_CALC_RANKING)
   .timeZone('Asia/Tokyo')
@@ -158,7 +260,6 @@ exports.calculateMonthlyRankingWithBatch = functions
           continue
         }
         const monthlyTaggingsCountHistory = []
-        // const createdAt = new Date()
         for (let i = 0; i < 30; i++) {
           const createdAt = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
           monthlyTaggingsCountHistory.push({
@@ -198,7 +299,7 @@ exports.calculateMonthlyRankingWithBatch = functions
     }
   })
 
-exports.calculateWeeklyRankingWithBatch = functions
+exports.calculateWeeklyRanking = functions
   .runWith({ timeoutSeconds: CALC_RANKING_TIMEOUT })
   .pubsub.schedule(TIME_TO_CALC_RANKING)
   .timeZone('Asia/Tokyo')
@@ -319,7 +420,7 @@ exports.calculateWeeklyRankingWithBatch = functions
 
 // 毎日7時に、Firestoreに保存されているタグ情報を元に、RSSフィードを取得して保存する
 exports.getTopicsRssFeed = functions
-  .runWith({ timeoutSeconds: CALC_RANKING_TIMEOUT })
+  .runWith({ timeoutSeconds: FETCH_ARTICLES_TIMEOUT })
   .pubsub.schedule(TIME_TO_FETCH_ARTICLES)
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
@@ -383,7 +484,6 @@ exports.getTopicsRssFeed = functions
           }
         })
       }
-      console.log('topicNames', topicNames)
       const currentTime = admin.firestore.Timestamp.now()
       // 保存されたトピック名からRSSフィードを取得して保存する
       for (let i = 0; i < topicNames.length; i++) {
@@ -405,7 +505,7 @@ exports.getTopicsRssFeed = functions
           const items = result.rss.channel[0].item
           const oneMonthAgo = new Date()
           oneMonthAgo.setDate(oneMonthAgo.getDate() - 30)
-          const topicRef = db.collection('rss_feed').doc(topicName)
+          const topicRef = db.collection(RSS_FEED_COLLECTION).doc(topicName)
           batch.set(
             topicRef,
             {
@@ -427,9 +527,9 @@ exports.getTopicsRssFeed = functions
             const guid = item.guid[0]._
             const slug = guid.split('/').pop()
             const articleRef = db
-              .collection('rss_feed')
+              .collection(RSS_FEED_COLLECTION)
               .doc(topicName)
-              .collection('articles')
+              .collection(TOPICS_ARTICLES_SUBCOLLECTION)
               .doc(slug)
 
             const enclosureUrl =
@@ -465,7 +565,7 @@ exports.getTopicsRssFeed = functions
   })
 
 exports.deleteOldArticles = functions
-  .runWith({ timeoutSeconds: CALC_RANKING_TIMEOUT })
+  .runWith({ timeoutSeconds: DELETE_OLD_ARTICLES_TIMEOUT })
   .pubsub.schedule(TIME_TO_DELETE_OLD_ARTICLES)
   .onRun(async (context) => {
     const db = admin.firestore()
@@ -473,11 +573,13 @@ exports.deleteOldArticles = functions
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
 
     try {
-      const rssFeedRef = db.collection('rss_feed')
+      const rssFeedRef = db.collection(RSS_FEED_COLLECTION)
       const topicsSnapshot = await rssFeedRef.get()
 
       for (const topicDoc of topicsSnapshot.docs) {
-        const articlesRef = topicDoc.ref.collection('articles')
+        const articlesRef = topicDoc.ref.collection(
+          TOPICS_ARTICLES_SUBCOLLECTION,
+        )
         const oldArticlesSnapshot = await articlesRef
           .where('published_date', '<', oneMonthAgo)
           .get()

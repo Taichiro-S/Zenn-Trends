@@ -39,12 +39,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RootPage(),
       );
     },
-    RssFeedRoute.name: (routeData) {
-      final args = routeData.argsAs<RssFeedRouteArgs>(
-          orElse: () => const RssFeedRouteArgs());
+    RssFeedListRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RssFeedPage(
+        child: const RssFeedListPage(),
+      );
+    },
+    RssFeedOfTopicRoute.name: (routeData) {
+      final args = routeData.argsAs<RssFeedOfTopicRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: RssFeedOfTopicPage(
           key: args.key,
           selectedTopic: args.selectedTopic,
         ),
@@ -116,40 +121,54 @@ class RootRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RssFeedPage]
-class RssFeedRoute extends PageRouteInfo<RssFeedRouteArgs> {
-  RssFeedRoute({
+/// [RssFeedListPage]
+class RssFeedListRoute extends PageRouteInfo<void> {
+  const RssFeedListRoute({List<PageRouteInfo>? children})
+      : super(
+          RssFeedListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RssFeedListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RssFeedOfTopicPage]
+class RssFeedOfTopicRoute extends PageRouteInfo<RssFeedOfTopicRouteArgs> {
+  RssFeedOfTopicRoute({
     Key? key,
-    RankedTopic? selectedTopic,
+    required RankedTopic selectedTopic,
     List<PageRouteInfo>? children,
   }) : super(
-          RssFeedRoute.name,
-          args: RssFeedRouteArgs(
+          RssFeedOfTopicRoute.name,
+          args: RssFeedOfTopicRouteArgs(
             key: key,
             selectedTopic: selectedTopic,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'RssFeedRoute';
+  static const String name = 'RssFeedOfTopicRoute';
 
-  static const PageInfo<RssFeedRouteArgs> page =
-      PageInfo<RssFeedRouteArgs>(name);
+  static const PageInfo<RssFeedOfTopicRouteArgs> page =
+      PageInfo<RssFeedOfTopicRouteArgs>(name);
 }
 
-class RssFeedRouteArgs {
-  const RssFeedRouteArgs({
+class RssFeedOfTopicRouteArgs {
+  const RssFeedOfTopicRouteArgs({
     this.key,
-    this.selectedTopic,
+    required this.selectedTopic,
   });
 
   final Key? key;
 
-  final RankedTopic? selectedTopic;
+  final RankedTopic selectedTopic;
 
   @override
   String toString() {
-    return 'RssFeedRouteArgs{key: $key, selectedTopic: $selectedTopic}';
+    return 'RssFeedOfTopicRouteArgs{key: $key, selectedTopic: $selectedTopic}';
   }
 }
 

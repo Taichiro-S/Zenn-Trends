@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'bookmarked_articles_provider.dart';
+part of 'read_articles_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookmarkedArticlesHash() =>
-    r'c9695ce542a681416c9f6760bb0915d9b5c2f095';
+String _$readArticlesRepositoryHash() =>
+    r'bacb3480886c9cbba9c22c565b4b2365572cf7d8';
 
-/// See also [BookmarkedArticles].
-@ProviderFor(BookmarkedArticles)
-final bookmarkedArticlesProvider = AutoDisposeNotifierProvider<
-    BookmarkedArticles, BookmarkedArticlesState>.internal(
-  BookmarkedArticles.new,
-  name: r'bookmarkedArticlesProvider',
+/// See also [readArticlesRepository].
+@ProviderFor(readArticlesRepository)
+final readArticlesRepositoryProvider =
+    AutoDisposeProvider<ReadArticlesRepository>.internal(
+  readArticlesRepository,
+  name: r'readArticlesRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$bookmarkedArticlesHash,
+      : _$readArticlesRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$BookmarkedArticles = AutoDisposeNotifier<BookmarkedArticlesState>;
+typedef ReadArticlesRepositoryRef
+    = AutoDisposeProviderRef<ReadArticlesRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

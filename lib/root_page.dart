@@ -8,7 +8,12 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      routes: [const RankingRoute(), const UserSettingsRoute(), RssFeedRoute()],
+      routes: const [
+        RankingRoute(),
+        UserSettingsRoute(),
+        RssFeedListRoute(),
+        AccountRoute()
+      ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -26,6 +31,10 @@ class RootPage extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.article),
               label: 'Articles',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Account',
             ),
           ],
         );
