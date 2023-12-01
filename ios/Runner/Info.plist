@@ -50,14 +50,14 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key><true/>
 	</dict>
-	<key>FLTEnableImpeller</key>
+	<!-- <key>FLTEnableImpeller</key>
 	<false />
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>http</string>
 		<string>https</string>
 		<string>zenntrends</string>
-	</array>
+	</array> -->
 	<key>CFBundleURLTypes</key>
 	<array>
 	<dict>
@@ -71,7 +71,7 @@
 	</dict>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>zenntrends</string>
+	<string>Zenn Trends</string>
 	<!--  -->
 </dict>
 </plist>
