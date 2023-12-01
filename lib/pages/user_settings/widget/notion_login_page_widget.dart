@@ -30,6 +30,7 @@ class NotionLoginPageWidget extends ConsumerWidget {
           try {
             // await deleteCookies(url);
             if (url.toString().contains('/oauth/callback')) {
+              print(url);
               await notionOauthApi.login(url, uuid);
               webViewNotifier.hide();
               ref.invalidate(notionOauthApiProvider);
