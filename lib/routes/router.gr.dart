@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AccountPage(),
       );
     },
+    NotionAccountRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const NotionAccountPage(),
+      );
+    },
     PrivacyPolicyRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -74,6 +80,20 @@ class AccountRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AccountRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [NotionAccountPage]
+class NotionAccountRoute extends PageRouteInfo<void> {
+  const NotionAccountRoute({List<PageRouteInfo>? children})
+      : super(
+          NotionAccountRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NotionAccountRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

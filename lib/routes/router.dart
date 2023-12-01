@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:zenn_trends/pages/account/account_page.dart';
+import 'package:zenn_trends/pages/notion_account/account_page.dart';
+
 import 'package:zenn_trends/pages/privacy_policy/privacy_policy_page.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/ranking_page.dart';
@@ -23,6 +25,7 @@ class AppRouter extends _$AppRouter {
           AutoRoute(path: '', page: AccountRoute.page),
         ]),
         AutoRoute(path: '/account', page: AccountRoute.page),
+        AutoRoute(path: '/notion_account', page: NotionAccountRoute.page),
         AutoRoute(path: '/rss_feed_of_topic', page: RssFeedOfTopicRoute.page),
         AutoRoute(path: '/privacy_policy', page: PrivacyPolicyRoute.page),
       ];

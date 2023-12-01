@@ -6,12 +6,12 @@ part of 'notion_auth_storage_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notionAuthStorageHash() => r'062560ba094d63955259587806031918e5076453';
+String _$notionAuthStorageHash() => r'f2d151003ee5a344a3c035c89b7079740da3eb01';
 
 /// See also [NotionAuthStorage].
 @ProviderFor(NotionAuthStorage)
-final notionAuthStorageProvider =
-    AutoDisposeAsyncNotifierProvider<NotionAuthStorage, bool>.internal(
+final notionAuthStorageProvider = AutoDisposeNotifierProvider<NotionAuthStorage,
+    NotionAuthStorageState>.internal(
   NotionAuthStorage.new,
   name: r'notionAuthStorageProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final notionAuthStorageProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$NotionAuthStorage = AutoDisposeAsyncNotifier<bool>;
+typedef _$NotionAuthStorage = AutoDisposeNotifier<NotionAuthStorageState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

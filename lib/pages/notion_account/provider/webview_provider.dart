@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:zenn_trends/pages/user_settings/model/webview_state.dart';
+import 'package:zenn_trends/pages/notion_account/model/webview_state.dart';
 part 'webview_provider.g.dart';
 
 @riverpod
