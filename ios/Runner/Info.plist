@@ -46,29 +46,17 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<!-- add -->
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>zenntrend</string>
-			</array>
-		</dict>
-	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key><true/>
 	</dict>
-	<key>CFBundleDisplayName</key>
-	<string>zenntrend</string>
 	<key>FLTEnableImpeller</key>
 	<false />
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>http</string>
 		<string>https</string>
+		<string>zenntrends</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -78,9 +66,12 @@
 		<key>CFBundleURLSchemes</key>
 		<array>
 			<string>com.googleusercontent.apps.987919199528-h7n06f2s3iehp7b86b8k6esi01kgcalf</string>
+			<string>zenntrends</string>
 		</array>
 	</dict>
 	</array>
+	<key>CFBundleDisplayName</key>
+	<string>zenntrends</string>
 	<!--  -->
 </dict>
 </plist>

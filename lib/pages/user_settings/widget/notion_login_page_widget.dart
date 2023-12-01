@@ -52,8 +52,8 @@ class NotionLoginPageWidget extends ConsumerWidget {
       },
       onLoadError: (controller, url, code, message) {
         // because onLoadError is also called when the user is redirected to the callback url
-        // allow redirect to zenntrend://oauth/callback
-        if (url.toString().startsWith('zenntrend') &&
+        // allow redirect to zenntrends://oauth/callback
+        if (url.toString().startsWith('zenntrends') &&
             url.toString().contains('/oauth/callback')) {
           return;
         }

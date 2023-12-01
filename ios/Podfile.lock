@@ -48,6 +48,13 @@ PODS:
   - FirebaseFirestore/WithLeveldb (10.17.0):
     - FirebaseFirestore/Base
   - Flutter (1.0.0)
+  - flutter_inappwebview (0.0.1):
+    - Flutter
+    - flutter_inappwebview/Core (= 0.0.1)
+    - OrderedSet (~> 5.0)
+  - flutter_inappwebview/Core (0.0.1):
+    - Flutter
+    - OrderedSet (~> 5.0)
   - flutter_secure_storage (6.0.0):
     - Flutter
   - fluttertoast (0.0.2):
@@ -87,6 +94,7 @@ PODS:
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
+  - OrderedSet (5.0.0)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -108,6 +116,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.17.0`)
   - Flutter (from `Flutter`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
@@ -130,6 +139,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - nanopb
+    - OrderedSet
     - PromisesObjC
     - RecaptchaInterop
     - Toast
@@ -146,6 +156,8 @@ EXTERNAL SOURCES:
     :tag: 10.17.0
   Flutter:
     :path: Flutter
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   fluttertoast:
@@ -178,6 +190,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 8eb002e564b533bdcf1ba011f33f2b5c10e2ed4a
   FirebaseFirestore: 53a178f4f4b180da7fcdc64dc6ce776a052f48c5
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -187,6 +200,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
+  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
