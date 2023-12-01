@@ -27,9 +27,10 @@ class NotionLoginPageWidget extends ConsumerWidget {
         if (url != null) {
           webViewNotifier.loading();
           webViewNotifier.clearError();
+          print(url);
           try {
             // await deleteCookies(url);
-            if (url.toString().contains('/oauth/callback')) {
+            if (url.toString().startsWith('zenntrends://oauth/callback?code')) {
               print(url);
               await notionOauthApi.login(url, uuid);
               webViewNotifier.hide();
@@ -50,7 +51,8 @@ class NotionLoginPageWidget extends ConsumerWidget {
         webViewNotifier.loaded();
       },
       onLoadError: (controller, url, code, message) {
-        // allow redirect to qiitatrend://oauth/callback
+        // because onLoadError is also called when the user is redirected to the callback url
+        // allow redirect to zenntrend://oauth/callback
         if (url.toString().startsWith('zenntrend') &&
             url.toString().contains('/oauth/callback')) {
           return;
