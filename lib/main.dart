@@ -1,7 +1,6 @@
 // import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/routes/router.dart';
@@ -9,8 +8,6 @@ import '/routes/router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await dotenv.load(fileName: '.env');
-  // OpenAI.apiKey = dotenv.env['OPENAI_API_KEY'] ?? '';
 
   runApp(
     const ProviderScope(child: MyApp()),

@@ -1,26 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'firebase_auth_storage_provider.dart';
+part of 'notion_oauth_api.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$qiitaAuthStorageHash() => r'af2c6ce0b3248d93e6b3c87e702074b258557dbd';
+String _$notionOauthApiHash() => r'96747956ba2a1154d31da93e17ae0845b3a19844';
 
-/// See also [QiitaAuthStorage].
-@ProviderFor(QiitaAuthStorage)
-final qiitaAuthStorageProvider =
-    AutoDisposeAsyncNotifierProvider<QiitaAuthStorage, bool>.internal(
-  QiitaAuthStorage.new,
-  name: r'qiitaAuthStorageProvider',
+/// See also [notionOauthApi].
+@ProviderFor(notionOauthApi)
+final notionOauthApiProvider = AutoDisposeProvider<NotionOauthApi>.internal(
+  notionOauthApi,
+  name: r'notionOauthApiProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$qiitaAuthStorageHash,
+      : _$notionOauthApiHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$QiitaAuthStorage = AutoDisposeAsyncNotifier<bool>;
+typedef NotionOauthApiRef = AutoDisposeProviderRef<NotionOauthApi>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

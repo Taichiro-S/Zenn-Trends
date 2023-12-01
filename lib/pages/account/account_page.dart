@@ -2,26 +2,27 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:zenn_trends/pages/account/provider/bookmarked_articles_provider.dart';
 import 'package:zenn_trends/pages/account/provider/google_auth_provider.dart';
-import 'package:zenn_trends/pages/account/widget/google_auth_widget.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:zenn_trends/routes/router.dart';
+import 'package:zenn_trends/pages/account/provider/read_articles_provider.dart';
+import 'package:zenn_trends/pages/account/widget/bookmarked_articles_widget.dart';
+import 'package:zenn_trends/pages/account/widget/google_login_button.dart';
+import 'package:zenn_trends/pages/account/widget/google_logout_button.dart';
+import 'package:zenn_trends/pages/account/widget/read_articles_widget.dart';
 import 'package:zenn_trends/theme/app_theme.dart';
 import 'package:zenn_trends/widget/custom_circle_avator.dart';
 
 @RoutePage()
 class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final googleAuth = ref.watch(googleAuthProvider);
-    final googleAuthNotifier = ref.read(googleAuthProvider.notifier);
+    final readArticlesAsync =
+        ref.watch(readArticlesProvider.select((state) => state.articles));
     final bookmarkedArticlesAsync =
         ref.watch(bookmarkedArticlesProvider.select((state) => state.articles));
-
-    final router = AutoRouter.of(context);
     return Scaffold(
         appBar:
             AppBar(title: Text("アカウント", style: AppTheme.light().textTheme.h60)),
@@ -47,53 +48,59 @@ class AccountPage extends ConsumerWidget {
                           user.email!,
                           style: AppTheme.light().textTheme.h20,
                         ),
+                        const GoogleLogOutButton(),
                         const Divider(),
-                        const DefaultTabController(
+                        DefaultTabController(
                             length: 2,
-                            child: Column(children: [
-                              TabBar(tabs: [
-                                Tab(
-                                  icon: Icon(LineAwesomeIcons.bookmark),
-                                  text: 'ブックマーク',
-                                ),
-                                Tab(
-                                  icon: Icon(LineAwesomeIcons.history),
-                                  text: '閲覧履歴',
-                                ),
-                              ]),
-                              Expanded(
-                                  child: TabBarView(children: [
-                                GoogleAuthWidget(),
-                                GoogleAuthWidget(),
-                              ]))
-                            ])),
-                      ]))
-                  // : [
-                  //   CircleAvatar(
-                  //     backgroundImage: user.photoURL != null
-                  //         ? NetworkImage(user.photoURL!)
-                  //         : const AssetImage('assets/images/no_image.png')
-                  //             as ImageProvider<Object>,
-                  //     radius: 40,
-                  //   ),
-                  //   Text(user.displayName ?? 'No Name'),
-                  //   ElevatedButton(
-                  //     onPressed: () async {
-                  //       await googleAuthNotifier.signOut();
-                  //       Fluttertoast.showToast(
-                  //           backgroundColor: AppTheme.light().appColors.primary,
-                  //           msg: "ログアウトしました");
-                  //     },
-                  //     child: const Text('ログアウト'),
-                  //   ),
-                  // ]
-                  );
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TabBar(tabs: [
+                                    Tab(
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                          const Icon(LineAwesomeIcons.bookmark),
+                                          const SizedBox(width: 4),
+                                          Text('ブックマーク',
+                                              style: AppTheme.light()
+                                                  .textTheme
+                                                  .h30),
+                                        ])),
+                                    Tab(
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                          const Icon(LineAwesomeIcons.history),
+                                          const SizedBox(width: 4),
+                                          Text('閲覧履歴',
+                                              style: AppTheme.light()
+                                                  .textTheme
+                                                  .h30),
+                                        ])),
+                                  ]),
+                                  const SizedBox(
+                                      height: 200,
+                                      child: TabBarView(children: [
+                                        BookmarkedArtilcesWidget(),
+                                        ReadArtilcesWidget()
+                                      ]))
+                                ])),
+                      ])));
             } else {
-              router.navigate(const RankingRoute());
-              return Container();
+              return Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    Text('ログインしていません', style: AppTheme.light().textTheme.h50),
+                    const SizedBox(height: 10),
+                    const GoogleLogInButton()
+                  ]));
             }
           },
-          loading: () => const CircularProgressIndicator(),
+          loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, stack) {
             Fluttertoast.showToast(
                 backgroundColor: AppTheme.light().appColors.error,
