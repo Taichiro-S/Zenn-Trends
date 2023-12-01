@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 enum Collection {
   topics,
   weeklyRanking,
@@ -61,3 +63,9 @@ enum HistoryProperty {
     }
   }
 }
+
+// rss_feedコレクションの更新時刻
+const TIME_TO_FETCH_RSS_FEED = [6, 12, 18, 24];
+
+const BOOKMARK_LIMIT = 100;
+const READ_LIMIT = 100;

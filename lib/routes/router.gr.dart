@@ -33,16 +33,26 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RankingPage(),
       );
     },
-    RecentArticleRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RecentArticlePage(),
-      );
-    },
     RootRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const RootPage(),
+      );
+    },
+    RssFeedListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RssFeedListPage(),
+      );
+    },
+    RssFeedOfTopicRoute.name: (routeData) {
+      final args = routeData.argsAs<RssFeedOfTopicRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: RssFeedOfTopicPage(
+          key: args.key,
+          selectedTopic: args.selectedTopic,
+        ),
       );
     },
     UserSettingsRoute.name: (routeData) {
@@ -97,20 +107,6 @@ class RankingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RecentArticlePage]
-class RecentArticleRoute extends PageRouteInfo<void> {
-  const RecentArticleRoute({List<PageRouteInfo>? children})
-      : super(
-          RecentArticleRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RecentArticleRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
   const RootRoute({List<PageRouteInfo>? children})
@@ -122,6 +118,58 @@ class RootRoute extends PageRouteInfo<void> {
   static const String name = 'RootRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RssFeedListPage]
+class RssFeedListRoute extends PageRouteInfo<void> {
+  const RssFeedListRoute({List<PageRouteInfo>? children})
+      : super(
+          RssFeedListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RssFeedListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RssFeedOfTopicPage]
+class RssFeedOfTopicRoute extends PageRouteInfo<RssFeedOfTopicRouteArgs> {
+  RssFeedOfTopicRoute({
+    Key? key,
+    required RankedTopic selectedTopic,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RssFeedOfTopicRoute.name,
+          args: RssFeedOfTopicRouteArgs(
+            key: key,
+            selectedTopic: selectedTopic,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RssFeedOfTopicRoute';
+
+  static const PageInfo<RssFeedOfTopicRouteArgs> page =
+      PageInfo<RssFeedOfTopicRouteArgs>(name);
+}
+
+class RssFeedOfTopicRouteArgs {
+  const RssFeedOfTopicRouteArgs({
+    this.key,
+    required this.selectedTopic,
+  });
+
+  final Key? key;
+
+  final RankedTopic selectedTopic;
+
+  @override
+  String toString() {
+    return 'RssFeedOfTopicRouteArgs{key: $key, selectedTopic: $selectedTopic}';
+  }
 }
 
 /// generated route for

@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/constant/default_value.dart';
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 import 'package:zenn_trends/pages/ranking/model/display_settings_state.dart';
 
 part 'display_settings_provider.g.dart';

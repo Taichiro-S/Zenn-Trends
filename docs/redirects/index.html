@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirect</title>
+  </head>
+  <body>
+    <script>
+      var urlParams = new URLSearchParams(window.location.search);
+      var authCode = urlParams.get("code");
+    //   var authState = urlParams.get("state");
+      if (authCode == null){
+        window.location.replace(
+          "https://taichiro-s.github.io/zenn_trends/redirects/fallback.html"
+        );
+      } else {
+        window.location.replace(
+          "zenntrends://oauth/callback?code=" + authCode
+        );
+      }
+    </script>
+  </body>
+</html>

@@ -44,6 +44,12 @@ dependencies:
   fluttertoast: ^8.2.4
   flutter_easyloading: ^3.0.5
   mockito: ^5.4.3
+  sticky_headers: ^0.3.0+2
+  skeleton_text: ^3.0.1
+  line_awesome_flutter: ^2.0.0
+  envied: ^0.5.2
+  flutter_inappwebview: ^5.8.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -51,6 +57,7 @@ dev_dependencies:
   json_serializable: ^6.7.1
   flutter_lints: ^2.0.0
   test: ^1.24.3
+  envied_generator: ^0.5.2
 
 flutter:
   uses-material-design: true

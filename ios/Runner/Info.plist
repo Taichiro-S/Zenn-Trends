@@ -46,6 +46,8 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<!-- add -->
+	<key>FLTEnableImpeller</key>
+	<false />
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>http</string>

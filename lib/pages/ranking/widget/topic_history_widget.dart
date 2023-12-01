@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/model/taggings_count_change_history.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
@@ -37,8 +36,8 @@ class TopicHistoryWidget extends ConsumerWidget {
       List<TaggingsCountChangeHistory> originalDataset =
           rankedTopic.taggingsCountHistory!;
       int cumulativeChange = rankedTopic.taggingsCount;
-      Timestamp lastDate = rankedTopic.date;
-      List<Map<Timestamp, int>> cumulativeDataset = [
+      DateTime lastDate = rankedTopic.updatedAt;
+      List<Map<DateTime, int>> cumulativeDataset = [
         {lastDate: cumulativeChange}
       ];
       for (var i = 0; i < originalDataset.length - 1; i++) {
@@ -191,8 +190,7 @@ class TopicHistoryWidget extends ConsumerWidget {
       }
     }
 
-    List<DateTime> dates =
-        dataset.map((history) => history.date.toDate()).toList();
+    List<DateTime> dates = dataset.map((history) => history.date).toList();
     return LineChartData(
       borderData: FlBorderData(show: false),
       gridData: const FlGridData(show: false),

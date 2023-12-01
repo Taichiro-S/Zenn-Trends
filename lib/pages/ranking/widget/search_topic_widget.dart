@@ -35,13 +35,8 @@ class SearchTopic extends ConsumerWidget {
                       loadedTopics.searchWord!.isNotEmpty
               ? IconButton(
                   onPressed: () {
-                    if (loadedTopics.isSearching) {
-                      FocusScope.of(context).unfocus();
-                      quitSearching();
-                    } else if (loadedTopics.showSearchResult) {
-                      FocusScope.of(context).unfocus();
-                      quitSearching();
-                    }
+                    FocusScope.of(context).unfocus();
+                    quitSearching();
                   },
                   icon: const Icon(Icons.arrow_back, size: 20))
               : const Icon(Icons.search, size: 20),

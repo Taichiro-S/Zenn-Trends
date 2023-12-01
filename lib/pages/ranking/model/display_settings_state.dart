@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 part 'display_settings_state.freezed.dart';
 
 @freezed

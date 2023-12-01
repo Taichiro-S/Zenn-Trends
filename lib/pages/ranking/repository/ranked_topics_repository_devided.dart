@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/constant/default_value.dart';
-import 'package:zenn_trends/constant/firestore_arg.dart';
+import 'package:zenn_trends/constant/firestore.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 
 part 'ranked_topics_repository_devided.g.dart';
