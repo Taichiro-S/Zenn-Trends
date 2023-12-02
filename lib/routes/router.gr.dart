@@ -67,6 +67,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const UserSettingsPage(),
       );
     },
+    ZennArticleRoute.name: (routeData) {
+      final args = routeData.argsAs<ZennArticleRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ZennArticlePage(
+          key: args.key,
+          article: args.article,
+        ),
+      );
+    },
   };
 }
 
@@ -204,4 +214,42 @@ class UserSettingsRoute extends PageRouteInfo<void> {
   static const String name = 'UserSettingsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ZennArticlePage]
+class ZennArticleRoute extends PageRouteInfo<ZennArticleRouteArgs> {
+  ZennArticleRoute({
+    Key? key,
+    required RssFeedArticle article,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ZennArticleRoute.name,
+          args: ZennArticleRouteArgs(
+            key: key,
+            article: article,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ZennArticleRoute';
+
+  static const PageInfo<ZennArticleRouteArgs> page =
+      PageInfo<ZennArticleRouteArgs>(name);
+}
+
+class ZennArticleRouteArgs {
+  const ZennArticleRouteArgs({
+    this.key,
+    required this.article,
+  });
+
+  final Key? key;
+
+  final RssFeedArticle article;
+
+  @override
+  String toString() {
+    return 'ZennArticleRouteArgs{key: $key, article: $article}';
+  }
 }

@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notion_auth_storage_provider.dart';
+part of 'notion_database_api.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notionAuthStorageHash() => r'b8fb9a032d74a9182f633208d86b1f24e7160f69';
+String _$notionDatabaseApiHash() => r'8c0b73e5a88a0ab31f514a7644936d748da10177';
 
-/// See also [NotionAuthStorage].
-@ProviderFor(NotionAuthStorage)
-final notionAuthStorageProvider = AutoDisposeNotifierProvider<NotionAuthStorage,
-    NotionAuthStorageState>.internal(
-  NotionAuthStorage.new,
-  name: r'notionAuthStorageProvider',
+/// See also [notionDatabaseApi].
+@ProviderFor(notionDatabaseApi)
+final notionDatabaseApiProvider =
+    AutoDisposeProvider<NotionDatabaseApi>.internal(
+  notionDatabaseApi,
+  name: r'notionDatabaseApiProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$notionAuthStorageHash,
+      : _$notionDatabaseApiHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$NotionAuthStorage = AutoDisposeNotifier<NotionAuthStorageState>;
+typedef NotionDatabaseApiRef = AutoDisposeProviderRef<NotionDatabaseApi>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

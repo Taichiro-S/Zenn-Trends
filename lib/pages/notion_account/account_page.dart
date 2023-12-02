@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zenn_trends/pages/notion_account/api/notion_oauth_api.dart';
 import 'package:zenn_trends/pages/notion_account/provider/notion_auth_storage_provider.dart';
-import 'package:zenn_trends/pages/notion_account/provider/webview_provider.dart';
+import 'package:zenn_trends/pages/notion_account/provider/notion_integrate_webview_provider.dart';
 import 'package:zenn_trends/pages/notion_account/widget/notion_login_page_widget.dart';
 import 'package:zenn_trends/theme/app_colors.dart';
 import 'package:zenn_trends/theme/app_theme.dart';
@@ -16,8 +16,8 @@ class NotionAccountPage extends ConsumerWidget {
   const NotionAccountPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final webView = ref.watch(webViewProvider);
-    final webViewNotifier = ref.watch(webViewProvider.notifier);
+    final webView = ref.watch(notionIntegrateWebViewProvider);
+    final webViewNotifier = ref.read(notionIntegrateWebViewProvider.notifier);
     final notionOauthApi = ref.read(notionOauthApiProvider);
     final notionAuthStorageAsync = ref.watch(notionAuthStorageProvider
         .select((state) => state.notionAuthStorageState));
@@ -30,8 +30,12 @@ class NotionAccountPage extends ConsumerWidget {
       if (notionAuthStorageAsync is AsyncLoading) {
         ref.read(notionAuthStorageProvider.notifier).getNotionWorkspace();
       }
+      // if (notionAuthStorageAsync is AsyncData &&
+      //     notionAuthStorageAsync.value != null &&
+      //     notionAuthStorageAsync.value!.isAuth) {
+      //   ref.read(notionAuthStorageProvider.notifier).getNotionWorkspace();
+      // }
     });
-    print(notionAuthStorageAsync.value?.isAuth);
     if (webView.isOpen) {
       return Scaffold(
           appBar: AppBar(
@@ -78,6 +82,7 @@ class NotionAccountPage extends ConsumerWidget {
           body: notionAuthStorageAsync.when(
             data: (notionAuth) {
               if (notionAuth.isAuth) {
+                print(notionAuth.isAuth);
                 return Column(children: [
                   const Center(child: Text('連携済みです')),
                   const SizedBox(height: 10),

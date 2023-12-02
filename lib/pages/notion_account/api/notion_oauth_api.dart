@@ -1,18 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:zenn_trends/constant/api_endpoint.dart';
 import 'package:zenn_trends/constant/storage_key.dart';
 import 'package:zenn_trends/constant/url.dart';
 import 'package:zenn_trends/env/env.dart';
-import 'package:zenn_trends/pages/notion_account/model/notion_account.dart';
 import 'package:zenn_trends/service/secure_storage.dart';
-import 'package:uni_links/uni_links.dart';
 
 part 'notion_oauth_api.g.dart';
 
 class NotionOauthApi {
-  final String clientId = Env.notionOauthClientId;
-  final String clientSecret = Env.notionOauthClientSecret;
   final _secureStorage = SecureStorage();
 
   Future<void> login({required String url}) async {
@@ -28,9 +25,10 @@ class NotionOauthApi {
   }
 
   Future<String> _getAccessToken(String authorizationCode) async {
-    final String encoded = base64Encode(utf8.encode('$clientId:$clientSecret'));
+    final String encoded = base64Encode(utf8
+        .encode('${Env.notionOauthClientId}:${Env.notionOauthClientSecret}}'));
     final response = await http.post(
-      Uri.parse(NOTION_API_V1_ACCESS_TOKEN_URL),
+      Uri.parse(NOTION_API_V1_ACCESS_TOKEN),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:zenn_trends/constant/url.dart';
+import 'package:zenn_trends/constant/api_endpoint.dart';
 import 'package:zenn_trends/pages/recent_article/model/zenn_article.dart';
 
 class ZennRecentArticlesApi {
@@ -16,7 +16,7 @@ class ZennRecentArticlesApi {
       apiCall:
       for (var i = 1; i < maxPage; i++) {
         final response =
-            await http.get(Uri.parse('$ZENN_API_URL$recentArticlesPath$i'));
+            await http.get(Uri.parse('$ZENN_API$recentArticlesPath$i'));
         if (response.statusCode == 200) {
           final now = DateTime.now();
           final cutoff = now.subtract(Duration(days: duration));

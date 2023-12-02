@@ -8,7 +8,6 @@ part 'notion_user.g.dart';
 @freezed
 class NotionUser with _$NotionUser {
   const factory NotionUser({
-    required String object,
     required String id,
     required String? type,
     required String? name,

@@ -20,7 +20,6 @@ NotionUser _$NotionUserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$NotionUser {
-  String get object => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
@@ -40,8 +39,7 @@ abstract class $NotionUserCopyWith<$Res> {
       _$NotionUserCopyWithImpl<$Res, NotionUser>;
   @useResult
   $Res call(
-      {String object,
-      String id,
+      {String id,
       String? type,
       String? name,
       @JsonKey(name: 'avator_url') String? avatorUrl});
@@ -60,17 +58,12 @@ class _$NotionUserCopyWithImpl<$Res, $Val extends NotionUser>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? object = null,
     Object? id = null,
     Object? type = freezed,
     Object? name = freezed,
     Object? avatorUrl = freezed,
   }) {
     return _then(_value.copyWith(
-      object: null == object
-          ? _value.object
-          : object // ignore: cast_nullable_to_non_nullable
-              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -100,8 +93,7 @@ abstract class _$$NotionUserImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String object,
-      String id,
+      {String id,
       String? type,
       String? name,
       @JsonKey(name: 'avator_url') String? avatorUrl});
@@ -118,17 +110,12 @@ class __$$NotionUserImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? object = null,
     Object? id = null,
     Object? type = freezed,
     Object? name = freezed,
     Object? avatorUrl = freezed,
   }) {
     return _then(_$NotionUserImpl(
-      object: null == object
-          ? _value.object
-          : object // ignore: cast_nullable_to_non_nullable
-              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -153,8 +140,7 @@ class __$$NotionUserImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$NotionUserImpl implements _NotionUser {
   const _$NotionUserImpl(
-      {required this.object,
-      required this.id,
+      {required this.id,
       required this.type,
       required this.name,
       @JsonKey(name: 'avator_url') required this.avatorUrl});
@@ -162,8 +148,6 @@ class _$NotionUserImpl implements _NotionUser {
   factory _$NotionUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$NotionUserImplFromJson(json);
 
-  @override
-  final String object;
   @override
   final String id;
   @override
@@ -176,7 +160,7 @@ class _$NotionUserImpl implements _NotionUser {
 
   @override
   String toString() {
-    return 'NotionUser(object: $object, id: $id, type: $type, name: $name, avatorUrl: $avatorUrl)';
+    return 'NotionUser(id: $id, type: $type, name: $name, avatorUrl: $avatorUrl)';
   }
 
   @override
@@ -184,7 +168,6 @@ class _$NotionUserImpl implements _NotionUser {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NotionUserImpl &&
-            (identical(other.object, object) || other.object == object) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.name, name) || other.name == name) &&
@@ -194,8 +177,7 @@ class _$NotionUserImpl implements _NotionUser {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, object, id, type, name, avatorUrl);
+  int get hashCode => Object.hash(runtimeType, id, type, name, avatorUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -213,8 +195,7 @@ class _$NotionUserImpl implements _NotionUser {
 
 abstract class _NotionUser implements NotionUser {
   const factory _NotionUser(
-          {required final String object,
-          required final String id,
+          {required final String id,
           required final String? type,
           required final String? name,
           @JsonKey(name: 'avator_url') required final String? avatorUrl}) =
@@ -223,8 +204,6 @@ abstract class _NotionUser implements NotionUser {
   factory _NotionUser.fromJson(Map<String, dynamic> json) =
       _$NotionUserImpl.fromJson;
 
-  @override
-  String get object;
   @override
   String get id;
   @override

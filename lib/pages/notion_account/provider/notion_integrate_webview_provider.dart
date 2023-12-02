@@ -1,12 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:zenn_trends/pages/notion_account/model/webview_state.dart';
-part 'webview_provider.g.dart';
+import 'package:zenn_trends/pages/notion_account/model/notion_integrate_webview_state.dart';
+part 'notion_integrate_webview_provider.g.dart';
 
 @riverpod
-class WebView extends _$WebView {
+class NotionIntegrateWebView extends _$NotionIntegrateWebView {
   @override
-  WebViewState build() {
-    return const WebViewState(
+  NotionIntegrateWebViewState build() {
+    return const NotionIntegrateWebViewState(
         isOpen: false, isLoading: false, isError: false, errorText: '');
   }
 

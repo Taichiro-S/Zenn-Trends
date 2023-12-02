@@ -3,24 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zenn_trends/env/env.dart';
-import 'package:zenn_trends/pages/notion_account/api/notion_oauth_api.dart';
-import 'package:zenn_trends/pages/notion_account/provider/notion_auth_storage_provider.dart';
-import 'package:zenn_trends/pages/notion_account/provider/notion_integrate_webview_provider.dart';
-import 'package:zenn_trends/pages/notion_account/provider/uuid_provider.dart';
+import 'package:zenn_trends/pages/zenn_article/provider/zenn_article_webview_provider.dart';
 
-class NotionLoginPageWidget extends ConsumerWidget {
-  const NotionLoginPageWidget({super.key});
-
+class ZennArticleWidget extends ConsumerWidget {
+  const ZennArticleWidget({super.key, required this.articleUrl});
+  final String articleUrl;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final notionOauthNotifier = ref.read(notionAccountProvider.notifier);
-    final notionOauthApi = ref.read(notionOauthApiProvider);
     InAppWebViewController? webViewController;
-    final webViewNotifier = ref.read(notionIntegrateWebViewProvider.notifier);
-    final uuid = ref.read(uuidProvider);
+    final webViewNotifier = ref.read(zennArticleWebViewProvider.notifier);
     return InAppWebView(
-      initialUrlRequest: URLRequest(url: Uri.parse(Env.notionOauthUrl)),
+      initialUrlRequest: URLRequest(url: Uri.parse(articleUrl)),
       initialOptions: InAppWebViewGroupOptions(
           crossPlatform: InAppWebViewOptions(
             javaScriptEnabled: true,
@@ -42,26 +35,13 @@ class NotionLoginPageWidget extends ConsumerWidget {
         if (url != null) {
           webViewNotifier.loading();
           webViewNotifier.clearError();
-          try {
-            if (url.toString().startsWith('zenntrends://oauth/callback?code')) {
-              await notionOauthApi.login(url: url.toString());
-              webViewNotifier.hide();
-              ref.invalidate(notionAuthStorageProvider);
-            }
-          } catch (e) {
-            throw Exception(e);
-          }
+          webViewNotifier.setUrl(url: url.toString());
         }
       },
       onLoadStop: (controller, url) async {
         webViewNotifier.loaded();
       },
       onLoadError: (controller, url, code, message) {
-        // because onLoadError is also called when the user is redirected to the callback url
-        // allow redirect to zenntrends://oauth/callback
-        if (url.toString().startsWith('zenntrends://oauth/callback?code')) {
-          return;
-        }
         webViewNotifier.error(message);
       },
     );

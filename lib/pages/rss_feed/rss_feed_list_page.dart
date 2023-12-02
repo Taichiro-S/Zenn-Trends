@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +9,6 @@ import 'package:zenn_trends/pages/account/provider/read_articles_provider.dart';
 import 'package:zenn_trends/pages/rss_feed/provider/topics_rss_feed_articles_provider.dart';
 import 'package:zenn_trends/pages/rss_feed/provider/trend_topics_provider.dart';
 import 'package:zenn_trends/pages/rss_feed/widget/rss_feed_of_topic_widget.dart';
-import 'package:zenn_trends/widget/circle_loading_widget.dart';
 import 'package:zenn_trends/widget/custom_circle_avator.dart';
 import 'package:zenn_trends/widget/skeleton_for_stickyheader_widget.dart';
 
@@ -49,7 +47,6 @@ class RssFeedListPage extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadedTrendTopicsNotifier.getTrendTopics();
     });
-
     return trendTopicsAsync.when(loading: () {
       return DefaultTabController(
           length: 1,

@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zenn_trends/pages/account/provider/read_articles_provider.dart';
 import 'package:zenn_trends/pages/rss_feed/model/rss_feed_article.dart';
 import 'package:zenn_trends/pages/rss_feed/service/format_published_date.dart';
 import 'package:zenn_trends/pages/rss_feed/widget/bookmark_button_widget.dart';
+import 'package:zenn_trends/pages/zenn_article/provider/zenn_article_webview_provider.dart';
+import 'package:zenn_trends/routes/router.dart';
 import 'package:zenn_trends/widget/skelton_container_widget.dart';
 
 class ArticleContainerWidget extends ConsumerWidget {
@@ -30,6 +32,8 @@ class ArticleContainerWidget extends ConsumerWidget {
         ref.watch(readArticlesProvider.select((state) => state.articleIds));
     final readArticlesNotifier = ref.read(readArticlesProvider.notifier);
     final articleId = '${article.creator}${article.slug}';
+    final router = AutoRouter.of(context);
+    final webViewNotifier = ref.watch(zennArticleWebViewProvider.notifier);
     return StickyHeaderBuilder(
         builder: (context, stuckAmount) {
           return Container(
@@ -97,10 +101,13 @@ class ArticleContainerWidget extends ConsumerWidget {
                         readArticlesNotifier.updateReadArticle(
                             user: user!, article: article);
                       }
+                      router.push(
+                        ZennArticleRoute(article: article),
+                      );
 
-                      if (await canLaunchUrl(uri)) {
-                        launchUrl(uri);
-                      }
+                      // if (await canLaunchUrl(uri)) {
+                      //   launchUrl(uri);
+                      // }
                     },
                   ),
                 ],

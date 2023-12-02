@@ -18,8 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$NotionAuthState {
   bool get isAuth => throw _privateConstructorUsedError;
   String get botId => throw _privateConstructorUsedError;
-  String? get duplicatedTemplateId =>
-      throw _privateConstructorUsedError; // required NotionUser owner,
+  String? get duplicatedTemplateId => throw _privateConstructorUsedError;
+  NotionUser? get owner => throw _privateConstructorUsedError;
   String? get workspaceIcon => throw _privateConstructorUsedError;
   String get workspaceId => throw _privateConstructorUsedError;
   String? get workspaceName => throw _privateConstructorUsedError;
@@ -39,9 +39,12 @@ abstract class $NotionAuthStateCopyWith<$Res> {
       {bool isAuth,
       String botId,
       String? duplicatedTemplateId,
+      NotionUser? owner,
       String? workspaceIcon,
       String workspaceId,
       String? workspaceName});
+
+  $NotionUserCopyWith<$Res>? get owner;
 }
 
 /// @nodoc
@@ -60,6 +63,7 @@ class _$NotionAuthStateCopyWithImpl<$Res, $Val extends NotionAuthState>
     Object? isAuth = null,
     Object? botId = null,
     Object? duplicatedTemplateId = freezed,
+    Object? owner = freezed,
     Object? workspaceIcon = freezed,
     Object? workspaceId = null,
     Object? workspaceName = freezed,
@@ -77,6 +81,10 @@ class _$NotionAuthStateCopyWithImpl<$Res, $Val extends NotionAuthState>
           ? _value.duplicatedTemplateId
           : duplicatedTemplateId // ignore: cast_nullable_to_non_nullable
               as String?,
+      owner: freezed == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as NotionUser?,
       workspaceIcon: freezed == workspaceIcon
           ? _value.workspaceIcon
           : workspaceIcon // ignore: cast_nullable_to_non_nullable
@@ -90,6 +98,18 @@ class _$NotionAuthStateCopyWithImpl<$Res, $Val extends NotionAuthState>
           : workspaceName // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $NotionUserCopyWith<$Res>? get owner {
+    if (_value.owner == null) {
+      return null;
+    }
+
+    return $NotionUserCopyWith<$Res>(_value.owner!, (value) {
+      return _then(_value.copyWith(owner: value) as $Val);
+    });
   }
 }
 
@@ -105,9 +125,13 @@ abstract class _$$NotionAuthStateImplCopyWith<$Res>
       {bool isAuth,
       String botId,
       String? duplicatedTemplateId,
+      NotionUser? owner,
       String? workspaceIcon,
       String workspaceId,
       String? workspaceName});
+
+  @override
+  $NotionUserCopyWith<$Res>? get owner;
 }
 
 /// @nodoc
@@ -124,6 +148,7 @@ class __$$NotionAuthStateImplCopyWithImpl<$Res>
     Object? isAuth = null,
     Object? botId = null,
     Object? duplicatedTemplateId = freezed,
+    Object? owner = freezed,
     Object? workspaceIcon = freezed,
     Object? workspaceId = null,
     Object? workspaceName = freezed,
@@ -141,6 +166,10 @@ class __$$NotionAuthStateImplCopyWithImpl<$Res>
           ? _value.duplicatedTemplateId
           : duplicatedTemplateId // ignore: cast_nullable_to_non_nullable
               as String?,
+      owner: freezed == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as NotionUser?,
       workspaceIcon: freezed == workspaceIcon
           ? _value.workspaceIcon
           : workspaceIcon // ignore: cast_nullable_to_non_nullable
@@ -164,6 +193,7 @@ class _$NotionAuthStateImpl implements _NotionAuthState {
       {required this.isAuth,
       required this.botId,
       required this.duplicatedTemplateId,
+      required this.owner,
       required this.workspaceIcon,
       required this.workspaceId,
       required this.workspaceName});
@@ -174,7 +204,8 @@ class _$NotionAuthStateImpl implements _NotionAuthState {
   final String botId;
   @override
   final String? duplicatedTemplateId;
-// required NotionUser owner,
+  @override
+  final NotionUser? owner;
   @override
   final String? workspaceIcon;
   @override
@@ -184,7 +215,7 @@ class _$NotionAuthStateImpl implements _NotionAuthState {
 
   @override
   String toString() {
-    return 'NotionAuthState(isAuth: $isAuth, botId: $botId, duplicatedTemplateId: $duplicatedTemplateId, workspaceIcon: $workspaceIcon, workspaceId: $workspaceId, workspaceName: $workspaceName)';
+    return 'NotionAuthState(isAuth: $isAuth, botId: $botId, duplicatedTemplateId: $duplicatedTemplateId, owner: $owner, workspaceIcon: $workspaceIcon, workspaceId: $workspaceId, workspaceName: $workspaceName)';
   }
 
   @override
@@ -196,6 +227,7 @@ class _$NotionAuthStateImpl implements _NotionAuthState {
             (identical(other.botId, botId) || other.botId == botId) &&
             (identical(other.duplicatedTemplateId, duplicatedTemplateId) ||
                 other.duplicatedTemplateId == duplicatedTemplateId) &&
+            (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.workspaceIcon, workspaceIcon) ||
                 other.workspaceIcon == workspaceIcon) &&
             (identical(other.workspaceId, workspaceId) ||
@@ -206,7 +238,7 @@ class _$NotionAuthStateImpl implements _NotionAuthState {
 
   @override
   int get hashCode => Object.hash(runtimeType, isAuth, botId,
-      duplicatedTemplateId, workspaceIcon, workspaceId, workspaceName);
+      duplicatedTemplateId, owner, workspaceIcon, workspaceId, workspaceName);
 
   @JsonKey(ignore: true)
   @override
@@ -221,6 +253,7 @@ abstract class _NotionAuthState implements NotionAuthState {
       {required final bool isAuth,
       required final String botId,
       required final String? duplicatedTemplateId,
+      required final NotionUser? owner,
       required final String? workspaceIcon,
       required final String workspaceId,
       required final String? workspaceName}) = _$NotionAuthStateImpl;
@@ -231,7 +264,9 @@ abstract class _NotionAuthState implements NotionAuthState {
   String get botId;
   @override
   String? get duplicatedTemplateId;
-  @override // required NotionUser owner,
+  @override
+  NotionUser? get owner;
+  @override
   String? get workspaceIcon;
   @override
   String get workspaceId;

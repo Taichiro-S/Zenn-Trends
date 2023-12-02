@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 import 'package:zenn_trends/constant/firestore.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
@@ -27,14 +25,6 @@ class TopicContainerWidget extends ConsumerWidget {
     final router = AutoRouter.of(context);
     return ListTile(
       leading: Column(children: [
-        // CircleAvatar(
-        //   backgroundColor: Colors.white70,
-        //   backgroundImage: rankedTopic.imageUrl != null
-        //       ? CachedNetworkImageProvider(rankedTopic.imageUrl!)
-        //       : const AssetImage('assets/images/no_image.png')
-        //           as ImageProvider<Object>,
-        //   radius: 16,
-        // ),
         CustomCircleAvator(imageUrl: rankedTopic.imageUrl),
         Expanded(
             child: Padding(
