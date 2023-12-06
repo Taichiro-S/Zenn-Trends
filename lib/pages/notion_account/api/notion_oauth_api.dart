@@ -26,7 +26,7 @@ class NotionOauthApi {
 
   Future<String> _getAccessToken(String authorizationCode) async {
     final String encoded = base64Encode(utf8
-        .encode('${Env.notionOauthClientId}:${Env.notionOauthClientSecret}}'));
+        .encode('${Env.notionOauthClientId}:${Env.notionOauthClientSecret}'));
     final response = await http.post(
       Uri.parse(NOTION_API_V1_ACCESS_TOKEN),
       headers: {

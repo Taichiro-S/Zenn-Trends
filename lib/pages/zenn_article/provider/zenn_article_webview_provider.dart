@@ -1,17 +1,31 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:zenn_trends/pages/zenn_article/model/zenn_article_webview_state.dart';
+
 part 'zenn_article_webview_provider.g.dart';
+part 'zenn_article_webview_provider.freezed.dart';
+
+@freezed
+class ZennArticleWebViewState with _$ZennArticleWebViewState {
+  const factory ZennArticleWebViewState({
+    required bool isOpen,
+    required bool isLoading,
+    required bool isError,
+    required String errorText,
+    required String currentUrl,
+  }) = _ZennArticleWebViewState;
+}
 
 @riverpod
 class ZennArticleWebView extends _$ZennArticleWebView {
   @override
   ZennArticleWebViewState build() {
     return const ZennArticleWebViewState(
-        isOpen: false,
-        isLoading: false,
-        isError: false,
-        errorText: '',
-        currentUrl: '');
+      isOpen: false,
+      isLoading: false,
+      isError: false,
+      errorText: '',
+      currentUrl: '',
+    );
   }
 
   void show() => state = state.copyWith(isOpen: true);
@@ -28,7 +42,7 @@ class ZennArticleWebView extends _$ZennArticleWebView {
     state = state.copyWith(errorText: '');
   }
 
-  void setUrl({required String url}) {
+  void setUrl(String url) {
     state = state.copyWith(currentUrl: url);
   }
 

@@ -14,7 +14,7 @@ import 'package:zenn_trends/widget/skeleton_for_stickyheader_widget.dart';
 
 @RoutePage()
 class RssFeedListPage extends ConsumerWidget {
-  const RssFeedListPage({Key? key}) : super(key: key);
+  const RssFeedListPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trendTopicsAsync =

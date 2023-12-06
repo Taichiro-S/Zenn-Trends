@@ -20,6 +20,7 @@ class RssFeedOfTopicPage extends ConsumerWidget {
   const RssFeedOfTopicPage({Key? key, required this.selectedTopic})
       : super(key: key);
   final RankedTopic selectedTopic;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final googleAuth = ref.watch(googleAuthProvider);
@@ -136,7 +137,10 @@ class RssFeedOfTopicPage extends ConsumerWidget {
                           final article = articles[index];
 
                           return ArticleContainerWidget(
-                              user: user, article: article, index: index);
+                              user: user,
+                              article: article,
+                              index: index,
+                              topicName: selectedTopic.name);
                         },
                       ),
                       onRefresh: () async {

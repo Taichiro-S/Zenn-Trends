@@ -8,5 +8,6 @@ class NotionIntegrateWebViewState with _$NotionIntegrateWebViewState {
     required bool isLoading,
     required bool isError,
     required String errorText,
+    required double progress,
   }) = _NotionIntegrateWebViewState;
 }

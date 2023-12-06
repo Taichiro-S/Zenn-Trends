@@ -1,10 +1,18 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/pages/notion_account/model/notion_auth_state.dart';
-import 'package:zenn_trends/pages/notion_account/model/notion_auth_storage_state.dart';
 import 'package:zenn_trends/service/secure_storage.dart';
 import '/constant/storage_key.dart';
 
 part 'notion_auth_storage_provider.g.dart';
+part 'notion_auth_storage_provider.freezed.dart';
+
+@freezed
+class NotionAuthStorageState with _$NotionAuthStorageState {
+  const factory NotionAuthStorageState({
+    required AsyncValue<NotionAuthState> notionAuthStorageState,
+  }) = _NotionAuthStorageState;
+}
 
 @riverpod
 class NotionAuthStorage extends _$NotionAuthStorage {

@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:zenn_trends/pages/account/provider/read_articles_provider.dart';
@@ -9,6 +11,7 @@ import 'package:zenn_trends/pages/rss_feed/model/rss_feed_article.dart';
 import 'package:zenn_trends/pages/rss_feed/service/format_published_date.dart';
 import 'package:zenn_trends/pages/rss_feed/widget/bookmark_button_widget.dart';
 import 'package:zenn_trends/pages/zenn_article/provider/zenn_article_webview_provider.dart';
+import 'package:zenn_trends/pages/zenn_article/widget/zenn_article_browser.dart';
 import 'package:zenn_trends/routes/router.dart';
 import 'package:zenn_trends/widget/skelton_container_widget.dart';
 
@@ -17,14 +20,24 @@ class ArticleContainerWidget extends ConsumerWidget {
     super.key,
     required this.article,
     required this.index,
+    required this.topicName,
     this.user,
   });
   final RssFeedArticle article;
   final int index;
+  final String topicName;
   final User? user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final browser = MyInAppBrowser();
+    // final settings = InAppBrowserClassSettings(
+    //     browserSettings: InAppBrowserSettings(
+    //         hideUrlBar: true,
+    //         toolbarTopBackgroundColor: Colors.white,
+    //         presentationStyle: ModalPresentationStyle.POPOVER),
+    //     webViewSettings: InAppWebViewSettings(isInspectable: kDebugMode));
+
     final uri = Uri.parse(article.link);
     final now = DateTime.now();
     final publishedDate = formatPublishedDate(article.publishedDate, now);
@@ -67,7 +80,10 @@ class ArticleContainerWidget extends ConsumerWidget {
           );
         },
         content: readArticleIdsAsync.when(
-            loading: () => const SkeltonContainerWidget(),
+            loading: () => SkeltonContainerWidget(
+                width: MediaQuery.of(context).size.width,
+                height: 180,
+                radius: 10),
             error: (error, stack) {
               return Center(child: Text('エラー: $error'));
             },
@@ -83,7 +99,12 @@ class ArticleContainerWidget extends ConsumerWidget {
                               ? CachedNetworkImage(
                                   imageUrl: article.enclosure!,
                                   placeholder: (context, url) =>
-                                      const SkeltonContainerWidget(),
+                                      SkeltonContainerWidget(
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          height: 180,
+                                          radius: 10),
                                   errorWidget: (context, url, error) =>
                                       const Image(
                                           image: AssetImage(
@@ -101,8 +122,13 @@ class ArticleContainerWidget extends ConsumerWidget {
                         readArticlesNotifier.updateReadArticle(
                             user: user!, article: article);
                       }
+                      // browser.openUrlRequest(
+                      //     urlRequest: URLRequest(url: WebUri(article.link)),
+                      //     settings: settings);
+
                       router.push(
-                        ZennArticleRoute(article: article),
+                        ZennArticleRoute(
+                            article: article, topicName: topicName),
                       );
 
                       // if (await canLaunchUrl(uri)) {

@@ -89,7 +89,10 @@ class RssFeedOfTopicWidget extends ConsumerWidget {
                 final article = articles[index];
 
                 return ArticleContainerWidget(
-                    user: user, article: article, index: index);
+                    user: user,
+                    article: article,
+                    index: index,
+                    topicName: topicName);
               },
             ),
             onRefresh: () async {

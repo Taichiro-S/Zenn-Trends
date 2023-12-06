@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'notion_integrate_webview_state.dart';
+part of 'zenn_article_webview_provider.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,39 +15,37 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$NotionIntegrateWebViewState {
+mixin _$ZennArticleWebViewState {
   bool get isOpen => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isError => throw _privateConstructorUsedError;
   String get errorText => throw _privateConstructorUsedError;
-  double get progress => throw _privateConstructorUsedError;
+  String get currentUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $NotionIntegrateWebViewStateCopyWith<NotionIntegrateWebViewState>
-      get copyWith => throw _privateConstructorUsedError;
+  $ZennArticleWebViewStateCopyWith<ZennArticleWebViewState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $NotionIntegrateWebViewStateCopyWith<$Res> {
-  factory $NotionIntegrateWebViewStateCopyWith(
-          NotionIntegrateWebViewState value,
-          $Res Function(NotionIntegrateWebViewState) then) =
-      _$NotionIntegrateWebViewStateCopyWithImpl<$Res,
-          NotionIntegrateWebViewState>;
+abstract class $ZennArticleWebViewStateCopyWith<$Res> {
+  factory $ZennArticleWebViewStateCopyWith(ZennArticleWebViewState value,
+          $Res Function(ZennArticleWebViewState) then) =
+      _$ZennArticleWebViewStateCopyWithImpl<$Res, ZennArticleWebViewState>;
   @useResult
   $Res call(
       {bool isOpen,
       bool isLoading,
       bool isError,
       String errorText,
-      double progress});
+      String currentUrl});
 }
 
 /// @nodoc
-class _$NotionIntegrateWebViewStateCopyWithImpl<$Res,
-        $Val extends NotionIntegrateWebViewState>
-    implements $NotionIntegrateWebViewStateCopyWith<$Res> {
-  _$NotionIntegrateWebViewStateCopyWithImpl(this._value, this._then);
+class _$ZennArticleWebViewStateCopyWithImpl<$Res,
+        $Val extends ZennArticleWebViewState>
+    implements $ZennArticleWebViewStateCopyWith<$Res> {
+  _$ZennArticleWebViewStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -61,7 +59,7 @@ class _$NotionIntegrateWebViewStateCopyWithImpl<$Res,
     Object? isLoading = null,
     Object? isError = null,
     Object? errorText = null,
-    Object? progress = null,
+    Object? currentUrl = null,
   }) {
     return _then(_value.copyWith(
       isOpen: null == isOpen
@@ -80,21 +78,21 @@ class _$NotionIntegrateWebViewStateCopyWithImpl<$Res,
           ? _value.errorText
           : errorText // ignore: cast_nullable_to_non_nullable
               as String,
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as double,
+      currentUrl: null == currentUrl
+          ? _value.currentUrl
+          : currentUrl // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$NotionIntegrateWebViewStateImplCopyWith<$Res>
-    implements $NotionIntegrateWebViewStateCopyWith<$Res> {
-  factory _$$NotionIntegrateWebViewStateImplCopyWith(
-          _$NotionIntegrateWebViewStateImpl value,
-          $Res Function(_$NotionIntegrateWebViewStateImpl) then) =
-      __$$NotionIntegrateWebViewStateImplCopyWithImpl<$Res>;
+abstract class _$$ZennArticleWebViewStateImplCopyWith<$Res>
+    implements $ZennArticleWebViewStateCopyWith<$Res> {
+  factory _$$ZennArticleWebViewStateImplCopyWith(
+          _$ZennArticleWebViewStateImpl value,
+          $Res Function(_$ZennArticleWebViewStateImpl) then) =
+      __$$ZennArticleWebViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -102,17 +100,17 @@ abstract class _$$NotionIntegrateWebViewStateImplCopyWith<$Res>
       bool isLoading,
       bool isError,
       String errorText,
-      double progress});
+      String currentUrl});
 }
 
 /// @nodoc
-class __$$NotionIntegrateWebViewStateImplCopyWithImpl<$Res>
-    extends _$NotionIntegrateWebViewStateCopyWithImpl<$Res,
-        _$NotionIntegrateWebViewStateImpl>
-    implements _$$NotionIntegrateWebViewStateImplCopyWith<$Res> {
-  __$$NotionIntegrateWebViewStateImplCopyWithImpl(
-      _$NotionIntegrateWebViewStateImpl _value,
-      $Res Function(_$NotionIntegrateWebViewStateImpl) _then)
+class __$$ZennArticleWebViewStateImplCopyWithImpl<$Res>
+    extends _$ZennArticleWebViewStateCopyWithImpl<$Res,
+        _$ZennArticleWebViewStateImpl>
+    implements _$$ZennArticleWebViewStateImplCopyWith<$Res> {
+  __$$ZennArticleWebViewStateImplCopyWithImpl(
+      _$ZennArticleWebViewStateImpl _value,
+      $Res Function(_$ZennArticleWebViewStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -122,9 +120,9 @@ class __$$NotionIntegrateWebViewStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? isError = null,
     Object? errorText = null,
-    Object? progress = null,
+    Object? currentUrl = null,
   }) {
-    return _then(_$NotionIntegrateWebViewStateImpl(
+    return _then(_$ZennArticleWebViewStateImpl(
       isOpen: null == isOpen
           ? _value.isOpen
           : isOpen // ignore: cast_nullable_to_non_nullable
@@ -141,24 +139,23 @@ class __$$NotionIntegrateWebViewStateImplCopyWithImpl<$Res>
           ? _value.errorText
           : errorText // ignore: cast_nullable_to_non_nullable
               as String,
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as double,
+      currentUrl: null == currentUrl
+          ? _value.currentUrl
+          : currentUrl // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _$NotionIntegrateWebViewStateImpl
-    implements _NotionIntegrateWebViewState {
-  const _$NotionIntegrateWebViewStateImpl(
+class _$ZennArticleWebViewStateImpl implements _ZennArticleWebViewState {
+  const _$ZennArticleWebViewStateImpl(
       {required this.isOpen,
       required this.isLoading,
       required this.isError,
       required this.errorText,
-      required this.progress});
+      required this.currentUrl});
 
   @override
   final bool isOpen;
@@ -169,48 +166,47 @@ class _$NotionIntegrateWebViewStateImpl
   @override
   final String errorText;
   @override
-  final double progress;
+  final String currentUrl;
 
   @override
   String toString() {
-    return 'NotionIntegrateWebViewState(isOpen: $isOpen, isLoading: $isLoading, isError: $isError, errorText: $errorText, progress: $progress)';
+    return 'ZennArticleWebViewState(isOpen: $isOpen, isLoading: $isLoading, isError: $isError, errorText: $errorText, currentUrl: $currentUrl)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$NotionIntegrateWebViewStateImpl &&
+            other is _$ZennArticleWebViewStateImpl &&
             (identical(other.isOpen, isOpen) || other.isOpen == isOpen) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isError, isError) || other.isError == isError) &&
             (identical(other.errorText, errorText) ||
                 other.errorText == errorText) &&
-            (identical(other.progress, progress) ||
-                other.progress == progress));
+            (identical(other.currentUrl, currentUrl) ||
+                other.currentUrl == currentUrl));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, isOpen, isLoading, isError, errorText, progress);
+  int get hashCode => Object.hash(
+      runtimeType, isOpen, isLoading, isError, errorText, currentUrl);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$NotionIntegrateWebViewStateImplCopyWith<_$NotionIntegrateWebViewStateImpl>
-      get copyWith => __$$NotionIntegrateWebViewStateImplCopyWithImpl<
-          _$NotionIntegrateWebViewStateImpl>(this, _$identity);
+  _$$ZennArticleWebViewStateImplCopyWith<_$ZennArticleWebViewStateImpl>
+      get copyWith => __$$ZennArticleWebViewStateImplCopyWithImpl<
+          _$ZennArticleWebViewStateImpl>(this, _$identity);
 }
 
-abstract class _NotionIntegrateWebViewState
-    implements NotionIntegrateWebViewState {
-  const factory _NotionIntegrateWebViewState(
+abstract class _ZennArticleWebViewState implements ZennArticleWebViewState {
+  const factory _ZennArticleWebViewState(
       {required final bool isOpen,
       required final bool isLoading,
       required final bool isError,
       required final String errorText,
-      required final double progress}) = _$NotionIntegrateWebViewStateImpl;
+      required final String currentUrl}) = _$ZennArticleWebViewStateImpl;
 
   @override
   bool get isOpen;
@@ -221,9 +217,9 @@ abstract class _NotionIntegrateWebViewState
   @override
   String get errorText;
   @override
-  double get progress;
+  String get currentUrl;
   @override
   @JsonKey(ignore: true)
-  _$$NotionIntegrateWebViewStateImplCopyWith<_$NotionIntegrateWebViewStateImpl>
+  _$$ZennArticleWebViewStateImplCopyWith<_$ZennArticleWebViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

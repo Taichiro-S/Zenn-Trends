@@ -1,12 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zenn_trends/constant/firestore.dart';
-import 'package:zenn_trends/pages/rss_feed/model/rss_feed_articles_state.dart';
-import 'package:zenn_trends/pages/rss_feed/model/topics_rss_feed_articles_state.dart';
+import 'package:zenn_trends/pages/rss_feed/model/rss_feed_article.dart';
 import 'package:zenn_trends/pages/rss_feed/repository/rss_feed_articles_repository.dart';
 import 'package:zenn_trends/pages/rss_feed/service/is_over_update_time.dart';
 
 part 'topics_rss_feed_articles_provider.g.dart';
+
+part 'topics_rss_feed_articles_provider.freezed.dart';
+
+@freezed
+class RssFeedArticlesState with _$RssFeedArticlesState {
+  const factory RssFeedArticlesState({
+    required AsyncValue<List<RssFeedArticle>> rssFeedArticles,
+    required DocumentSnapshot? lastDocument,
+    required String selectedTopicName,
+    required DateTime lastUpdatedAt,
+  }) = _RssFeedArticlesState;
+}
+
+@freezed
+class TopicsRssFeedArticlesState with _$TopicsRssFeedArticlesState {
+  const factory TopicsRssFeedArticlesState({
+    required Map<String, RssFeedArticlesState> topicsRssFeedArticles,
+    required String selectedTopicName,
+    required bool isLoadingMore,
+  }) = _TopicsRssFeedArticlesState;
+}
 
 @riverpod
 class TopicsRssFeedArticles extends _$TopicsRssFeedArticles {

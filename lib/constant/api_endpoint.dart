@@ -8,4 +8,5 @@ const NOTION_API_V1_PAGES = 'https://api.notion.com/v1/pages';
 const NOTION_API_V1_BLOCKS = 'https://api.notion.com/v1/blocks';
 const NOTION_API_V1_SEARCH = 'https://api.notion.com/v1/search';
 
-const ZENN_API = 'https://zenn.dev/api/articles';
+const ZENN_API = 'https://zenn.dev/api';
+const ZENN_ARTICLES_API = 'https://zenn.dev/api/articles';

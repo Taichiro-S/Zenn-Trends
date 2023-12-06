@@ -74,6 +74,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ZennArticlePage(
           key: args.key,
           article: args.article,
+          topicName: args.topicName,
         ),
       );
     },
@@ -222,12 +223,14 @@ class ZennArticleRoute extends PageRouteInfo<ZennArticleRouteArgs> {
   ZennArticleRoute({
     Key? key,
     required RssFeedArticle article,
+    required String topicName,
     List<PageRouteInfo>? children,
   }) : super(
           ZennArticleRoute.name,
           args: ZennArticleRouteArgs(
             key: key,
             article: article,
+            topicName: topicName,
           ),
           initialChildren: children,
         );
@@ -242,14 +245,17 @@ class ZennArticleRouteArgs {
   const ZennArticleRouteArgs({
     this.key,
     required this.article,
+    required this.topicName,
   });
 
   final Key? key;
 
   final RssFeedArticle article;
 
+  final String topicName;
+
   @override
   String toString() {
-    return 'ZennArticleRouteArgs{key: $key, article: $article}';
+    return 'ZennArticleRouteArgs{key: $key, article: $article, topicName: $topicName}';
   }
 }

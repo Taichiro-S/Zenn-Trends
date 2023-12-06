@@ -6,7 +6,7 @@ part of 'notion_database_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notionDatabaseHash() => r'73202d57dd78fe1f7b4feeedea4009dbeb4cace1';
+String _$notionDatabaseHash() => r'e1956c07547ed97c27582c051852bf485bc9a005';
 
 /// See also [NotionDatabase].
 @ProviderFor(NotionDatabase)

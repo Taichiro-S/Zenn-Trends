@@ -10,8 +10,7 @@ import 'package:zenn_trends/widget/show_login_dialog_on_pressed_widget.dart';
 class BookmarkButtonWidget extends ConsumerStatefulWidget {
   final RssFeedArticle article;
   final User? user;
-  const BookmarkButtonWidget({Key? key, required this.article, this.user})
-      : super(key: key);
+  const BookmarkButtonWidget({super.key, required this.article, this.user});
   @override
   ConsumerState<BookmarkButtonWidget> createState() =>
       _BookmarkButtonWidgetState();
