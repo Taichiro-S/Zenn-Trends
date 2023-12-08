@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final appRouter = AppRouter();
     return MaterialApp.router(
-      title: 'Zenn Trends',
+      title: 'Zenn Trend',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       // builder: FToastBuilder(),
       builder: EasyLoading.init(),
       routerConfig: appRouter.config(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

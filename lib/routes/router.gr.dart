@@ -15,18 +15,6 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    AccountRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AccountPage(),
-      );
-    },
-    NotionAccountRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const NotionAccountPage(),
-      );
-    },
     PrivacyPolicyRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -45,68 +33,13 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RootPage(),
       );
     },
-    RssFeedListRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RssFeedListPage(),
-      );
-    },
-    RssFeedOfTopicRoute.name: (routeData) {
-      final args = routeData.argsAs<RssFeedOfTopicRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: RssFeedOfTopicPage(
-          key: args.key,
-          selectedTopic: args.selectedTopic,
-        ),
-      );
-    },
     UserSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const UserSettingsPage(),
       );
     },
-    ZennArticleRoute.name: (routeData) {
-      final args = routeData.argsAs<ZennArticleRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ZennArticlePage(
-          key: args.key,
-          article: args.article,
-          topicName: args.topicName,
-        ),
-      );
-    },
   };
-}
-
-/// generated route for
-/// [AccountPage]
-class AccountRoute extends PageRouteInfo<void> {
-  const AccountRoute({List<PageRouteInfo>? children})
-      : super(
-          AccountRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AccountRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [NotionAccountPage]
-class NotionAccountRoute extends PageRouteInfo<void> {
-  const NotionAccountRoute({List<PageRouteInfo>? children})
-      : super(
-          NotionAccountRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'NotionAccountRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -152,58 +85,6 @@ class RootRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RssFeedListPage]
-class RssFeedListRoute extends PageRouteInfo<void> {
-  const RssFeedListRoute({List<PageRouteInfo>? children})
-      : super(
-          RssFeedListRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RssFeedListRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [RssFeedOfTopicPage]
-class RssFeedOfTopicRoute extends PageRouteInfo<RssFeedOfTopicRouteArgs> {
-  RssFeedOfTopicRoute({
-    Key? key,
-    required RankedTopic selectedTopic,
-    List<PageRouteInfo>? children,
-  }) : super(
-          RssFeedOfTopicRoute.name,
-          args: RssFeedOfTopicRouteArgs(
-            key: key,
-            selectedTopic: selectedTopic,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'RssFeedOfTopicRoute';
-
-  static const PageInfo<RssFeedOfTopicRouteArgs> page =
-      PageInfo<RssFeedOfTopicRouteArgs>(name);
-}
-
-class RssFeedOfTopicRouteArgs {
-  const RssFeedOfTopicRouteArgs({
-    this.key,
-    required this.selectedTopic,
-  });
-
-  final Key? key;
-
-  final RankedTopic selectedTopic;
-
-  @override
-  String toString() {
-    return 'RssFeedOfTopicRouteArgs{key: $key, selectedTopic: $selectedTopic}';
-  }
-}
-
-/// generated route for
 /// [UserSettingsPage]
 class UserSettingsRoute extends PageRouteInfo<void> {
   const UserSettingsRoute({List<PageRouteInfo>? children})
@@ -215,47 +96,4 @@ class UserSettingsRoute extends PageRouteInfo<void> {
   static const String name = 'UserSettingsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [ZennArticlePage]
-class ZennArticleRoute extends PageRouteInfo<ZennArticleRouteArgs> {
-  ZennArticleRoute({
-    Key? key,
-    required RssFeedArticle article,
-    required String topicName,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ZennArticleRoute.name,
-          args: ZennArticleRouteArgs(
-            key: key,
-            article: article,
-            topicName: topicName,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ZennArticleRoute';
-
-  static const PageInfo<ZennArticleRouteArgs> page =
-      PageInfo<ZennArticleRouteArgs>(name);
-}
-
-class ZennArticleRouteArgs {
-  const ZennArticleRouteArgs({
-    this.key,
-    required this.article,
-    required this.topicName,
-  });
-
-  final Key? key;
-
-  final RssFeedArticle article;
-
-  final String topicName;
-
-  @override
-  String toString() {
-    return 'ZennArticleRouteArgs{key: $key, article: $article, topicName: $topicName}';
-  }
 }

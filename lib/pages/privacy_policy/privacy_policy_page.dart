@@ -9,7 +9,7 @@ Future<String> loadMarkdownFile(String path) async {
 
 @RoutePage()
 class PrivacyPolicyPage extends StatefulWidget {
-  const PrivacyPolicyPage({Key? key}) : super(key: key);
+  const PrivacyPolicyPage({super.key});
   @override
   State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
 }

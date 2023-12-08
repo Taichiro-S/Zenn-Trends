@@ -9,11 +9,9 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^2.16.0
-  flutter_dotenv: ^5.1.0
   cloud_firestore: ^4.9.2
   fl_chart: ^0.65.0
   url_launcher: ^6.2.1
-  shared_preferences: ^2.2.1
   flutter_riverpod: ^2.4.3
   riverpod_annotation: ^2.2.0
   freezed_annotation: ^2.4.1
@@ -47,10 +45,7 @@ dependencies:
   sticky_headers: ^0.3.0+2
   skeleton_text: ^3.0.1
   line_awesome_flutter: ^2.0.0
-  envied: ^0.5.2
-  flutter_inappwebview: ^5.8.0
-  # flutter_inappwebview: ^6.0.0-beta.31
-  uni_links: ^0.5.1
+  flutter_launcher_icons: ^0.9.3
 
 dev_dependencies:
   flutter_test:
@@ -59,12 +54,15 @@ dev_dependencies:
   json_serializable: ^6.7.1
   flutter_lints: ^3.0.1
   test: ^1.24.3
-  envied_generator: ^0.5.2
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
     - assets/privacy_policy/ja.md
-    - .env
-  
+
+flutter_icons:
+ android: true
+ ios: true
+ image_path: "assets/images/app_icon.png"
+ remove_alpha_ios: true

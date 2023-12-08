@@ -2,12 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenn_trends/constant/firestore.dart';
+import 'package:zenn_trends/constant/url.dart';
 import 'package:zenn_trends/pages/ranking/model/ranked_topic.dart';
 import 'package:zenn_trends/pages/ranking/provider/display_settings_provider.dart';
 import 'package:zenn_trends/pages/ranking/service/display_num.dart';
 import 'package:zenn_trends/pages/ranking/widget/bar_indicator_widget.dart';
-import 'package:zenn_trends/pages/ranking/widget/favorite_icon_widget.dart';
 import 'package:zenn_trends/routes/router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zenn_trends/widget/custom_circle_avator.dart';
 
 class TopicContainerWidget extends ConsumerWidget {
@@ -47,12 +48,13 @@ class TopicContainerWidget extends ConsumerWidget {
                 text: rankedTopic.displayName),
           ),
         ),
-        FavoriteIconWidget(rankedTopic: rankedTopic),
         IconButton(
             onPressed: () async {
-              router.push(
-                RssFeedOfTopicRoute(selectedTopic: rankedTopic),
-              );
+              final url = Uri.parse(
+                  '$ZENN_DEV_URL/topics/${rankedTopic.name}?order=latest');
+              if (await canLaunchUrl(url)) {
+                launchUrl(url);
+              }
             },
             icon: const Icon(
               Icons.description,

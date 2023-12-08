@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zenn_trends/pages/account/provider/favorite_topics_provider.dart';
 import 'package:zenn_trends/pages/ranking/provider/loaded_topics_provider.dart';
 
 class SearchTopic extends ConsumerWidget {
@@ -15,7 +14,6 @@ class SearchTopic extends ConsumerWidget {
       loadedTopicsNotifier.stopSearching();
     }
 
-    ref.watch(favoriteTopicsProvider);
     return TextField(
       autocorrect: false,
       autofocus: true,
